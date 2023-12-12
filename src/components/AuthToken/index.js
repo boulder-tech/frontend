@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Navigate } from 'react-router-dom';
 
+const backendUrl = process.env.REACT_BACKEND_URL;
+
 const AuthToken = () => {
     const { token } = useParams();
     const [redirect, setRedirect] = useState(false);
 
     useEffect(() => {
         // Define la URL con el token como parámetro
-        const url = `http://204.236.148.119:1337/api/client/verify-token/${token}`;
+        const url = `${backendUrl}/api/client/verify-token/${token}`;
     
         // Realiza la solicitud PUT con Axios
         axios.put(url, {

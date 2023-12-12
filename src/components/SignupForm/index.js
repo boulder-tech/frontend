@@ -23,6 +23,7 @@ import { useAuth } from '../../context/AuthContext';
 
 const CLIENT_ALREADY_EXISTS = 100;
 const INVALID_EMAIL_OR_PASSWORD = 101;
+const backendUrl = process.env.REACT_BACKEND_URL;
 
 const SignupForm = () => {
     const { login } = useAuth();
@@ -62,7 +63,7 @@ const SignupForm = () => {
 
         try {
             const response = await axios.post(
-                'http://204.236.148.119:1337/api/client/signup',
+                `${backendUrl}/api/client/signup`,
                 {
                     email,
                     name: firstName,
@@ -102,40 +103,7 @@ const SignupForm = () => {
             email: email ? '' : 'Email is required',
             password: password ? '' : 'Password is required',
         };
-
-        /*
-        try {
-            const response = await axios.post(
-                'http://204.236.148.119:1337/api/client/login',
-                {
-                    email,
-                    password,
-                }
-            );
-
-            // La respuesta de Axios ya tiene el cuerpo JSON analizado
-            if (response.status === 200) {
-                // Manejar el caso de éxito
-                console.log('Login exitoso:', response.data);
-                validationErrors.general = '';
-                setErrors(validationErrors);
-            } else {
-                // Manejar errores
-                console.error('Error en el login:', response.data);
-            }
-        } catch (error) {
-            // Manejar errores de red o cualquier otro error
-            console.error('Error en la solicitud:', error);
-
-            if (password)
-                validationErrors.general = 'Invalid email or password';
-
-            //Aqui imprimir una validacion de password
-            console.log(validationErrors);
-            setErrors(validationErrors);
-        }
-        */
-
+        
         const { code, success } = await login(email, password);
 
         if (success) {

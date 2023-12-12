@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
+const backendUrl = process.env.REACT_BACKEND_URL;
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -10,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const response = await axios.post(
-                'http://204.236.148.119:1337/api/client/login',
+                `${backendUrl}/api/client/login`,
                 {
                     email,
                     password,
