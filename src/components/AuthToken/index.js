@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Navigate } from 'react-router-dom';
 
-const backendUrl = process.env.REACT_BACKEND_URL;
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const AuthToken = () => {
     const { token } = useParams();

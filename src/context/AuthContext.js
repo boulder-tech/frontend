@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
-const backendUrl = process.env.REACT_BACKEND_URL;
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);

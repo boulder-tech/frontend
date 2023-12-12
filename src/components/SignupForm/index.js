@@ -18,12 +18,14 @@ import {
     Eye,
     EyeSlash,
 } from 'react-bootstrap-icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const CLIENT_ALREADY_EXISTS = 100;
-const INVALID_EMAIL_OR_PASSWORD = 101;
-const backendUrl = process.env.REACT_BACKEND_URL;
+const SIGNUP_EMAIL_SENT = 101;
+const CLIENT_SUCCESSFULLY_REGISTERED = 102;
+const INVALID_EMAIL_OR_PASSWORD = 103;
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SignupForm = () => {
     const { login } = useAuth();
@@ -36,6 +38,7 @@ const SignupForm = () => {
     const [verifiedEmail, setVerifiedEmail] = useState('');
     const [emailSent, setEmailSent] = useState('');
     const [showLogin, setShowLogin] = useState(false);
+    const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [errors, setErrors] = useState({
         email: '',
         password: '',
@@ -81,6 +84,9 @@ const SignupForm = () => {
                 const { code } = response.data;
 
                 if (code === CLIENT_ALREADY_EXISTS) setShowLogin(true);
+                else if (code === SIGNUP_EMAIL_SENT) setEmailSent(true);
+                else if (code === CLIENT_SUCCESSFULLY_REGISTERED)
+                    setRegistrationSuccess(true);
             } else {
                 // Manejar errores
                 console.error('Error en el registro:', response.data);
@@ -90,8 +96,7 @@ const SignupForm = () => {
             console.error('Error en la solicitud:', error);
 
             if (!error.response.data.success) {
-                console.log('REGISTRESE');
-                setEmailSent(true);
+                console.log('ERROR AL REGISTRARSE');
             }
         }
     };
@@ -103,7 +108,7 @@ const SignupForm = () => {
             email: email ? '' : 'Email is required',
             password: password ? '' : 'Password is required',
         };
-        
+
         const { code, success } = await login(email, password);
 
         if (success) {
@@ -124,7 +129,7 @@ const SignupForm = () => {
     return (
         <Container>
             <Row className="justify-content-md-center py-5">
-                {verifiedEmail && (
+                {verifiedEmail && !registrationSuccess && (
                     <Col xs={12} md={6}>
                         <div className="mb-4">
                             <h2>Sign up</h2>
@@ -214,7 +219,7 @@ const SignupForm = () => {
                         </Form>
                     </Col>
                 )}
-                {!emailSent && !verifiedEmail && (
+                {!emailSent && !verifiedEmail && !registrationSuccess && (
                     <Col xs={12} md={6}>
                         <div className="mb-4">
                             <h2>
@@ -347,6 +352,16 @@ const SignupForm = () => {
                                 </Alert>
                             </Col>
                         </Row>
+                    </Col>
+                )}
+                {registrationSuccess && (
+                    <Col className="bg-light p-4 rounded">
+                        <h4 className="mb-4">Account Created Successfully</h4>
+                        <p>
+                            Your account has been successfully created. You can
+                            now <a href="/signup">sign in</a> to your new
+                            account.
+                        </p>
                     </Col>
                 )}
             </Row>
