@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { Menu, Dropdown, Icon } from 'semantic-ui-react';
 import { PersonCircle, BoxArrowRight } from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+
+import './Header.css';
 
 const Header = () => {
     const { user, logout } = useAuth();
@@ -22,60 +24,13 @@ const Header = () => {
     };
 
     return (
-        <Navbar bg="dark" variant="dark">
-            <Nav>
-                <Navbar.Brand as={NavLink} to="/" exact>
-                    Boulder Tech
-                </Navbar.Brand>
-                <Nav.Link as={NavLink} to="/bt-2">
-                    BT-2
-                </Nav.Link>
-                <Nav.Link as={NavLink} to="/token-sale">
-                    Token Sale
-                </Nav.Link>
-                <Nav.Link as={NavLink} to="/team">
-                    Team
-                </Nav.Link>
-                <Nav.Link as={NavLink} to="/contact">
-                    Contact
-                </Nav.Link>
-
-                {user && (
-                    <NavDropdown
-                        title={
-                            <div
-                                onClick={handleUserMenuToggle}
-                                className="d-flex align-items-center"
-                            >
-                                <PersonCircle size={24} className="mr-4" />
-                                <span className="mr-4">{user.email}</span>
-                            </div>
-                        }
-                        show={showUserMenu}
-                        onSelect={() => setShowUserMenu(false)}
-                    >
-                        <NavDropdown.Item>Verified</NavDropdown.Item>
-                        <NavDropdown.Item>Regular User</NavDropdown.Item>
-                        <NavDropdown.Item>Link Twitter</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item>Dashboard</NavDropdown.Item>
-                        <NavDropdown.Item>Security</NavDropdown.Item>
-                        <NavDropdown.Item>Identification</NavDropdown.Item>
-                        <NavDropdown.Item>Referral</NavDropdown.Item>
-                        <NavDropdown.Item>New</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item>New User Zone</NavDropdown.Item>
-                        <NavDropdown.Item>Rewards Hub</NavDropdown.Item>
-                        <NavDropdown.Item>API Management</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item>
-                            Log Out
-                            <BoxArrowRight className="ml-2" />
-                        </NavDropdown.Item>
-                    </NavDropdown>
-                )}
-            </Nav>
-        </Navbar>
+        <>
+            <header className="w-full fixed h-[65px] top-0 z-50 py-3 bg-[rgba(1, 3, 18, 0.01)] border-b border-grey-200 backdrop-blur-lg">
+                <div className="flex items-center justify-between 2xl:px-[300px] lg:px-[150px] md:px-[75px] px-[20px]">
+                    <div className="flex gap-4 items-center justify-center divide-border-grey-200 divide-x-[1px]"></div>
+                </div>
+            </header>
+        </>
     );
 };
 

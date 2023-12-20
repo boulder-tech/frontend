@@ -11,35 +11,35 @@ const AuthToken = () => {
     useEffect(() => {
         // Define la URL con el token como parámetro
         const url = `${backendUrl}/api/client/verify-token/${token}`;
-    
+
         // Realiza la solicitud PUT con Axios
-        axios.put(url, {
-          // Puedes incluir datos en el cuerpo si es necesario
-          // data: { /* tus datos */ },
-        })
-          .then(response => {
-            // Manejar la respuesta exitosa
-            console.log('Success:', response.data);
+        axios
+            .put(url, {
+                // Puedes incluir datos en el cuerpo si es necesario
+                // data: { /* tus datos */ },
+            })
+            .then((response) => {
+                // Manejar la respuesta exitosa
+                console.log('Success:', response.data);
 
-            const { email } = response.data;
+                const { email } = response.data;
 
-            localStorage.setItem('email', email);
+                localStorage.setItem('email', email);
 
-            setRedirect(true);
-          })
-          .catch(error => {
-            // Manejar errores de la solicitud
-            console.error('Error:', error);
-          });
-      }, [token]);
-    
-      if (redirect) {
+                setRedirect(true);
+            })
+            .catch((error) => {
+                // Manejar errores de la solicitud
+                console.error('Error:', error);
+            });
+    }, [token]);
+
+    if (redirect) {
+        //alert('verificado');
         return <Navigate to="/signup" />;
-      }
+    }
 
-    return (
-    <div></div>
-  );
+    return <div></div>;
 };
 
 export default AuthToken;

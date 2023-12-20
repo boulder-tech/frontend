@@ -9,6 +9,7 @@ import Team from './components/Team';
 import Contact from './components/Contact';
 import SignupForm from './components/SignupForm';
 import RegistrationForm from './components/RegistrationForm';
+import Portfolio from './components/Portfolio';
 import AuthToken from './components/AuthToken';
 import { AuthProvider } from './context/AuthContext';
 
@@ -27,6 +28,7 @@ const App = () => {
                         <Route path="/team" element={<Team />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/signup" element={<SignupForm />} />
+                        <Route path="/portfolio" element={<Portfolio />} />
                         <Route
                             path="/auth/token/:token"
                             element={<AuthToken />}

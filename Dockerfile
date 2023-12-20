@@ -16,8 +16,8 @@ RUN npm install
 # Copia el resto de la aplicación
 COPY . .
 
-# Exponer el puerto en el que se ejecutará tu aplicación React (por defecto es 3000)
+# Exponer el puerto en el que se ejecutará tu aplicación React (por defecto es 80)
 EXPOSE 3000
 
 # Comando para ejecutar la aplicación (puede variar según la configuración de tu proyecto)
-CMD ["npm", "start"]
+CMD npm run dev

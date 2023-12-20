@@ -4,12 +4,14 @@ import {
     Form,
     Button,
     Container,
-    Row,
-    Col,
+    Grid,
+    Header,
     Image,
-    Alert,
-    InputGroup,
-} from 'react-bootstrap';
+    Message,
+    Label,
+    Segment,
+    Input,
+} from 'semantic-ui-react';
 import {
     Envelope,
     Clock,
@@ -55,6 +57,10 @@ const SignupForm = () => {
             setVerifiedEmail(storedEmail);
             localStorage.removeItem('email');
         }
+        console.log('verifiedEmail', verifiedEmail);
+        console.log('emailSent', emailSent);
+        console.log('showLogin', showLogin);
+        console.log('registrationSuccess', registrationSuccess);
     }, []);
 
     const handleRegister = async (e) => {
@@ -128,10 +134,10 @@ const SignupForm = () => {
 
     return (
         <Container>
-            <Row className="justify-content-md-center py-5">
+            <Grid>
                 {verifiedEmail && !registrationSuccess && (
-                    <Col xs={12} md={6}>
-                        <div className="mb-4">
+                    <Grid.Column>
+                        <div>
                             <h2>Sign up</h2>
                             <p>
                                 Ready to get started? Fill in the details below
@@ -144,24 +150,18 @@ const SignupForm = () => {
                             </p>
                         </div>
                         <Form>
-                            <Form.Group
-                                controlId="formBasicEmail"
-                                className="mb-3"
-                            >
-                                <Form.Control
+                            <Form.Field>
+                                <Form.Input
                                     type="email"
                                     placeholder="Email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    readOnly // Make the email input read-only
+                                    readOnly // Hacer que el campo de entrada de correo electrónico sea de solo lectura
                                 />
-                            </Form.Group>
+                            </Form.Field>
 
-                            <Form.Group
-                                controlId="formBasicFirstName"
-                                className="mb-3"
-                            >
-                                <Form.Control
+                            <Form.Field>
+                                <Form.Input
                                     type="text"
                                     placeholder="Names"
                                     value={firstName}
@@ -169,13 +169,10 @@ const SignupForm = () => {
                                         setFirstName(e.target.value)
                                     }
                                 />
-                            </Form.Group>
+                            </Form.Field>
 
-                            <Form.Group
-                                controlId="formBasicLastName"
-                                className="mb-3"
-                            >
-                                <Form.Control
+                            <Form.Field>
+                                <Form.Input
                                     type="text"
                                     placeholder="Lastname"
                                     value={lastName}
@@ -183,31 +180,18 @@ const SignupForm = () => {
                                         setLastName(e.target.value)
                                     }
                                 />
-                            </Form.Group>
+                            </Form.Field>
 
-                            <Form.Group
-                                controlId="formBasicPassword"
-                                className="mb-3"
-                            >
-                                <InputGroup>
-                                    <Form.Control
-                                        type={
-                                            showPassword ? 'text' : 'password'
-                                        }
-                                        placeholder="Password"
-                                        value={password}
-                                        onChange={(e) =>
-                                            setPassword(e.target.value)
-                                        }
-                                    />
-                                    <Button
-                                        variant="outline-secondary"
-                                        onClick={togglePasswordVisibility}
-                                    >
-                                        {showPassword ? <EyeSlash /> : <Eye />}
-                                    </Button>
-                                </InputGroup>
-                            </Form.Group>
+                            <Form.Field>
+                                <Form.Input
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                />
+                            </Form.Field>
                             <Button
                                 variant="primary"
                                 type="submit"
@@ -217,10 +201,10 @@ const SignupForm = () => {
                                 Sign Up
                             </Button>
                         </Form>
-                    </Col>
+                    </Grid.Column>
                 )}
                 {!emailSent && !verifiedEmail && !registrationSuccess && (
-                    <Col xs={12} md={6}>
+                    <Grid.Column>
                         <div className="mb-4">
                             <h2>
                                 {showLogin ? 'Sign in' : 'Sign up or Sign in'}
@@ -232,51 +216,46 @@ const SignupForm = () => {
                             </p>
                         </div>
                         <Form>
-                            <Form.Group
-                                controlId="formBasicEmail"
-                                className="mb-3"
-                            >
-                                <Form.Control
+                            <Form.Field>
+                                <label>Email</label>
+                                <Form.Input
                                     type="email"
                                     placeholder="Email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                            </Form.Group>
+                            </Form.Field>
                             {showLogin && (
-                                <Form.Group
-                                    controlId="formBasicPassword"
-                                    className="mb-3"
-                                >
-                                    <InputGroup>
-                                        <Form.Control
-                                            type={
-                                                showPassword
-                                                    ? 'text'
-                                                    : 'password'
-                                            }
-                                            placeholder="Password"
-                                            value={password}
-                                            onChange={(e) =>
-                                                setPassword(e.target.value)
-                                            }
-                                            isInvalid={!!errors.password}
-                                        />
-                                        <Button
-                                            variant="outline-secondary"
-                                            onClick={togglePasswordVisibility}
-                                        >
-                                            {showPassword ? (
-                                                <EyeSlash />
-                                            ) : (
-                                                <Eye />
-                                            )}
-                                        </Button>
-                                        <Form.Control.Feedback type="invalid">
+                                <Form.Field>
+                                    <Form.Input
+                                        type={
+                                            showPassword ? 'text' : 'password'
+                                        }
+                                        placeholder="Password"
+                                        value={password}
+                                        onChange={(e) =>
+                                            setPassword(e.target.value)
+                                        }
+                                        icon={
+                                            <Button
+                                                icon={
+                                                    showPassword
+                                                        ? 'eye slash'
+                                                        : 'eye'
+                                                }
+                                                onClick={
+                                                    togglePasswordVisibility
+                                                }
+                                            />
+                                        }
+                                        iconPosition="right"
+                                    />
+                                    {errors.password && (
+                                        <Label basic color="red" pointing>
                                             {errors.password}
-                                        </Form.Control.Feedback>
-                                    </InputGroup>
-                                </Form.Group>
+                                        </Label>
+                                    )}
+                                </Form.Field>
                             )}
                             <div className="d-inline-flex flex-column">
                                 {errors.general && (
@@ -297,74 +276,78 @@ const SignupForm = () => {
                                 </Button>
                             </div>
                         </Form>
-                    </Col>
+                    </Grid.Column>
                 )}
                 {emailSent && (
-                    <Col className="bg-light p-4 rounded">
+                    <Grid.Column className="bg-light p-4 rounded">
                         <h4 className="mb-4">Check Your Email</h4>
                         <p>
                             We sent an email to <strong>{email}</strong> with
                             instructions on how to sign in to your account.
                         </p>
 
-                        <Row className="mt-4">
-                            <Col md={6} className="d-flex align-items-center">
-                                <Envelope size={24} className="mr-2" />
-                                <p className="m-1">
+                        <Grid columns={2}>
+                            <Grid.Column>
+                                <p className="ui inline">
+                                    <Envelope size={24} className="mr-2" />
                                     The magic link is in your email.
                                 </p>
-                            </Col>
-                            <Col md={6} className="d-flex align-items-center">
-                                <Clock size={24} className="mr-2" />
-                                <p className="m-1">
+                            </Grid.Column>
+                            <Grid.Column>
+                                <p className="ui inline">
+                                    <Clock size={24} className="mr-2" />
                                     The link expires in 1 hour.
                                 </p>
-                            </Col>
-                        </Row>
+                            </Grid.Column>
+                        </Grid>
 
-                        <Row className="mt-3">
-                            <Col md={6} className="d-flex align-items-center">
-                                <Lock size={24} className="mr-2" />
-                                <p className="m-1">
+                        <Grid columns={2}>
+                            <Grid.Column>
+                                <p className="ui inline">
+                                    <Lock size={24} className="mr-2" />
                                     Don't share this link. It's only meant for
                                     you.
                                 </p>
-                            </Col>
-                            <Col md={6} className="d-flex align-items-center">
-                                <ArrowRepeat size={24} className="mr-2" />
-                                <p className="m-1">
+                            </Grid.Column>
+                            <Grid.Column>
+                                <p className="ui inline">
+                                    <ArrowRepeat size={24} className="mr-2" />
                                     Didn't receive this link?{' '}
                                     <a href="#" className="text-primary">
                                         Try again.
                                     </a>
                                 </p>
-                            </Col>
-                        </Row>
+                            </Grid.Column>
+                        </Grid>
 
-                        <Row className="mt-4">
-                            <Col>
-                                <Alert variant="info">
-                                    Forgot your email or need help? Get
-                                    assistance via{' '}
-                                    <a href="mailto:support@bouldertech.fi">
-                                        support@bouldertech.fi
-                                    </a>
-                                </Alert>
-                            </Col>
-                        </Row>
-                    </Col>
+                        <Grid className="mt-4">
+                            <Grid.Column>
+                                <Message info>
+                                    <Message.Header>
+                                        Forgot your email or need help?
+                                    </Message.Header>
+                                    <p>
+                                        Get assistance via{' '}
+                                        <a href="mailto:support@bouldertech.fi">
+                                            support@bouldertech.fi
+                                        </a>
+                                    </p>
+                                </Message>
+                            </Grid.Column>
+                        </Grid>
+                    </Grid.Column>
                 )}
                 {registrationSuccess && (
-                    <Col className="bg-light p-4 rounded">
+                    <Grid.Column className="bg-light p-4 rounded">
                         <h4 className="mb-4">Account Created Successfully</h4>
                         <p>
                             Your account has been successfully created. You can
                             now <a href="/signup">sign in</a> to your new
                             account.
                         </p>
-                    </Col>
+                    </Grid.Column>
                 )}
-            </Row>
+            </Grid>
         </Container>
     );
 };
