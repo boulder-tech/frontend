@@ -21,7 +21,7 @@ import {
     EyeSlash,
 } from 'react-bootstrap-icons';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../app/context/AuthContext';
 
 const CLIENT_ALREADY_EXISTS = 100;
 const SIGNUP_EMAIL_SENT = 101;

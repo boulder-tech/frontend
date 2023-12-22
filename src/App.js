@@ -11,7 +11,7 @@ import SignupForm from './components/SignupForm';
 import RegistrationForm from './components/RegistrationForm';
 import Portfolio from './components/Portfolio';
 import AuthToken from './components/AuthToken';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from './app/context/AuthContext';
 
 import './App.css';
 

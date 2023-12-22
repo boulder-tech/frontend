@@ -2,8 +2,9 @@ import { Metadata } from 'next';
 import localFont from 'next/font/local';
 import clsx from 'clsx';
 import './globals.css';
-import Header from '@/components/header';
-import Footer from '@/components/sections/footer';
+import Header from '../components/Header';
+//import Footer from '@/components/sections/footer';
+import { GlobalContextProvider } from './context/store';
 
 const atypDisplay = localFont({
     variable: '--font-atyp-display',
@@ -34,20 +35,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
-            <body
-                className={clsx(
-                    atypDisplay.variable,
-                    atypText.variable,
-                    'font-atyp-text',
-                    'bg-background',
-                    'text-foreground-heading'
-                )}
-            >
-                <Header />
-                <main className="flex flex-col bg-background">
-                    {children}
-                    <Footer />
-                </main>
+            <body>
+                <GlobalContextProvider>
+                    <Header />
+                    <main className="flex flex-col bg-background">
+                        {children}
+                    </main>
+                </GlobalContextProvider>
             </body>
         </html>
     );

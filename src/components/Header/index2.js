@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu, Dropdown, Icon } from 'semantic-ui-react';
 import { PersonCircle, BoxArrowRight } from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../app/context/AuthContext';
 
 const Header = () => {
     const { user, logout } = useAuth();
