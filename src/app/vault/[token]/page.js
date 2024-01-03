@@ -2,6 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useGlobalContext } from '../../context/store';
 import MainSection from '../../../components/sections/main-section';
+import axios from 'axios';
+
+import { ethers } from 'ethers';
+
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Vault = ({ params }) => {
     const [isNavbarOpen, setNavbarOpen] = useState(true);
@@ -10,8 +15,19 @@ const Vault = ({ params }) => {
     const [hasKYC, setHasKYC] = useState(false);
     const [showKYCForm, setShowKYCForm] = useState(false);
     const [kycData, setKycData] = useState({});
+    const [showPendingReviewModal, setShowPendingReviewModal] = useState(false);
+    const [showKYCRejectedModal, setShowKYCRejectedModal] = useState(false);
+    const [showBuyModal, setShowBuyModal] = useState(false);
+    const [showAssets, setShowAssets] = useState(false);
+
+    const [cost, setCost] = useState(0.04118);
+    const [quantity, setQuantity] = useState(1);
 
     const { wallet, setWallet } = useGlobalContext();
+
+    //For transactions
+    const [error, setError] = useState();
+    const [txs, setTxs] = useState([]);
 
     useEffect(() => {
         const walletDataString = localStorage.getItem('wallet');
@@ -25,12 +41,32 @@ const Vault = ({ params }) => {
         setNavbarOpen(!isNavbarOpen);
     };
 
-    const BuyToken = () => {
+    const BuyToken = async () => {
         if (wallet?.address) {
-            //consultar al backend si el usuario tiene KYC
-            setHasKYC(false);
+            const { data } = await axios.get(
+                `${backendUrl}/api/client/public-address/${wallet.address}`
+            );
 
-            setIsKYCModalOpen(true);
+            const { client } = data;
+
+            if (client) {
+                setHasKYC(true);
+                console.log(client.status);
+                if (client.status === 'pending_review') {
+                    setShowPendingReviewModal(true);
+                } else if (client.status === 'rejected') {
+                    setShowKYCRejectedModal(true);
+                } else if (client.status === 'approved') {
+                    setShowBuyModal(true);
+                } else {
+                    setIsKYCModalOpen(true);
+                }
+            } else {
+                setHasKYC(false);
+                setIsKYCModalOpen(true);
+            }
+
+            //consultar al backend si el usuario tiene KYC
 
             //proceder a KYC si no lo hizo
             //caso contrario dejarle comprar
@@ -83,6 +119,57 @@ const Vault = ({ params }) => {
             console.error('Error al conectar la billetera:', error);
             // Manejar el error según sea necesario
         }
+    };
+
+    const startPayment = async ({ setError, setTxs, ether, addr }) => {
+        try {
+            if (!window.ethereum)
+                throw new Error('No crypto wallet found. Please install it.');
+
+            await window.ethereum.send('eth_requestAccounts');
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            ethers.utils.getAddress(addr);
+            const tx = await signer.sendTransaction({
+                to: addr,
+                value: ethers.utils.parseEther(ether),
+            });
+
+            console.log({ ether, addr });
+            console.log('tx', tx);
+
+            // Realiza una solicitud POST al backend con la información de la transacción usando Axios
+            const response = await axios.post(`${backendUrl}/api/transaction`, {
+                data: {
+                    amount: quantity,
+                    asset: 'GD30D',
+                    address: wallet.address,
+                    hash: tx.hash,
+                    status: 'pending',
+                },
+            });
+
+            console.log(response);
+
+            setTxs([tx]);
+
+            setShowBuyModal(false);
+        } catch (err) {
+            console.log(err);
+            setError(err.message);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        //const data = new FormData(e.target);
+        setError();
+        await startPayment({
+            setError,
+            setTxs,
+            ether: cost.toString(),
+            addr: '0xF13b282C1a8f3965A384D71D78683dF208162753', //data.get('addr'),
+        });
     };
 
     const { token } = params;
@@ -158,7 +245,6 @@ const Vault = ({ params }) => {
                                 ></path>
                             </svg>
                             <p class="text-base font-semibold">Vaults</p>
-                            
                         </div>
                     </div>
                 </a>
@@ -1236,7 +1322,7 @@ const Vault = ({ params }) => {
                                                                 id="firstName"
                                                                 name="firstName"
                                                                 value={
-                                                                    kycData.firstName
+                                                                    kycData.name
                                                                 }
                                                                 onChange={(
                                                                     event
@@ -1246,10 +1332,9 @@ const Vault = ({ params }) => {
                                                                             prevData
                                                                         ) => ({
                                                                             ...prevData,
-                                                                            firstName:
-                                                                                event
-                                                                                    .target
-                                                                                    .value,
+                                                                            name: event
+                                                                                .target
+                                                                                .value,
                                                                         })
                                                                     );
                                                                 }}
@@ -1269,7 +1354,7 @@ const Vault = ({ params }) => {
                                                                 id="lastName"
                                                                 name="lastName"
                                                                 value={
-                                                                    kycData.lastName
+                                                                    kycData.lastname
                                                                 }
                                                                 onChange={(
                                                                     event
@@ -1279,7 +1364,7 @@ const Vault = ({ params }) => {
                                                                             prevData
                                                                         ) => ({
                                                                             ...prevData,
-                                                                            lastName:
+                                                                            lastname:
                                                                                 event
                                                                                     .target
                                                                                     .value,
@@ -1334,7 +1419,7 @@ const Vault = ({ params }) => {
                                                                 id="postalAddress"
                                                                 name="postalAddress"
                                                                 value={
-                                                                    kycData.postalAddress
+                                                                    kycData.postal_address
                                                                 }
                                                                 onChange={(
                                                                     event
@@ -1344,7 +1429,7 @@ const Vault = ({ params }) => {
                                                                             prevData
                                                                         ) => ({
                                                                             ...prevData,
-                                                                            postalAddress:
+                                                                            postal_address:
                                                                                 event
                                                                                     .target
                                                                                     .value,
@@ -1420,7 +1505,7 @@ const Vault = ({ params }) => {
                                                                 id="amountToInvest"
                                                                 name="amountToInvest"
                                                                 value={
-                                                                    kycData.amountToInvest
+                                                                    kycData.amount_to_invest
                                                                 }
                                                                 onChange={(
                                                                     event
@@ -1430,7 +1515,7 @@ const Vault = ({ params }) => {
                                                                             prevData
                                                                         ) => ({
                                                                             ...prevData,
-                                                                            amountToInvest:
+                                                                            amount_to_invest:
                                                                                 event
                                                                                     .target
                                                                                     .value,
@@ -1448,11 +1533,32 @@ const Vault = ({ params }) => {
                                                             <button
                                                                 type="submit"
                                                                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
-                                                                onClick={() =>
+                                                                onClick={async () => {
+                                                                    const response =
+                                                                        await axios.put(
+                                                                            `${backendUrl}/api/client/kyc`,
+                                                                            {
+                                                                                ...kycData,
+                                                                                public_address:
+                                                                                    wallet.address,
+                                                                                amount_to_invest:
+                                                                                    typeof kycData.amount_to_invest ===
+                                                                                    'number'
+                                                                                        ? kycData.amount_to_invest
+                                                                                        : parseFloat(
+                                                                                              kycData.amount_to_invest
+                                                                                          ),
+                                                                            }
+                                                                        );
+
+                                                                    console.log(
+                                                                        response
+                                                                    );
+
                                                                     setIsKYCModalOpen(
                                                                         false
-                                                                    )
-                                                                }
+                                                                    );
+                                                                }}
                                                             >
                                                                 Submit
                                                             </button>
@@ -1515,6 +1621,608 @@ const Vault = ({ params }) => {
                                                     </button>
                                                 </>
                                             )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                        </div>
+                    ) : null}
+
+                    {showPendingReviewModal ? (
+                        <div>
+                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                                    {/*content*/}
+                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                        {/*header*/}
+                                        <div className="ml-auto mr-3 mt-3">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                                aria-hidden="true"
+                                                className="cursor-pointer h-5 w-5 min-w-5 text-gray-600 hover:text-green-600"
+                                                onClick={() =>
+                                                    setShowPendingReviewModal(
+                                                        false
+                                                    )
+                                                }
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                ></path>
+                                            </svg>
+                                        </div>
+                                        <div className="flex items-start justify-between pt-1 pb-1 pl-5 pr-5 border-b border-solid border-blueGray-200 rounded-t">
+                                            <p className="text-2xl text-black">
+                                                KYC Data Under Review
+                                            </p>
+                                            <button
+                                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                                onClick={() =>
+                                                    setShowPendingReviewModal(
+                                                        false
+                                                    )
+                                                }
+                                            >
+                                                <span className="text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                                                    ×
+                                                </span>
+                                            </button>
+                                        </div>
+                                        {/*body*/}
+                                        <div className="relative p-6 flex-auto">
+                                            <p>
+                                                You are currently unable to make
+                                                a purchase at this moment. Your
+                                                KYC data is under review to
+                                                ensure security and regulatory
+                                                compliance. We will notify you
+                                                once the review is complete.
+                                                Thank you for your
+                                                understanding.
+                                            </p>
+                                            <button
+                                                data-v-69ed45e4=""
+                                                type="button"
+                                                onClick={() =>
+                                                    setShowPendingReviewModal(
+                                                        false
+                                                    )
+                                                }
+                                                class="flex items-center rounded-lg font-semibold outline-none py-3 px-4 text-base h-10 max-h-10 bg-green-600 hover:bg-green-800 text-white mt-5"
+                                            >
+                                                <div
+                                                    data-v-69ed45e4=""
+                                                    class="flex items-center gap-2"
+                                                >
+                                                    <span data-v-69ed45e4="">
+                                                        Ok
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                        </div>
+                    ) : null}
+
+                    {showKYCRejectedModal ? (
+                        <div>
+                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                                    {/*content*/}
+                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                        {/*header*/}
+                                        <div className="ml-auto mr-3 mt-3">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                                aria-hidden="true"
+                                                className="cursor-pointer h-5 w-5 min-w-5 text-gray-600 hover:text-green-600"
+                                                onClick={() =>
+                                                    setShowKYCRejectedModal(
+                                                        false
+                                                    )
+                                                }
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                ></path>
+                                            </svg>
+                                        </div>
+                                        <div className="flex items-start justify-between pt-1 pb-1 pl-5 pr-5 border-b border-solid border-blueGray-200 rounded-t">
+                                            <p className="text-2xl text-black">
+                                                KYC Rejected
+                                            </p>
+                                            <button
+                                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                                onClick={() =>
+                                                    setShowKYCRejectedModal(
+                                                        false
+                                                    )
+                                                }
+                                            >
+                                                <span className="text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                                                    ×
+                                                </span>
+                                            </button>
+                                        </div>
+                                        {/*body*/}
+                                        <div className="relative p-6 flex-auto">
+                                            <p>
+                                                Your KYC submission has been
+                                                rejected. Unfortunately, we are
+                                                unable to proceed with your
+                                                request at this time. If you
+                                                have further questions or need
+                                                assistance, please contact our
+                                                support team. Thank you for your
+                                                understanding.
+                                            </p>
+                                            <button
+                                                data-v-69ed45e4=""
+                                                type="button"
+                                                onClick={() =>
+                                                    setShowKYCRejectedModal(
+                                                        false
+                                                    )
+                                                }
+                                                class="flex items-center rounded-lg font-semibold outline-none py-3 px-4 text-base h-10 max-h-10 bg-green-600 hover:bg-green-800 text-white mt-5"
+                                            >
+                                                <div
+                                                    data-v-69ed45e4=""
+                                                    class="flex items-center gap-2"
+                                                >
+                                                    <span data-v-69ed45e4="">
+                                                        Ok
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                        </div>
+                    ) : null}
+
+                    {showBuyModal ? (
+                        <div>
+                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                        <div
+                                            id="root"
+                                            class="h-full overflow-y-auto"
+                                        >
+                                            <div
+                                                class="flex flex-col items-center justify-center sm:sys-background-primary"
+                                                style={{ minHeight: '752px' }}
+                                            >
+                                                <form
+                                                    class="max-h-screen flex-1 sm:flex-initial relative w-full sm:max-w-sm sm:min-h-widget mx-auto p-4 sm:p-8 sm:pb-8 flex flex-col justify-between sm:shadow-widget sm:rounded-widget overflow-hidden sm:my-4 lg:my-8 bg-system-background-primary"
+                                                    novalidate=""
+                                                >
+                                                    <div
+                                                        class="flex flex-col flex-auto overflow-hidden -mx-1"
+                                                        id="widget-modal-root"
+                                                    >
+                                                        <div class="bg-system-background-primary backdrop-blur-[30px] px-1 pb-2">
+                                                            <div>
+                                                                <div class="flex items-start min-h-24 pr-2 pt-3">
+                                                                    <div class="flex-1">
+                                                                        <span
+                                                                            data-testid="buyHeaderPillText"
+                                                                            class="text-headline leading-headline tracking-headline font-semibold font-stretch-condensed text-label-primary"
+                                                                        >
+                                                                            Buy
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="relative">
+                                                                        <button
+                                                                            class="flex items-center justify-center pl-4 pt-1 text-label-primary relative"
+                                                                            type="button"
+                                                                            data-testid="HeaderMenuButton"
+                                                                        >
+                                                                            <svg
+                                                                                fill="none"
+                                                                                class="text-label-primary"
+                                                                                height="24"
+                                                                                stroke="currentColor"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"
+                                                                                stroke-width="2"
+                                                                                viewBox="0 0 24 24"
+                                                                                width="24"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                            >
+                                                                                <line
+                                                                                    x1="3"
+                                                                                    y1="12"
+                                                                                    x2="21"
+                                                                                    y2="12"
+                                                                                ></line>
+                                                                                <line
+                                                                                    x1="3"
+                                                                                    y1="6"
+                                                                                    x2="21"
+                                                                                    y2="6"
+                                                                                ></line>
+                                                                                <line
+                                                                                    x1="3"
+                                                                                    y1="18"
+                                                                                    x2="21"
+                                                                                    y2="18"
+                                                                                ></line>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex flex-col flex-grow h-full px-1 overflow-y-auto overflow-x-visible">
+                                                            <div>
+                                                                <div class="mt-4">
+                                                                    <div>
+                                                                        <div>
+                                                                            <div class="rounded-foreground flex items-center border border-main bg-system-background-secondary">
+                                                                                <div class="CurrencySelector__TextFieldContainer-sc-2a9k4b-2 kpwQYN flex flex-col py-4">
+                                                                                    <input
+                                                                                        class="border rounded-md placeholder-label-tertiary text-label-primary text-title2 leading-title2 font-stretch-condensed pl-4 pr-4 h-14 h-full focus:outline-none focus:shadow-outline bg-blue-100"
+                                                                                        name="amount"
+                                                                                        autocomplete="off"
+                                                                                        id="amount"
+                                                                                        placeholder="0.4118"
+                                                                                        data-testid="currencyInputFiat"
+                                                                                        step="0.01"
+                                                                                        type="number"
+                                                                                        inputmode="decimal"
+                                                                                        min="0"
+                                                                                        pattern="[0-9]*"
+                                                                                        value={
+                                                                                            cost
+                                                                                        }
+                                                                                    />
+                                                                                </div>
+
+                                                                                <div class="relative ml-auto pr-4">
+                                                                                    <button
+                                                                                        class="CurrencySelector__SelectorButton-sc-2a9k4b-1 iiOxaT rounded-r-foreground p-2 flex items-center"
+                                                                                        type="button"
+                                                                                        data-testid="currencySelectionFiat"
+                                                                                    >
+                                                                                        <span class="CurrencySelector__CurrencyIcon-sc-2a9k4b-0 STFLc"></span>
+                                                                                        <p class="text-callout leading-callout tracking-callout font-regular text-label-primary">
+                                                                                            SepoliaETH
+                                                                                        </p>
+                                                                                        <div class="w-5 h-5 ml-1">
+                                                                                            <svg
+                                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                                viewBox="0 0 20 20"
+                                                                                                fill="currentColor"
+                                                                                                aria-hidden="true"
+                                                                                                class="w-5 h-5 text-label-tertiary"
+                                                                                            >
+                                                                                                <path
+                                                                                                    fill-rule="evenodd"
+                                                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                                                    clip-rule="evenodd"
+                                                                                                ></path>
+                                                                                            </svg>
+                                                                                        </div>
+                                                                                    </button>
+
+                                                                                    <div
+                                                                                        class={`absolute top-full left-0 mt-2 bg-white border rounded shadow-md ${
+                                                                                            showAssets
+                                                                                                ? ''
+                                                                                                : 'hidden'
+                                                                                        }`}
+                                                                                    >
+                                                                                        <ul class="py-1">
+                                                                                            <li class="text-sm px-4 py-2">
+                                                                                                USDT
+                                                                                            </li>
+                                                                                            <li class="text-sm px-4 py-2">
+                                                                                                USDC
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mt-4">
+                                                                    <div>
+                                                                        <div class="rounded-foreground flex items-center border border-main bg-system-background-secondary">
+                                                                            <div class="CurrencySelector__TextFieldContainer-sc-2a9k4b-2 kpwQYN flex flex-col py-4">
+                                                                                <input
+                                                                                    class="border rounded-md disabled:fill-primary placeholder-label-tertiary text-label-primary disabled:text-label-secondary bg-blue-100 disabled:bg-fill-primary w-full disabled:cursor-not-allowed focus:outline-none focus:shadow-outline text-title2 leading-title2 font-stretch-condensed pl-4 pr-4 h-14 h-full border-none disabled:bg-transparent"
+                                                                                    autocomplete="off"
+                                                                                    id="quoteAmount"
+                                                                                    name="quoteAmount"
+                                                                                    data-testid="currencyInputCrypto"
+                                                                                    type="number"
+                                                                                    inputmode="decimal"
+                                                                                    min="0"
+                                                                                    pattern="[0-9]*"
+                                                                                    value={
+                                                                                        quantity
+                                                                                    }
+                                                                                    onChange={(
+                                                                                        e
+                                                                                    ) => {
+                                                                                        const qty =
+                                                                                            e
+                                                                                                .target
+                                                                                                .value;
+                                                                                        setQuantity(
+                                                                                            qty
+                                                                                        );
+
+                                                                                        const usdTotalCost =
+                                                                                            qty *
+                                                                                            41.18;
+
+                                                                                        const sepoliaETHcost = 1000;
+                                                                                        const totalCost =
+                                                                                            usdTotalCost /
+                                                                                            sepoliaETHcost;
+
+                                                                                        setCost(
+                                                                                            totalCost
+                                                                                        );
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+
+                                                                            <div class="flex flex-col ml-auto pr-4">
+                                                                                <button
+                                                                                    class="CurrencySelector__SelectorButton-sc-2a9k4b-1 iiOxaT rounded-r-foreground p-2"
+                                                                                    type="button"
+                                                                                    data-testid="currencySelectionCrypto"
+                                                                                >
+                                                                                    <span class="CurrencySelector__CurrencyIcon-sc-2a9k4b-0 hDeCcS"></span>
+                                                                                    <p class="text-callout leading-callout tracking-callout font-regular text-label-primary">
+                                                                                        GD30D{' '}
+                                                                                    </p>
+                                                                                    <div class="w-5 h-5">
+                                                                                        <svg
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            viewBox="0 0 20 20"
+                                                                                            fill="currentColor"
+                                                                                            aria-hidden="true"
+                                                                                            class="w-5 h-5 ml-1 text-label-tertiary"
+                                                                                        >
+                                                                                            <path
+                                                                                                fill-rule="evenodd"
+                                                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                                                clip-rule="evenodd"
+                                                                                            ></path>
+                                                                                        </svg>
+                                                                                    </div>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mt-4">
+                                                                    <div>
+                                                                        <div class="flex items-center justify-between"></div>
+                                                                        <div class="bg-system-background-secondary rounded-foreground border border-main">
+                                                                            <div
+                                                                                class="flex items-center justify-between px-4 py-4 rounded-foreground focus:outline-none focus:shadow-outline"
+                                                                                role="button"
+                                                                                tabindex="0"
+                                                                                data-testid="summary-table-header"
+                                                                            >
+                                                                                <span
+                                                                                    data-testid="summary-table-header-2"
+                                                                                    class="text-callout leading-callout tracking-callout font-regular text-label-primary"
+                                                                                >
+                                                                                    You
+                                                                                    obtain{' '}
+                                                                                    <span class="font-semibold">
+                                                                                        {`${quantity} GD30D`}
+                                                                                    </span>{' '}
+                                                                                    for{' '}
+                                                                                    <span class="font-semibold">
+                                                                                        {
+                                                                                            cost
+                                                                                        }
+                                                                                        &nbsp;SepoliaETH
+                                                                                    </span>
+                                                                                </span>
+                                                                                <div
+                                                                                    data-testid="summary-chevron"
+                                                                                    class="UpdatedSummaryTable__ArrowContainer-sc-1311rdh-0 ibwXas"
+                                                                                >
+                                                                                    <svg
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                        viewBox="0 0 20 20"
+                                                                                        fill="currentColor"
+                                                                                        aria-hidden="true"
+                                                                                        class="w-6 h-6 text-label-tertiary"
+                                                                                    >
+                                                                                        <path
+                                                                                            fill-rule="evenodd"
+                                                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                                            clip-rule="evenodd"
+                                                                                        ></path>
+                                                                                    </svg>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="UpdatedSummaryTable__SummaryContent-sc-1311rdh-1 hiMStq px-5"
+                                                                                data-testid="updated-summary-content"
+                                                                            >
+                                                                                <hr
+                                                                                    class="UpdatedSummaryTable__Divider-sc-1311rdh-2 fIiqTd mb-4 bg-divider-nonOpaque border-divider-nonOpaque"
+                                                                                    data-testid="summary-divider"
+                                                                                />
+                                                                                <div class="pb-4 space-y-3">
+                                                                                    <div class="flex justify-between w-full">
+                                                                                        <span class="flex items-center">
+                                                                                            <p class="text-subhead leading-subhead tracking-subhead font-regular">
+                                                                                                <span class="text-label-primary">
+                                                                                                    Network
+                                                                                                    fee
+                                                                                                </span>
+                                                                                            </p>
+                                                                                            <span
+                                                                                                class="ml-1 text-label-secondary focus:outline-none focus:shadow-outline"
+                                                                                                data-testid="tooltip-icon"
+                                                                                                aria-describedby="tooltip-8ac64483-37a6-4945-be87-e76164eff9df"
+                                                                                                tabindex="0"
+                                                                                                role="button"
+                                                                                            >
+                                                                                                <svg
+                                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                                    fill="none"
+                                                                                                    viewBox="0 0 24 24"
+                                                                                                    stroke="currentColor"
+                                                                                                    aria-hidden="true"
+                                                                                                    class="w-4 h-4"
+                                                                                                >
+                                                                                                    <path
+                                                                                                        stroke-linecap="round"
+                                                                                                        stroke-linejoin="round"
+                                                                                                        stroke-width="2"
+                                                                                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                                                                    ></path>
+                                                                                                </svg>
+                                                                                            </span>
+                                                                                        </span>
+                                                                                        <p class="text-subhead leading-subhead tracking-subhead font-regular">
+                                                                                            <span class="text-label-primary">
+                                                                                                -
+                                                                                            </span>
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="flex flex-row items-start mt-4 -mb-3 justify-center">
+                                                                        <div class="text-footnote leading-footnote tracking-footnote font-regular text-label-secondary">
+                                                                            <div class="flex items-center mb-2">
+                                                                                <span
+                                                                                    class="focus:outline-none focus:shadow-outline"
+                                                                                    data-testid="tooltip-icon"
+                                                                                    aria-describedby="tooltip-b7988eeb-e595-49f2-bdb9-8c8c8c7073ae"
+                                                                                    tabindex="0"
+                                                                                    role="button"
+                                                                                >
+                                                                                    <svg
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                        fill="none"
+                                                                                        viewBox="0 0 24 24"
+                                                                                        stroke="currentColor"
+                                                                                        aria-hidden="true"
+                                                                                        class="w-3 h-3 text-label-secondary"
+                                                                                    >
+                                                                                        <path
+                                                                                            stroke-linecap="round"
+                                                                                            stroke-linejoin="round"
+                                                                                            stroke-width="2"
+                                                                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                                                        ></path>
+                                                                                    </svg>
+                                                                                </span>
+                                                                                <span
+                                                                                    data-testid="summary-countdown"
+                                                                                    style={{}}
+                                                                                    class="text-footnote leading-footnote tracking-footnote font-regular ml-1 text-label-secondary"
+                                                                                >
+                                                                                    <span class="text-footnote leading-footnote tracking-footnote font-regular">
+                                                                                        The
+                                                                                        price
+                                                                                        updates
+                                                                                        in
+                                                                                        4
+                                                                                        seconds
+                                                                                    </span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-auto mb-4">
+                                                                <div class=" bg-system-background-primary sm:mb-0 backdrop-blur-[30px] mb-2">
+                                                                    <div class="flex flex-col">
+                                                                        <button
+                                                                            type="submit"
+                                                                            class="text-headline leading-headline tracking-headline font-semibold font-stretch-condensed p-4 w-full focus:outline-none focus:shadow-outline transition-colors relative block text-center disabled:cursor-not-allowed flex justify-center items-center mt-4 xs:mt-8 rounded-button bg-btn-primary hover:bg-btn-hover disabled:bg-fill-secondary text-btn-label disabled:text-label-tertiary h-12"
+                                                                            onClick={
+                                                                                handleSubmit
+                                                                            }
+                                                                        >
+                                                                            Continue{' '}
+                                                                            <span class="absolute top-0 right-0 flex items-center h-full px-4">
+                                                                                <svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    fill="none"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke="currentColor"
+                                                                                    aria-hidden="true"
+                                                                                    class="w-6 h-6"
+                                                                                >
+                                                                                    <path
+                                                                                        stroke-linecap="round"
+                                                                                        stroke-linejoin="round"
+                                                                                        stroke-width="2"
+                                                                                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                                                                    ></path>
+                                                                                </svg>
+                                                                            </span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="bg-system-background-primary">
+                                                                            <div class="flex flex-row items-start mt-4 -mb-3 justify-center">
+                                                                                <div class="text-footnote leading-footnote tracking-footnote font-regular text-label-secondary">
+                                                                                    By
+                                                                                    continuing,
+                                                                                    you
+                                                                                    accept
+                                                                                    our{' '}
+                                                                                    <a
+                                                                                        href="https://www.moonpay.com/legal/cookie_policy"
+                                                                                        rel="noopener noreferrer"
+                                                                                        target="_blank"
+                                                                                        class="text-accent-primary"
+                                                                                    >
+                                                                                        cookie
+                                                                                        policy
+                                                                                    </a>
+
+                                                                                    .{' '}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

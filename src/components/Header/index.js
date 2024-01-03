@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useGlobalContext } from '../../app/context/store';
 import Link from 'next/link';
 import Imagotype from './imagotype';
@@ -10,9 +10,12 @@ import clsx from 'clsx';
 import { Menu, Dropdown, Icon } from 'semantic-ui-react';
 import { PersonCircle, BoxArrowRight } from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 //import { useAuth } from '../../context/AuthContext';
 
 //import './Header.css';
+
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Header = () => {
     //const { user, logout } = useAuth();
@@ -79,7 +82,16 @@ const Header = () => {
                 });
 
                 // Obtener la dirección pública de la primera cuenta
-                const publicAddress = accounts[0];
+                const public_address = accounts[0];
+
+                const response = await axios.post(
+                    `${backendUrl}/api/client/connect-wallet`,
+                    {
+                        public_address,
+                    }
+                );
+
+                console.log(response);
 
                 setIsWalletConnected(true);
                 setIsModalOpen(false);
@@ -87,7 +99,7 @@ const Header = () => {
                 // Crear el objeto que quieres almacenar en localStorage
                 const walletObject = {
                     wallet: walletName,
-                    address: publicAddress,
+                    address: public_address,
                 };
 
                 setWallet(walletObject);
@@ -151,7 +163,7 @@ const Header = () => {
                         </Link>
                     </div>
                     {wallet?.address ? (
-                        <Link href={'/#connect'} className="hidden sm:block">
+                        <div className="hidden sm:block">
                             <AddressButton
                                 onClick={() => setShowUserSettings(true)}
                             >
@@ -521,13 +533,13 @@ const Header = () => {
                                     </section>
                                 </div>
                             </div>
-                        </Link>
+                        </div>
                     ) : (
-                        <Link href={'/#connect'} className="hidden sm:block">
+                        <div className="hidden sm:block">
                             <GhostButton onClick={openModal}>
                                 Connect
                             </GhostButton>
-                        </Link>
+                        </div>
                     )}
                 </div>
             </header>
