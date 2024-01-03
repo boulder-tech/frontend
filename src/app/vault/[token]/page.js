@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGlobalContext } from '../../context/store';
 import MainSection from '../../../components/sections/main-section';
+import TransactionPanel from '../../../components/TransactionPanel';
 import axios from 'axios';
 
 import { ethers } from 'ethers';
@@ -421,1815 +422,3326 @@ const Vault = ({ params }) => {
                 </a>
             </nav>
 
-            <div class="h-full-flex max-w-full 2xl:mx-auto 2xl:max-w-7xl overflow-hidden">
-                <div data-v-69ed45e4="">
-                    <a
-                        data-v-69ed45e4=""
-                        href="/"
-                        class="mb-4 flex items-center gap-2"
-                    >
-                        <svg
-                            data-v-69ed45e4=""
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            class="cursor-pointer h-4 w-4 min-w-4 cursor-pointer h-4 w-4 min-w-4"
-                        >
-                            <path
-                                d="M21 11L6.414 11 11.707 5.707 10.293 4.293 2.586 12 10.293 19.707 11.707 18.293 6.414 13 21 13z"
-                                fill="currentColor"
-                            ></path>
-                        </svg>
-                        <span data-v-69ed45e4="">Back</span>
-                    </a>
-                    <div data-v-69ed45e4="" class="flex items-center gap-2">
-                        <div data-v-69ed45e4="" class="relative max-md:hidden">
-                            <img
-                                class="rounded-full bg-white w-10 h-10 min-w-10"
-                                src="http://clasico.rava.com/contenidos/logoperfil/ARG.png"
-                                name="PROJX"
-                            />
-                            <img
-                                class="rounded-full bg-white w-4 h-4 min-w-4 absolute right-0 bottom-0"
-                                src="/vendor/@injectivelabs/token-metadata/injective-black-fill.png"
-                                name="Injective"
-                            />
-                        </div>
-                        <div data-v-69ed45e4="" class="relative md:hidden">
-                            <img
-                                class="rounded-full bg-white w-6 h-6 min-w-6"
-                                src="/vendor/@injectivelabs/token-metadata/projx.png"
-                                name="PROJX"
-                            />
-                            <img
-                                class="rounded-full bg-white w-4 h-4 min-w-4 absolute -right-0.5 -bottom-0.5"
-                                src="/vendor/@injectivelabs/token-metadata/injective-black-fill.png"
-                                name="Injective"
-                            />
-                        </div>
-                        <h1
-                            data-v-69ed45e4=""
-                            class="text-2xl md:text-3xl font-bold max-w-sm truncate"
-                        >
-                            {token}
-                        </h1>
-                    </div>
-                    <section data-v-69ed45e4="" class="h-full-flex">
-                        <div
-                            data-v-69ed45e4=""
-                            class="my-6 flex flex-wrap items-center justify-between gap-2"
-                        >
-                            <div
-                                data-v-69ed45e4=""
-                                class="flex items-center flex-wrap xs:gap-4"
-                            >
-                                <a
-                                    data-v-69ed45e4=""
-                                    href={`/vault/${token}`}
-                                    class="router-link-active p-3 font-semibold hover:text-green-600"
-                                >
-                                    <span data-v-69ed45e4="" class="capitalize">
-                                        Overview
-                                    </span>
-                                </a>
-                                <a
-                                    data-v-69ed45e4=""
-                                    href={`/vault/${token}/info`}
-                                    class="p-3 font-semibold hover:text-green-600"
-                                >
-                                    <span data-v-69ed45e4="" class="capitalize">
-                                        Info
-                                    </span>
-                                </a>
-                                <a
-                                    data-v-69ed45e4=""
-                                    href={`/vault/${token}/liquidity`}
-                                    class="p-3 font-semibold hover:text-green-600"
-                                >
-                                    <span data-v-69ed45e4="" class="capitalize">
-                                        Liquidity
-                                    </span>
-                                </a>
-                                <a
-                                    data-v-69ed45e4=""
-                                    href={`/vault/${token}/activities`}
-                                    class="router-link-active router-link-exact-active p-3 font-semibold hover:text-green-600"
-                                    aria-current="page"
-                                >
-                                    <span data-v-69ed45e4="" class="capitalize">
-                                        Activities
-                                    </span>
-                                </a>
-                                <a
-                                    data-v-69ed45e4=""
-                                    aria-current="page"
-                                    href="/vault/inj1xvlnfmq5672rmvn6576rvj389ezu9nxc9dpk8l/activities"
-                                    class="router-link-active router-link-exact-active p-3 font-semibold hover:text-green-600"
-                                >
-                                    <span
-                                        data-v-69ed45e4=""
-                                        class="capitalize"
-                                    ></span>
-                                </a>
-                            </div>
-                            <div
-                                data-v-69ed45e4=""
-                                class="sm:flex items-center gap-2 hidden"
-                            >
-                                <button
-                                    data-v-69ed45e4=""
-                                    type="button"
-                                    onClick={() => BuyToken()}
-                                    class="flex items-center rounded-lg font-semibold outline-none py-3 px-4 text-base h-10 max-h-10 bg-green-600 hover:bg-green-800 text-white"
-                                >
-                                    <div
-                                        data-v-69ed45e4=""
-                                        class="flex items-center gap-2"
-                                    >
-                                        <span data-v-69ed45e4="">
-                                            {wallet?.address ? 'Buy' : '+Add'}
-                                        </span>
-                                        <svg
-                                            data-v-69ed45e4=""
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            class="cursor-pointer h-4 w-4 min-w-4 rotate-180"
-                                        >
-                                            <path
-                                                d="M21 11L6.414 11 11.707 5.707 10.293 4.293 2.586 12 10.293 19.707 11.707 18.293 6.414 13 21 13z"
-                                                fill="currentColor"
-                                            ></path>
-                                        </svg>
+            <div
+                style={{
+                    fontFamily: 'Barlow, sans-serif',
+                    opacity: 1,
+                    transform: 'none',
+                }}
+            >
+                <div
+                    class="z-0 w-full pt-[40px] pb-6 md:pb-8 border-t border-[#CFD9E2]"
+                    id="vault-dashboard"
+                    style={{ display: 'block' }}
+                >
+                    <div class="overflow-hidden pt-0 pb-8">
+                        <div class="mx-auto max-w-[1200px] px-4 xl:px-0">
+                            <div class="flex flex-row items-center space-x-3">
+                                <div class="h-[54px] w-[54px] rounded-lg border-2 border-black p-[10px]">
+                                    <img src="/./icons/tbillToken.svg" />
+                                </div>
+                                <div class="flex flex-col justify-center">
+                                    <div class="text-2xl font-semibold mobile:text-2xl">
+                                        GD30D VAULT
                                     </div>
-                                </button>
+                                    <div class="text-[14px] text-[#626262 font-normal]">
+                                        {' '}
+                                        Last updated: less than a minute ago{' '}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div data-v-69ed45e4="">
-                            <div
-                                isowner="false"
-                                isopensidebar="true"
-                                appstatus="idle"
-                                class=""
-                            >
-                                <div class="grid gap-6 xl:grid-cols-4">
-                                    <div class="xl:col-span-3 bg-white rounded-lg border border-gray-400 p-4 md:p-6">
-                                        <div class="h-full">
-                                            <div class="flex flex-wrap items-start justify-end gap-2">
-                                                <div class="flex-grow">
-                                                    <p class="text-sm text-gray-600 mb-4">
-                                                        <span>
-                                                            Vault Token ({token}
-                                                            ) Share Price{' '}
-                                                        </span>
-                                                    </p>
-                                                    <div class="flex items-center space-x-2 whitespace-nowrap">
-                                                        <div class="text-2xl font-semibold">
-                                                            41.18 USD{' '}
-                                                        </div>
-                                                        <div class="font-semibold text-base">
-                                                            <span class="text-red-600">
-                                                                -1.47%{' '}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex flex-wrap items-center gap-2 rounded-xl bg-gray-100 p-2">
-                                                    <div>
-                                                        <div class="cursor-pointer">
-                                                            <button
-                                                                type="button"
-                                                                class="flex items-center rounded-lg font-semibold outline-none py-2 px-4 text-sm h-8 max-h-8 bg-white text-black"
-                                                            >
-                                                                <span>
-                                                                    Price
-                                                                </span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="cursor-pointer">
-                                                            <button
-                                                                type="button"
-                                                                class="flex items-center rounded-lg font-semibold outline-none py-2 px-4 text-sm h-8 max-h-8 hover:bg-white hover:text-black hover:bg-opacity-80 max-h-[30px] text-gray-600"
-                                                            >
-                                                                <span>TVL</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="2md:flex hidden flex-wrap items-center gap-2 rounded-xl bg-gray-100 p-2">
-                                                    <div>
-                                                        <div class="cursor-pointer">
-                                                            <button
-                                                                type="button"
-                                                                class="flex items-center rounded-lg font-semibold outline-none py-2 px-4 text-sm h-8 max-h-8 bg-white text-black"
-                                                            >
-                                                                <span>1D</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="cursor-pointer">
-                                                            <button
-                                                                type="button"
-                                                                class="flex items-center rounded-lg font-semibold outline-none py-2 px-4 text-sm h-8 max-h-8 hover:bg-white hover:text-black hover:bg-opacity-80 max-h-[30px] text-gray-700"
-                                                            >
-                                                                <span>7D</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="cursor-pointer">
-                                                            <button
-                                                                type="button"
-                                                                class="flex items-center rounded-lg font-semibold outline-none py-2 px-4 text-sm h-8 max-h-8 hover:bg-white hover:text-black hover:bg-opacity-80 max-h-[30px] text-gray-700"
-                                                            >
-                                                                <span>1M</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="cursor-pointer">
-                                                            <button
-                                                                type="button"
-                                                                class="flex items-center rounded-lg font-semibold outline-none py-2 px-4 text-sm h-8 max-h-8 hover:bg-white hover:text-black hover:bg-opacity-80 max-h-[30px] text-gray-700"
-                                                            >
-                                                                <span>3M</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="cursor-pointer">
-                                                            <button
-                                                                type="button"
-                                                                class="flex items-center rounded-lg font-semibold outline-none py-2 px-4 text-sm h-8 max-h-8 hover:bg-white hover:text-black hover:bg-opacity-80 max-h-[30px] text-gray-700"
-                                                            >
-                                                                <span>6M</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="cursor-pointer">
-                                                            <button
-                                                                type="button"
-                                                                class="flex items-center rounded-lg font-semibold outline-none py-2 px-4 text-sm h-8 max-h-8 hover:bg-white hover:text-black hover:bg-opacity-80 max-h-[30px] text-gray-700"
-                                                            >
-                                                                <span>1Y</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="cursor-pointer">
-                                                            <button
-                                                                type="button"
-                                                                class="flex items-center rounded-lg font-semibold outline-none py-2 px-4 text-sm h-8 max-h-8 hover:bg-white hover:text-black hover:bg-opacity-80 max-h-[30px] text-gray-700"
-                                                            >
-                                                                <span>ALL</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="v-popper v-popper--theme-dropdown w-full 2md:hidden cursor-pointer w-full 2md:hidden">
-                                                    <div class="flex items-center justify-between px-4 h-10 box-border rounded text-sm gap-2 cursor-pointer border border-gray-750 border-opacity-10 hover:border-gray-600 focus-within:border-gray-600">
-                                                        <div>
-                                                            <span class="text-sm">
-                                                                1D
-                                                            </span>
-                                                        </div>
-                                                        <div class="flex items-center gap-2">
-                                                            <svg
-                                                                width="8"
-                                                                height="6"
-                                                                viewBox="0 0 8 6"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                class="cursor-pointer h-3 w-3 min-w-3 ease-in-out duration-300 text-gray-700"
-                                                            >
-                                                                <path
-                                                                    d="M8 1.55468L7.06 0.666687L4 3.55108L0.94 0.666687L0 1.55468L4 5.33335L8 1.55468Z"
-                                                                    fill="currentColor"
-                                                                ></path>
-                                                            </svg>
-                                                        </div>
-                                                    </div>
+                            <div class="py-2 px-2 md:px-0 w-full bg-[#FFEED5] flex justify-center items-center mt-10 gap-x-1 md:gap-x-0">
+                                <img
+                                    src="icons/yellow-info.svg"
+                                    width="24"
+                                    height="24"
+                                />
+                                <p class="text-base leading-[160%]">
+                                    GD30D has migrated to a
+                                    <a
+                                        class="font-medium underline"
+                                        href="https://etherscan.io/address/0xdd50C053C096CB04A3e3362E2b622529EC5f2e8a"
+                                        target="_blank"
+                                    >
+                                        new contract address
+                                    </a>
+                                    from
+                                    <a
+                                        class="font-medium underline"
+                                        href="https://etherscan.io/address/0xad6250f0BD49F7a1eB11063af2cE9F25B9597b0F"
+                                        target="_blank"
+                                    >
+                                        the old contract address
+                                    </a>
+                                    Read more
+                                    <a
+                                        class="font-medium underline"
+                                        href="https://medium.com/@openeden/openeden-announces-tbill-vault-migration-from-beta-to-full-launch-a7d4ff92d6d6"
+                                        target="_blank"
+                                    >
+                                        here
+                                    </a>
+                                    .
+                                </p>
+                            </div>
+                            <div>
+                                <div class="mt-[40px] hidden w-full gap-x-[23px] gap-y-[24px] sm:grid sm:grid-cols-2 lg:grid-cols-4 mobile:grid-cols-2">
+                                    <div class="flex flex-col vault_grid-item___r8p8">
+                                        <div class="mt-auto flex-col justify-start">
+                                            <div class="flex items-center text-sm font-normal leading-[22px]">
+                                                <div class="flex items-center">
+                                                    <span>
+                                                        Total Value Locked
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div
-                                                id="chart"
-                                                class="relative red"
-                                            >
+                                            <div class="text-[32px] font-semibold tracking-[-0.002em]">
                                                 <div
-                                                    id="apexchartsf2dxw71gj"
-                                                    class="apexcharts-canvas apexchartsf2dxw71gj apexcharts-theme-light"
                                                     style={{
-                                                        width: '719px',
-                                                        height: '260px',
+                                                        height: '48px',
+                                                        lineHeight: '48px',
+                                                        overflow: 'hidden',
+                                                        position: 'relative',
+                                                        width: '172px',
                                                     }}
                                                 >
-                                                    chart
-                                                    <div class="apexcharts-tooltip apexcharts-theme-light">
+                                                    <span
+                                                        style={{
+                                                            color: 'transparent',
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                        }}
+                                                    >
+                                                        $24,773,532
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '18.144px',
+                                                            opacity: '1',
+                                                            transform: 'none',
+                                                        }}
+                                                    >
+                                                        $
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '17.632px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(18.144px) translateZ(0px)',
+                                                        }}
+                                                    >
                                                         <div
-                                                            class="apexcharts-tooltip-title"
                                                             style={{
-                                                                fontFamily:
-                                                                    'Urbanist',
-                                                                fontSize:
-                                                                    '12px',
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-53.8462%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '18.72px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(35.776px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-38.4615%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '8.48px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(54.496px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-76.9231%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '15.616px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(62.976px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-15.3846%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '15.616px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(78.592px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-15.3846%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '16.992px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(94.208px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-46.1538%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '8.48px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(111.2px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-76.9231%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '16.96px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(119.68px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-30.7692%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '16.992px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(136.64px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-46.1538%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '17.632px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(153.632px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-53.8462%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col vault_grid-item___r8p8">
+                                        <div class="mt-auto flex-col justify-start">
+                                            <div class="flex items-center text-sm font-normal leading-[22px]">
+                                                <div class="flex items-center">
+                                                    <span>
+                                                        Price Per GD30D Token
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="text-[32px] font-semibold tracking-[-0.002em]">
+                                                <div
+                                                    style={{
+                                                        height: '48px',
+                                                        lineHeight: '48px',
+                                                        overflow: 'hidden',
+                                                        position: 'relative',
+                                                        width: '130px',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: 'transparent',
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                        }}
+                                                    >
+                                                        $40.21
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '18.144px',
+                                                            opacity: '1',
+                                                            transform: 'none',
+                                                        }}
+                                                    >
+                                                        $40.21
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col vault_grid-item___r8p8">
+                                        <div class="mt-auto flex-col justify-start">
+                                            <div class="flex items-center text-sm font-normal leading-[22px]">
+                                                <div class="flex items-center">
+                                                    <span>Estimated YTM</span>
+                                                    <span
+                                                        class="cursor-pointer"
+                                                        data-tooltip-id="oe-tooltip-Estimated YTM"
+                                                    >
+                                                        <img
+                                                            src="/icons/info.svg"
+                                                            width="20"
+                                                            height="20"
+                                                        />
+                                                    </span>
+                                                    <div
+                                                        id="oe-tooltip-Estimated YTM"
+                                                        role="tooltip"
+                                                        class="react-tooltip core-styles-module_tooltip__3vRRp styles-module_tooltip__mnnfp styles-module_dark__xNqje !bg-[#374151] mobile:!max-w-[250px] max-w-[450px] !text-base !z-10 react-tooltip__place-bottom core-styles-module_closing__sGnxF react-tooltip__closing"
+                                                        style={{
+                                                            left: '6.789px',
+                                                            top: '421.594px',
+                                                        }}
+                                                    >
+                                                        <div class="text-base text-[#E5E7EB]">
+                                                            <span>
+                                                                Estimated Yield
+                                                                To Maturity
+                                                            </span>
+                                                        </div>
+                                                        <div
+                                                            class="react-tooltip-arrow core-styles-module_arrow__cvMwQ styles-module_arrow__K0L3T"
+                                                            style={{
+                                                                left: '106.5px',
+                                                                top: '-4px',
                                                             }}
                                                         ></div>
-                                                        <div
-                                                            class="apexcharts-tooltip-series-group"
-                                                            style={{ order: 1 }}
-                                                        >
-                                                            <span
-                                                                class="apexcharts-tooltip-marker"
-                                                                style={{
-                                                                    backgroundColor:
-                                                                        'rgb(255, 102, 102)',
-                                                                }}
-                                                            ></span>
-                                                            <div
-                                                                class="apexcharts-tooltip-text"
-                                                                style={{
-                                                                    fontFamily:
-                                                                        'Urbanist',
-                                                                    fontSize:
-                                                                        '12px',
-                                                                }}
-                                                            >
-                                                                <div class="apexcharts-tooltip-y-group">
-                                                                    <span class="apexcharts-tooltip-text-y-label"></span>
-                                                                    <span class="apexcharts-tooltip-text-y-value"></span>
-                                                                </div>
-                                                                <div class="apexcharts-tooltip-goals-group">
-                                                                    <span class="apexcharts-tooltip-text-goals-label"></span>
-                                                                    <span class="apexcharts-tooltip-text-goals-value"></span>
-                                                                </div>
-                                                                <div class="apexcharts-tooltip-z-group">
-                                                                    <span class="apexcharts-tooltip-text-z-label"></span>
-                                                                    <span class="apexcharts-tooltip-text-z-value"></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="apexcharts-yaxistooltip apexcharts-yaxistooltip-0 apexcharts-yaxistooltip-left apexcharts-theme-light">
-                                                        <div class="apexcharts-yaxistooltip-text"></div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="hide-scrollbar flex flex-col gap-4 overflow-x-auto md:flex-row xl:flex-col xl:gap-6">
-                                        <div class="flex-none md:w-56 xl:w-full snap-start bg-white rounded-lg border border-gray-400 p-4 md:p-6">
-                                            <h3 class="mb-3 text-xs xl:text-sm">
-                                                Total Value Locked (TVL)
-                                            </h3>
-                                            <p class="text-xl font-semibold xl:text-2xl">
-                                                32,486,473.46 USD{' '}
-                                            </p>
-                                        </div>
-                                        <div class="flex-none md:w-56 xl:w-full snap-center bg-white rounded-lg border border-gray-400 p-4 md:p-6">
-                                            <h3 class="mb-3 text-xs xl:text-sm">
-                                                Spot Assets
-                                            </h3>
-                                            <div class="space-y-1.5">
-                                                <div>
-                                                    <div class="flex w-full items-center justify-between gap-2">
-                                                        <div class="flex items-center gap-1">
-                                                            <img
-                                                                class="rounded-full bg-white w-6 h-6 min-w-6 z-10"
-                                                                src="/vendor/@injectivelabs/token-metadata/projx.png"
-                                                                name="PROJX"
-                                                            />
-                                                            <span class="font-semibold uppercase text-lg xl:text-xl">
-                                                                {token}
-                                                            </span>
-                                                        </div>
-                                                        <span class="text-base">
-                                                            <div class="flex">
-                                                                <div class="v-popper v-popper--theme-tooltip">
-                                                                    <div>
-                                                                        <p class="border-dashed border-b border-black cursor-pointer">
-                                                                            <p class="space-x-1">
-                                                                                <span>
-                                                                                    2,774,254.0958
-                                                                                </span>
-                                                                            </p>
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-none md:w-56 xl:w-full snap-end bg-white rounded-lg border border-gray-400 p-4 md:p-6">
-                                            <div class="v-popper v-popper--theme-tooltip inline-block">
-                                                <div>
-                                                    <div class="flex items-center gap-1 cursor-pointer mb-2">
-                                                        <span class="inline-block text-xs xl:text-sm">
-                                                            APY
-                                                        </span>
-                                                        <svg
-                                                            width="12"
-                                                            height="13"
-                                                            viewBox="0 0 12 13"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            class="cursor-pointer h-4 w-4 min-w-4 cursor-pointer h-4 w-4 min-w-4"
-                                                        >
-                                                            <path
-                                                                d="M6 11.75C3.10051 11.75 0.75 9.3995 0.75 6.5C0.75 3.60051 3.10051 1.25 6 1.25C8.8995 1.25 11.25 3.60051 11.25 6.5C11.25 9.3995 8.8995 11.75 6 11.75ZM6 12.5C9.31371 12.5 12 9.81371 12 6.5C12 3.18629 9.31371 0.5 6 0.5C2.68629 0.5 0 3.18629 0 6.5C0 9.81371 2.68629 12.5 6 12.5Z"
-                                                                fill="currentColor"
-                                                            ></path>
-                                                            <path
-                                                                d="M6.69803 5.44092L4.97977 5.65625L4.91824 5.94189L5.25662 6.00342C5.47635 6.05615 5.52029 6.13525 5.47195 6.35498L4.91824 8.95654C4.77322 9.62891 4.99734 9.94531 5.52469 9.94531C5.93338 9.94531 6.40799 9.75635 6.62332 9.49707L6.68924 9.18506C6.53982 9.31689 6.3201 9.36963 6.17508 9.36963C5.96854 9.36963 5.89383 9.22461 5.94656 8.96973L6.69803 5.44092Z"
-                                                                fill="currentColor"
-                                                            ></path>
-                                                            <path
-                                                                d="M6.75 3.875C6.75 4.28921 6.41421 4.625 6 4.625C5.58579 4.625 5.25 4.28921 5.25 3.875C5.25 3.46079 5.58579 3.125 6 3.125C6.41421 3.125 6.75 3.46079 6.75 3.875Z"
-                                                                fill="currentColor"
-                                                            ></path>
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-1.5 text-yellow-500">
-                                                <svg
-                                                    width="16"
-                                                    height="16"
-                                                    viewBox="0 0 16 16"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    class="cursor-pointer h-6 w-6 min-w-6 cursor-pointer h-6 w-6 min-w-6"
+                                            <div class="text-[32px] font-semibold tracking-[-0.002em]">
+                                                <div
+                                                    style={{
+                                                        height: '48px',
+                                                        lineHeight: '48px',
+                                                        overflow: 'hidden',
+                                                        position: 'relative',
+                                                        width: '81px',
+                                                    }}
                                                 >
-                                                    <path
-                                                        d="M11.2514 0.0678058C11.4524 0.184724 11.5463 0.424795 11.4779 0.647058L9.67699 6.50002H13C13.1995 6.50002 13.3799 6.61858 13.459 6.8017C13.5381 6.98482 13.5008 7.19744 13.3641 7.3427L5.36411 15.8427C5.20473 16.012 4.94964 16.0491 4.74863 15.9322C4.54761 15.8153 4.45373 15.5752 4.52212 15.353L6.32303 9.50002H3.00001C2.80053 9.50002 2.62014 9.38145 2.54102 9.19833C2.4619 9.01522 2.4992 8.80259 2.63591 8.65733L10.6359 0.157333C10.7953 -0.0120074 11.0504 -0.049112 11.2514 0.0678058Z"
-                                                        fill="currentColor"
-                                                    ></path>
-                                                </svg>
-                                                <p class="text-lg font-semibold">
-                                                    4,055,620,596.12%
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="table-wrapper bg-white my-6 border border-gray-400">
-                                    <table class="table table-auto max-md:hidden">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Last 24 hrs</th>
-                                                <th>1 Week</th>
-                                                <th>1 Month</th>
-                                                <th>3 Months</th>
-                                                <th>6 Months</th>
-                                                <th>1 Year</th>
-                                                <th>3 Years</th>
-                                                <th>All-time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="">
-                                            <tr>
-                                                <td class="font-semibold">
-                                                    Total return as of 22 Dec,
-                                                    2023
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <span class="text-red-600">
-                                                            -89.47%{' '}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <span class="text-red-600">
-                                                            -99.88%{' '}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <span class="text-green-500">
-                                                            + 311.40%{' '}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <span>—</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <span>—</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <span>—</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <span>—</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <span class="text-green-500">
-                                                            + 311.40%{' '}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="md:hidden p-4 md:p-6">
-                                        <p class="text-sm font-semibold">
-                                            Total return as of 22 Dec, 2023
-                                        </p>
-                                        <div class="border-b border-gray-750 border-opacity-10 -mx-4 pt-4 mb-4"></div>
-                                        <div class="space-y-4">
-                                            <div class="flex justify-between items-center">
-                                                <span class="uppercase text-xs font-semibold tracking-wider text-gray-600">
-                                                    Last 24 hrs
-                                                </span>
-                                                <span class="text-sm">
-                                                    <div>
-                                                        <span class="text-red-600">
-                                                            -89.47%{' '}
-                                                        </span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="uppercase text-xs font-semibold tracking-wider text-gray-600">
-                                                    1 Week
-                                                </span>
-                                                <span class="text-sm">
-                                                    <div>
-                                                        <span class="text-red-600">
-                                                            -99.88%{' '}
-                                                        </span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="uppercase text-xs font-semibold tracking-wider text-gray-600">
-                                                    1 Month
-                                                </span>
-                                                <span class="text-sm">
-                                                    <div>
-                                                        <span class="text-green-500">
-                                                            + 311.40%{' '}
-                                                        </span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="uppercase text-xs font-semibold tracking-wider text-gray-600">
-                                                    3 Months
-                                                </span>
-                                                <span class="text-sm">
-                                                    <div>
-                                                        <span>—</span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="uppercase text-xs font-semibold tracking-wider text-gray-600">
-                                                    6 Months
-                                                </span>
-                                                <span class="text-sm">
-                                                    <div>
-                                                        <span>—</span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="uppercase text-xs font-semibold tracking-wider text-gray-600">
-                                                    1 Year
-                                                </span>
-                                                <span class="text-sm">
-                                                    <div>
-                                                        <span>—</span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="uppercase text-xs font-semibold tracking-wider text-gray-600">
-                                                    3 Years
-                                                </span>
-                                                <span class="text-sm">
-                                                    <div>
-                                                        <span>—</span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="uppercase text-xs font-semibold tracking-wider text-gray-600">
-                                                    All-time
-                                                </span>
-                                                <span class="text-sm">
-                                                    <div>
-                                                        <span class="text-green-500">
-                                                            + 311.40%{' '}
-                                                        </span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="table-wrapper bg-white rounded-lg border border-gray-400">
-                                        <div class="px-4 py-4 md:px-6 md:pt-6 text-xl md:text-2xl whitespace-break-spaces">
-                                            <h3 class="font-semibold">
-                                                My Holdings
-                                            </h3>
-                                        </div>
-                                        <div class="h-full-flex md:mt-6">
-                                            <div class="">
-                                                <div class="border-t">
-                                                    <div class="p-6 max-xs:max-w-xs whitespace-break-spaces sm:flex flex-col items-center justify-center">
-                                                        <span class="text-gray-600">
-                                                            You have no holdings
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    {isModalOpen ? (
-                        <>
-                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                                    {/*content*/}
-                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                        {/*header*/}
-                                        <div className="ml-auto mr-3 mt-3">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                aria-hidden="true"
-                                                className="cursor-pointer h-5 w-5 min-w-5 text-gray-600 hover:text-green-600"
-                                                onClick={() =>
-                                                    setIsModalOpen(false)
-                                                }
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M6 18L18 6M6 6l12 12"
-                                                ></path>
-                                            </svg>
-                                        </div>
-                                        <div className="flex items-start justify-between pt-1 pb-1 pl-5 pr-5 border-b border-solid border-blueGray-200 rounded-t">
-                                            <p className="text-2xl text-black">
-                                                Connect to Wallet
-                                            </p>
-                                            <button
-                                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                                onClick={() =>
-                                                    setIsModalOpen(false)
-                                                }
-                                            >
-                                                <span className="text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                                    ×
-                                                </span>
-                                            </button>
-                                        </div>
-                                        {/*body*/}
-                                        <div className="relative p-6 flex-auto">
-                                            <li className="block cursor-pointer rounded-lg bg-white hover:bg-green-200">
-                                                <div className="flex items-center p-4 sm:px-6">
-                                                    <div className="flex min-w-0 flex-1 items-center">
-                                                        <div className="mr-3 shrink-0 sm:mr-4">
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 33.9 31.3"
-                                                                className="cursor-pointer min-w-6 sm:min-w-8 h-6 w-6 sm:h-8 sm:w-8"
-                                                            >
-                                                                <path
-                                                                    fill="#E17726"
-                                                                    stroke="#E17726"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="M32.1.1 18.9 9.8l2.4-5.7 10.8-4z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#E27625"
-                                                                    stroke="#E27625"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m1.8.1 13 9.8-2.3-5.8L1.8.1zM27.4 22.7 23.9 28l7.5 2.1 2.1-7.3-6.1-.1zM.4 22.8l2.1 7.3L10 28l-3.5-5.3-6.1.1z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#E27625"
-                                                                    stroke="#E27625"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m9.6 13.6-2.1 3.1 7.4.3-.2-8-5.1 4.6zM24.3 13.6 19.1 9l-.2 8.1 7.4-.3-2-3.2zM10 28l4.5-2.2-3.9-3L10 28zM19.4 25.8l4.5 2.2-.6-5.2-3.9 3z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#D5BFB2"
-                                                                    stroke="#D5BFB2"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m23.9 28-4.5-2.2.4 2.9v1.2l4.1-1.9zM10 28l4.2 2v-1.2l.4-2.9L10 28z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#233447"
-                                                                    stroke="#233447"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m14.2 20.9-3.7-1.1 2.6-1.2 1.1 2.3zM19.6 20.9l1.1-2.3 2.6 1.2-3.7 1.1z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#CC6228"
-                                                                    stroke="#CC6228"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m10 28 .6-5.3-4.1.1L10 28zM23.2 22.7l.6 5.3 3.5-5.2-4.1-.1zM26.4 16.8l-7.4.3.7 3.8 1.1-2.3 2.6 1.2 3-3zM10.5 19.8l2.6-1.2 1.1 2.3.7-3.8-7.4-.3 3 3z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#E27525"
-                                                                    stroke="#E27525"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m7.5 16.8 3.1 6.1-.1-3-3-3.1zM23.4 19.8l-.1 3 3.1-6.1-3 3.1zM14.9 17.1l-.7 3.8.9 4.5.2-5.9-.4-2.4zM18.9 17.1l-.4 2.4.2 5.9.9-4.5-.7-3.8z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#F5841F"
-                                                                    stroke="#F5841F"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m19.6 20.9-.9 4.5.6.4 3.9-3 .1-3-3.7 1.1zM10.5 19.8l.1 3 3.9 3 .6-.4-.9-4.5-3.7-1.1z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#C0AC9D"
-                                                                    stroke="#C0AC9D"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="M19.7 30v-1.2l-.3-.3h-5l-.3.3V30L10 28l1.5 1.2 2.9 2h5.1l3-2 1.4-1.2-4.2 2z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#161616"
-                                                                    stroke="#161616"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m19.4 25.8-.6-.4h-3.7l-.6.4-.4 2.9.3-.3h5l.3.3-.3-2.9z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#763E1A"
-                                                                    stroke="#763E1A"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m32.6 10.5 1.1-5.4-1.7-5-12.6 9.4 4.9 4.1 6.9 2 1.5-1.8-.7-.4 1.1-1-.8-.6 1.1-.8-.8-.5zM.1 5.1l1.1 5.4-.7.5 1.1.8-.8.6 1.1 1-.7.5 1.5 1.8 6.9-2 4.9-4.1L1.8.1l-1.7 5z"
-                                                                ></path>
-                                                                <path
-                                                                    fill="#F5841F"
-                                                                    stroke="#F5841F"
-                                                                    stroke-width=".25"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="m31.2 15.6-6.9-2 2.1 3.1-3.1 6.1 4.1-.1h6.1l-2.3-7.1zM9.6 13.6l-6.9 2-2.3 7.1h6.1l4.1.1-3.1-6.1 2.1-3.1zM18.9 17.1l.4-7.6 2-5.4h-8.9l2 5.4.4 7.6.2 2.4v5.9h3.7v-5.9l.2-2.4z"
-                                                                ></path>
-                                                            </svg>
-                                                        </div>
-                                                        <div className="min-w-0 flex-1 text-left sm:px-4 md:grid md:grid-cols-1 md:gap-4">
-                                                            <div
-                                                                onClick={
-                                                                    connectWallet
-                                                                }
-                                                            >
-                                                                <p className="truncate text-base font-medium text-black sm:text-xl">
-                                                                    Metamask
-                                                                </p>
-                                                                <p className="hidden items-center text-sm text-gray-600 sm:flex mt-1">
-                                                                    Connect
-                                                                    using
-                                                                    browser
-                                                                    wallet
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="hidden text-black sm:block">
-                                                            <svg
-                                                                fill="currentColor"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 20 20"
-                                                                className="cursor-pointer h-5 w-5 -rotate-90 hover:text-green-600"
-                                                            >
-                                                                <path
-                                                                    fillRule="evenodd"
-                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                                    clipRule="evenodd"
-                                                                ></path>
-                                                            </svg>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            ;
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                        </>
-                    ) : null}
-
-                    {isKYCModalOpen ? (
-                        <div>
-                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                                    {/*content*/}
-                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                        {/*header*/}
-                                        <div className="ml-auto mr-3 mt-3">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                aria-hidden="true"
-                                                className="cursor-pointer h-5 w-5 min-w-5 text-gray-600 hover:text-green-600"
-                                                onClick={() =>
-                                                    setIsKYCModalOpen(false)
-                                                }
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M6 18L18 6M6 6l12 12"
-                                                ></path>
-                                            </svg>
-                                        </div>
-                                        <div className="flex items-start justify-between pt-1 pb-1 pl-5 pr-5 border-b border-solid border-blueGray-200 rounded-t">
-                                            <p className="text-2xl text-black">
-                                                {showKYCForm
-                                                    ? 'KYC'
-                                                    : 'Disclaimer'}
-                                            </p>
-                                            <button
-                                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                                onClick={() =>
-                                                    setIsModalOpen(false)
-                                                }
-                                            >
-                                                <span className="text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                                    ×
-                                                </span>
-                                            </button>
-                                        </div>
-                                        {/*body*/}
-                                        <div className="relative p-6 flex-auto">
-                                            {showKYCForm ? (
-                                                <div className="">
-                                                    <form>
-                                                        <div className="mb-4">
-                                                            <label
-                                                                htmlFor="firstName"
-                                                                className="block text-sm font-medium text-gray-600"
-                                                            >
-                                                                First Name
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                id="firstName"
-                                                                name="firstName"
-                                                                value={
-                                                                    kycData.name
-                                                                }
-                                                                onChange={(
-                                                                    event
-                                                                ) => {
-                                                                    setKycData(
-                                                                        (
-                                                                            prevData
-                                                                        ) => ({
-                                                                            ...prevData,
-                                                                            name: event
-                                                                                .target
-                                                                                .value,
-                                                                        })
-                                                                    );
-                                                                }}
-                                                                className="mt-1 p-2 border rounded-md w-full bg-white"
-                                                                required
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label
-                                                                htmlFor="lastName"
-                                                                className="block text-sm font-medium text-gray-600"
-                                                            >
-                                                                Last Name
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                id="lastName"
-                                                                name="lastName"
-                                                                value={
-                                                                    kycData.lastname
-                                                                }
-                                                                onChange={(
-                                                                    event
-                                                                ) => {
-                                                                    setKycData(
-                                                                        (
-                                                                            prevData
-                                                                        ) => ({
-                                                                            ...prevData,
-                                                                            lastname:
-                                                                                event
-                                                                                    .target
-                                                                                    .value,
-                                                                        })
-                                                                    );
-                                                                }}
-                                                                className="mt-1 p-2 border rounded-md w-full bg-white"
-                                                                required
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label
-                                                                htmlFor="email"
-                                                                className="block text-sm font-medium text-gray-600"
-                                                            >
-                                                                Email
-                                                            </label>
-                                                            <input
-                                                                type="email"
-                                                                id="email"
-                                                                name="email"
-                                                                value={
-                                                                    kycData.email
-                                                                }
-                                                                onChange={(
-                                                                    event
-                                                                ) => {
-                                                                    setKycData(
-                                                                        (
-                                                                            prevData
-                                                                        ) => ({
-                                                                            ...prevData,
-                                                                            email: event
-                                                                                .target
-                                                                                .value,
-                                                                        })
-                                                                    );
-                                                                }}
-                                                                className="mt-1 p-2 border rounded-md w-full bg-white"
-                                                                required
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label
-                                                                htmlFor="postalAddress"
-                                                                className="block text-sm font-medium text-gray-600"
-                                                            >
-                                                                Postal Address
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                id="postalAddress"
-                                                                name="postalAddress"
-                                                                value={
-                                                                    kycData.postal_address
-                                                                }
-                                                                onChange={(
-                                                                    event
-                                                                ) => {
-                                                                    setKycData(
-                                                                        (
-                                                                            prevData
-                                                                        ) => ({
-                                                                            ...prevData,
-                                                                            postal_address:
-                                                                                event
-                                                                                    .target
-                                                                                    .value,
-                                                                        })
-                                                                    );
-                                                                }}
-                                                                className="mt-1 p-2 border rounded-md w-full bg-white"
-                                                                required
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label
-                                                                htmlFor="passport"
-                                                                className="block text-sm font-medium text-gray-600"
-                                                            >
-                                                                Passport
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                id="passport"
-                                                                name="passport"
-                                                                value={
-                                                                    kycData.passport
-                                                                }
-                                                                onChange={(
-                                                                    event
-                                                                ) => {
-                                                                    setKycData(
-                                                                        (
-                                                                            prevData
-                                                                        ) => ({
-                                                                            ...prevData,
-                                                                            passport:
-                                                                                event
-                                                                                    .target
-                                                                                    .value,
-                                                                        })
-                                                                    );
-                                                                }}
-                                                                className="mt-1 p-2 border rounded-md w-full bg-white"
-                                                                required
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label
-                                                                htmlFor="walletAddress"
-                                                                className="block text-sm font-medium text-gray-600"
-                                                            >
-                                                                Wallet Address
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                id="walletAddress"
-                                                                name="walletAddress"
-                                                                value={
-                                                                    wallet.address
-                                                                }
-                                                                className="mt-1 p-2 border rounded-md w-full bg-white"
-                                                                required
-                                                                readOnly
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label
-                                                                htmlFor="amountToInvest"
-                                                                className="block text-sm font-medium text-gray-600"
-                                                            >
-                                                                Amount intended
-                                                                to invest
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                id="amountToInvest"
-                                                                name="amountToInvest"
-                                                                value={
-                                                                    kycData.amount_to_invest
-                                                                }
-                                                                onChange={(
-                                                                    event
-                                                                ) => {
-                                                                    setKycData(
-                                                                        (
-                                                                            prevData
-                                                                        ) => ({
-                                                                            ...prevData,
-                                                                            amount_to_invest:
-                                                                                event
-                                                                                    .target
-                                                                                    .value,
-                                                                        })
-                                                                    );
-                                                                }}
-                                                                className="mt-1 p-2 border rounded-md w-full bg-white"
-                                                                required
-                                                            />
-                                                        </div>
-
-                                                        {/* Otros campos del formulario (lastName, email, dateOfBirth, address, identificationType, identificationNumber) */}
-
-                                                        <div className="mt-4">
-                                                            <button
-                                                                type="submit"
-                                                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
-                                                                onClick={async () => {
-                                                                    const response =
-                                                                        await axios.put(
-                                                                            `${backendUrl}/api/client/kyc`,
-                                                                            {
-                                                                                ...kycData,
-                                                                                public_address:
-                                                                                    wallet.address,
-                                                                                amount_to_invest:
-                                                                                    typeof kycData.amount_to_invest ===
-                                                                                    'number'
-                                                                                        ? kycData.amount_to_invest
-                                                                                        : parseFloat(
-                                                                                              kycData.amount_to_invest
-                                                                                          ),
-                                                                            }
-                                                                        );
-
-                                                                    console.log(
-                                                                        response
-                                                                    );
-
-                                                                    setIsKYCModalOpen(
-                                                                        false
-                                                                    );
-                                                                }}
-                                                            >
-                                                                Submit
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            ) : (
-                                                <>
-                                                    {' '}
-                                                    <p>
-                                                        Lorem ipsum dolor sit
-                                                        amet, consectetur
-                                                        adipiscing elit. Sed do
-                                                        eiusmod tempor
-                                                        incididunt ut labore et
-                                                        dolore magna aliqua. Ut
-                                                        enim ad minim veniam,
-                                                        quis nostrud
-                                                        exercitation ullamco
-                                                        laboris nisi ut aliquip
-                                                        ex ea commodo consequat.
-                                                        Duis aute irure dolor in
-                                                        reprehenderit in
-                                                        voluptate velit esse
-                                                        cillum dolore eu fugiat
-                                                        nulla pariatur.
-                                                        Excepteur sint occaecat
-                                                        cupidatat non proident,
-                                                        sunt in culpa qui
-                                                        officia deserunt mollit
-                                                        anim id est laborum.
-                                                    </p>
-                                                    <button
-                                                        data-v-69ed45e4=""
-                                                        type="button"
-                                                        onClick={() =>
-                                                            setShowKYCForm(true)
-                                                        }
-                                                        class="flex items-center rounded-lg font-semibold outline-none py-3 px-4 text-base h-10 max-h-10 bg-green-600 hover:bg-green-800 text-white"
+                                                    <span
+                                                        style={{
+                                                            color: 'transparent',
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                        }}
+                                                    >
+                                                        5.31%
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '16.96px',
+                                                            opacity: '1',
+                                                            transform: 'none',
+                                                        }}
                                                     >
                                                         <div
-                                                            data-v-69ed45e4=""
-                                                            class="flex items-center gap-2"
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
                                                         >
-                                                            <span data-v-69ed45e4="">
-                                                                Next
-                                                            </span>
-                                                            <svg
-                                                                data-v-69ed45e4=""
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 24 24"
-                                                                class="cursor-pointer h-4 w-4 min-w-4 rotate-180"
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-30.7692%) translateZ(0px)',
+                                                                }}
                                                             >
-                                                                <path
-                                                                    d="M21 11L6.414 11 11.707 5.707 10.293 4.293 2.586 12 10.293 19.707 11.707 18.293 6.414 13 21 13z"
-                                                                    fill="currentColor"
-                                                                ></path>
-                                                            </svg>
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
                                                         </div>
-                                                    </button>
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                        </div>
-                    ) : null}
-
-                    {showPendingReviewModal ? (
-                        <div>
-                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                                    {/*content*/}
-                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                        {/*header*/}
-                                        <div className="ml-auto mr-3 mt-3">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                aria-hidden="true"
-                                                className="cursor-pointer h-5 w-5 min-w-5 text-gray-600 hover:text-green-600"
-                                                onClick={() =>
-                                                    setShowPendingReviewModal(
-                                                        false
-                                                    )
-                                                }
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M6 18L18 6M6 6l12 12"
-                                                ></path>
-                                            </svg>
-                                        </div>
-                                        <div className="flex items-start justify-between pt-1 pb-1 pl-5 pr-5 border-b border-solid border-blueGray-200 rounded-t">
-                                            <p className="text-2xl text-black">
-                                                KYC Data Under Review
-                                            </p>
-                                            <button
-                                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                                onClick={() =>
-                                                    setShowPendingReviewModal(
-                                                        false
-                                                    )
-                                                }
-                                            >
-                                                <span className="text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                                    ×
-                                                </span>
-                                            </button>
-                                        </div>
-                                        {/*body*/}
-                                        <div className="relative p-6 flex-auto">
-                                            <p>
-                                                You are currently unable to make
-                                                a purchase at this moment. Your
-                                                KYC data is under review to
-                                                ensure security and regulatory
-                                                compliance. We will notify you
-                                                once the review is complete.
-                                                Thank you for your
-                                                understanding.
-                                            </p>
-                                            <button
-                                                data-v-69ed45e4=""
-                                                type="button"
-                                                onClick={() =>
-                                                    setShowPendingReviewModal(
-                                                        false
-                                                    )
-                                                }
-                                                class="flex items-center rounded-lg font-semibold outline-none py-3 px-4 text-base h-10 max-h-10 bg-green-600 hover:bg-green-800 text-white mt-5"
-                                            >
-                                                <div
-                                                    data-v-69ed45e4=""
-                                                    class="flex items-center gap-2"
-                                                >
-                                                    <span data-v-69ed45e4="">
-                                                        Ok
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '8.73599px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(16.96px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-84.6154%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '16.992px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(25.696px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-46.1538%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '11.296px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(42.688px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-61.5385%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '26.656px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(53.984px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        %
                                                     </span>
                                                 </div>
-                                            </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                        </div>
-                    ) : null}
-
-                    {showKYCRejectedModal ? (
-                        <div>
-                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                                    {/*content*/}
-                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                        {/*header*/}
-                                        <div className="ml-auto mr-3 mt-3">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                aria-hidden="true"
-                                                className="cursor-pointer h-5 w-5 min-w-5 text-gray-600 hover:text-green-600"
-                                                onClick={() =>
-                                                    setShowKYCRejectedModal(
-                                                        false
-                                                    )
-                                                }
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M6 18L18 6M6 6l12 12"
-                                                ></path>
-                                            </svg>
-                                        </div>
-                                        <div className="flex items-start justify-between pt-1 pb-1 pl-5 pr-5 border-b border-solid border-blueGray-200 rounded-t">
-                                            <p className="text-2xl text-black">
-                                                KYC Rejected
-                                            </p>
-                                            <button
-                                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                                onClick={() =>
-                                                    setShowKYCRejectedModal(
-                                                        false
-                                                    )
-                                                }
-                                            >
-                                                <span className="text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                                    ×
-                                                </span>
-                                            </button>
-                                        </div>
-                                        {/*body*/}
-                                        <div className="relative p-6 flex-auto">
-                                            <p>
-                                                Your KYC submission has been
-                                                rejected. Unfortunately, we are
-                                                unable to proceed with your
-                                                request at this time. If you
-                                                have further questions or need
-                                                assistance, please contact our
-                                                support team. Thank you for your
-                                                understanding.
-                                            </p>
-                                            <button
-                                                data-v-69ed45e4=""
-                                                type="button"
-                                                onClick={() =>
-                                                    setShowKYCRejectedModal(
-                                                        false
-                                                    )
-                                                }
-                                                class="flex items-center rounded-lg font-semibold outline-none py-3 px-4 text-base h-10 max-h-10 bg-green-600 hover:bg-green-800 text-white mt-5"
-                                            >
-                                                <div
-                                                    data-v-69ed45e4=""
-                                                    class="flex items-center gap-2"
-                                                >
-                                                    <span data-v-69ed45e4="">
-                                                        Ok
+                                    <div class="flex flex-col vault_grid-item___r8p8">
+                                        <div class="mt-auto flex-col justify-start">
+                                            <div class="flex items-center text-sm font-normal leading-[22px]">
+                                                <div class="flex items-center">
+                                                    <span>Liquidity</span>
+                                                    <span
+                                                        class="cursor-pointer"
+                                                        data-tooltip-id="oe-tooltip-Liquidity"
+                                                    >
+                                                        <img
+                                                            src="/icons/info.svg"
+                                                            width="20"
+                                                            height="20"
+                                                        />
                                                     </span>
                                                 </div>
-                                            </button>
+                                            </div>
+                                            <div class="text-[32px] font-semibold tracking-[-0.002em]">
+                                                <div
+                                                    style={{
+                                                        height: '48px',
+                                                        lineHeight: '48px',
+                                                        overflow: 'hidden',
+                                                        position: 'relative',
+                                                        width: '123px',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: 'transparent',
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                        }}
+                                                    >
+                                                        $138,669
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '18.144px',
+                                                            opacity: '1',
+                                                            transform: 'none',
+                                                        }}
+                                                    >
+                                                        $
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '11.296px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(18.144px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-61.5385%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '16.992px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(29.44px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-46.1538%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '17.056px',
+                                                            opacity: 1,
+                                                            transform:
+                                                                'translateX(46.432px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity: 1,
+                                                                    transform:
+                                                                        'translateY(-7.69231%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '8.48px',
+                                                            opacity: 1,
+                                                            transform:
+                                                                'translateX(63.488px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-76.9231%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '16.928px',
+                                                            opacity: 1,
+                                                            transform:
+                                                                'translateX(71.968px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity: 1,
+                                                                    transform:
+                                                                        'translateY(-23.0769%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '16.928px',
+                                                            opacity: 1,
+                                                            transform:
+                                                                'translateX(88.896px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity: 1,
+                                                                    transform:
+                                                                        'translateY(-23.0769%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '16.864px',
+                                                            opacity: 1,
+                                                            transform:
+                                                                'translateX(105.824px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity: 1,
+                                                                    transform:
+                                                                        'translateY(0%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                        </div>
-                    ) : null}
-
-                    {showBuyModal ? (
-                        <div>
-                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                        <div
-                                            id="root"
-                                            class="h-full overflow-y-auto"
-                                        >
+                                <div class="mt-8 block sm:hidden">
+                                    <div
+                                        class="pb-4"
+                                        style={{
+                                            borderBottom: '0.5px solid #CFD9E2',
+                                        }}
+                                    >
+                                        <div class="flex items-center text-sm font-normal leading-[22px]">
+                                            <div class="flex items-center">
+                                                <span>Total Value Locked</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-[28px] font-semibold tracking-[-0.002em]">
                                             <div
-                                                class="flex flex-col items-center justify-center sm:sys-background-primary"
-                                                style={{ minHeight: '752px' }}
+                                                style={{
+                                                    height: '48px',
+                                                    lineHeight: '48px',
+                                                    overflow: 'hidden',
+                                                    position: 'relative',
+                                                    width: '150px',
+                                                }}
                                             >
-                                                <form
-                                                    class="max-h-screen flex-1 sm:flex-initial relative w-full sm:max-w-sm sm:min-h-widget mx-auto p-4 sm:p-8 sm:pb-8 flex flex-col justify-between sm:shadow-widget sm:rounded-widget overflow-hidden sm:my-4 lg:my-8 bg-system-background-primary"
-                                                    novalidate=""
+                                                <span
+                                                    style={{
+                                                        color: 'transparent',
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                    }}
+                                                >
+                                                    $24,773,532
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '15.876px',
+                                                        opacity: 1,
+                                                        transform: 'none',
+                                                    }}
+                                                >
+                                                    $
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '15.428px',
+                                                        opacity: 1,
+                                                        transform:
+                                                            'translateX(15.876px) translateZ(0px)',
+                                                    }}
                                                 >
                                                     <div
-                                                        class="flex flex-col flex-auto overflow-hidden -mx-1"
-                                                        id="widget-modal-root"
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
                                                     >
-                                                        <div class="bg-system-background-primary backdrop-blur-[30px] px-1 pb-2">
-                                                            <div>
-                                                                <div class="flex items-start min-h-24 pr-2 pt-3">
-                                                                    <div class="flex-1">
-                                                                        <span
-                                                                            data-testid="buyHeaderPillText"
-                                                                            class="text-headline leading-headline tracking-headline font-semibold font-stretch-condensed text-label-primary"
-                                                                        >
-                                                                            Buy
-                                                                        </span>
-                                                                    </div>
-                                                                    <div class="relative">
-                                                                        <button
-                                                                            class="flex items-center justify-center pl-4 pt-1 text-label-primary relative"
-                                                                            type="button"
-                                                                            data-testid="HeaderMenuButton"
-                                                                        >
-                                                                            <svg
-                                                                                fill="none"
-                                                                                class="text-label-primary"
-                                                                                height="24"
-                                                                                stroke="currentColor"
-                                                                                stroke-linecap="round"
-                                                                                stroke-linejoin="round"
-                                                                                stroke-width="2"
-                                                                                viewBox="0 0 24 24"
-                                                                                width="24"
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                            >
-                                                                                <line
-                                                                                    x1="3"
-                                                                                    y1="12"
-                                                                                    x2="21"
-                                                                                    y2="12"
-                                                                                ></line>
-                                                                                <line
-                                                                                    x1="3"
-                                                                                    y1="6"
-                                                                                    x2="21"
-                                                                                    y2="6"
-                                                                                ></line>
-                                                                                <line
-                                                                                    x1="3"
-                                                                                    y1="18"
-                                                                                    x2="21"
-                                                                                    y2="18"
-                                                                                ></line>
-                                                                            </svg>
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex flex-col flex-grow h-full px-1 overflow-y-auto overflow-x-visible">
-                                                            <div>
-                                                                <div class="mt-4">
-                                                                    <div>
-                                                                        <div>
-                                                                            <div class="rounded-foreground flex items-center border border-main bg-system-background-secondary">
-                                                                                <div class="CurrencySelector__TextFieldContainer-sc-2a9k4b-2 kpwQYN flex flex-col py-4">
-                                                                                    <input
-                                                                                        class="border rounded-md placeholder-label-tertiary text-label-primary text-title2 leading-title2 font-stretch-condensed pl-4 pr-4 h-14 h-full focus:outline-none focus:shadow-outline bg-blue-100"
-                                                                                        name="amount"
-                                                                                        autocomplete="off"
-                                                                                        id="amount"
-                                                                                        placeholder="0.4118"
-                                                                                        data-testid="currencyInputFiat"
-                                                                                        step="0.01"
-                                                                                        type="number"
-                                                                                        inputmode="decimal"
-                                                                                        min="0"
-                                                                                        pattern="[0-9]*"
-                                                                                        value={
-                                                                                            cost
-                                                                                        }
-                                                                                    />
-                                                                                </div>
-
-                                                                                <div class="relative ml-auto pr-4">
-                                                                                    <button
-                                                                                        class="CurrencySelector__SelectorButton-sc-2a9k4b-1 iiOxaT rounded-r-foreground p-2 flex items-center"
-                                                                                        type="button"
-                                                                                        data-testid="currencySelectionFiat"
-                                                                                    >
-                                                                                        <span class="CurrencySelector__CurrencyIcon-sc-2a9k4b-0 STFLc"></span>
-                                                                                        <p class="text-callout leading-callout tracking-callout font-regular text-label-primary">
-                                                                                            SepoliaETH
-                                                                                        </p>
-                                                                                        <div class="w-5 h-5 ml-1">
-                                                                                            <svg
-                                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                                viewBox="0 0 20 20"
-                                                                                                fill="currentColor"
-                                                                                                aria-hidden="true"
-                                                                                                class="w-5 h-5 text-label-tertiary"
-                                                                                            >
-                                                                                                <path
-                                                                                                    fill-rule="evenodd"
-                                                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                                                                    clip-rule="evenodd"
-                                                                                                ></path>
-                                                                                            </svg>
-                                                                                        </div>
-                                                                                    </button>
-
-                                                                                    <div
-                                                                                        class={`absolute top-full left-0 mt-2 bg-white border rounded shadow-md ${
-                                                                                            showAssets
-                                                                                                ? ''
-                                                                                                : 'hidden'
-                                                                                        }`}
-                                                                                    >
-                                                                                        <ul class="py-1">
-                                                                                            <li class="text-sm px-4 py-2">
-                                                                                                USDT
-                                                                                            </li>
-                                                                                            <li class="text-sm px-4 py-2">
-                                                                                                USDC
-                                                                                            </li>
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="mt-4">
-                                                                    <div>
-                                                                        <div class="rounded-foreground flex items-center border border-main bg-system-background-secondary">
-                                                                            <div class="CurrencySelector__TextFieldContainer-sc-2a9k4b-2 kpwQYN flex flex-col py-4">
-                                                                                <input
-                                                                                    class="border rounded-md disabled:fill-primary placeholder-label-tertiary text-label-primary disabled:text-label-secondary bg-blue-100 disabled:bg-fill-primary w-full disabled:cursor-not-allowed focus:outline-none focus:shadow-outline text-title2 leading-title2 font-stretch-condensed pl-4 pr-4 h-14 h-full border-none disabled:bg-transparent"
-                                                                                    autocomplete="off"
-                                                                                    id="quoteAmount"
-                                                                                    name="quoteAmount"
-                                                                                    data-testid="currencyInputCrypto"
-                                                                                    type="number"
-                                                                                    inputmode="decimal"
-                                                                                    min="0"
-                                                                                    pattern="[0-9]*"
-                                                                                    value={
-                                                                                        quantity
-                                                                                    }
-                                                                                    onChange={(
-                                                                                        e
-                                                                                    ) => {
-                                                                                        const qty =
-                                                                                            e
-                                                                                                .target
-                                                                                                .value;
-                                                                                        setQuantity(
-                                                                                            qty
-                                                                                        );
-
-                                                                                        const usdTotalCost =
-                                                                                            qty *
-                                                                                            41.18;
-
-                                                                                        const sepoliaETHcost = 1000;
-                                                                                        const totalCost =
-                                                                                            usdTotalCost /
-                                                                                            sepoliaETHcost;
-
-                                                                                        setCost(
-                                                                                            totalCost
-                                                                                        );
-                                                                                    }}
-                                                                                />
-                                                                            </div>
-
-                                                                            <div class="flex flex-col ml-auto pr-4">
-                                                                                <button
-                                                                                    class="CurrencySelector__SelectorButton-sc-2a9k4b-1 iiOxaT rounded-r-foreground p-2"
-                                                                                    type="button"
-                                                                                    data-testid="currencySelectionCrypto"
-                                                                                >
-                                                                                    <span class="CurrencySelector__CurrencyIcon-sc-2a9k4b-0 hDeCcS"></span>
-                                                                                    <p class="text-callout leading-callout tracking-callout font-regular text-label-primary">
-                                                                                        GD30D{' '}
-                                                                                    </p>
-                                                                                    <div class="w-5 h-5">
-                                                                                        <svg
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                            viewBox="0 0 20 20"
-                                                                                            fill="currentColor"
-                                                                                            aria-hidden="true"
-                                                                                            class="w-5 h-5 ml-1 text-label-tertiary"
-                                                                                        >
-                                                                                            <path
-                                                                                                fill-rule="evenodd"
-                                                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                                                                clip-rule="evenodd"
-                                                                                            ></path>
-                                                                                        </svg>
-                                                                                    </div>
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="mt-4">
-                                                                    <div>
-                                                                        <div class="flex items-center justify-between"></div>
-                                                                        <div class="bg-system-background-secondary rounded-foreground border border-main">
-                                                                            <div
-                                                                                class="flex items-center justify-between px-4 py-4 rounded-foreground focus:outline-none focus:shadow-outline"
-                                                                                role="button"
-                                                                                tabindex="0"
-                                                                                data-testid="summary-table-header"
-                                                                            >
-                                                                                <span
-                                                                                    data-testid="summary-table-header-2"
-                                                                                    class="text-callout leading-callout tracking-callout font-regular text-label-primary"
-                                                                                >
-                                                                                    You
-                                                                                    obtain{' '}
-                                                                                    <span class="font-semibold">
-                                                                                        {`${quantity} GD30D`}
-                                                                                    </span>{' '}
-                                                                                    for{' '}
-                                                                                    <span class="font-semibold">
-                                                                                        {
-                                                                                            cost
-                                                                                        }
-                                                                                        &nbsp;SepoliaETH
-                                                                                    </span>
-                                                                                </span>
-                                                                                <div
-                                                                                    data-testid="summary-chevron"
-                                                                                    class="UpdatedSummaryTable__ArrowContainer-sc-1311rdh-0 ibwXas"
-                                                                                >
-                                                                                    <svg
-                                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                                        viewBox="0 0 20 20"
-                                                                                        fill="currentColor"
-                                                                                        aria-hidden="true"
-                                                                                        class="w-6 h-6 text-label-tertiary"
-                                                                                    >
-                                                                                        <path
-                                                                                            fill-rule="evenodd"
-                                                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                                                            clip-rule="evenodd"
-                                                                                        ></path>
-                                                                                    </svg>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div
-                                                                                class="UpdatedSummaryTable__SummaryContent-sc-1311rdh-1 hiMStq px-5"
-                                                                                data-testid="updated-summary-content"
-                                                                            >
-                                                                                <hr
-                                                                                    class="UpdatedSummaryTable__Divider-sc-1311rdh-2 fIiqTd mb-4 bg-divider-nonOpaque border-divider-nonOpaque"
-                                                                                    data-testid="summary-divider"
-                                                                                />
-                                                                                <div class="pb-4 space-y-3">
-                                                                                    <div class="flex justify-between w-full">
-                                                                                        <span class="flex items-center">
-                                                                                            <p class="text-subhead leading-subhead tracking-subhead font-regular">
-                                                                                                <span class="text-label-primary">
-                                                                                                    Network
-                                                                                                    fee
-                                                                                                </span>
-                                                                                            </p>
-                                                                                            <span
-                                                                                                class="ml-1 text-label-secondary focus:outline-none focus:shadow-outline"
-                                                                                                data-testid="tooltip-icon"
-                                                                                                aria-describedby="tooltip-8ac64483-37a6-4945-be87-e76164eff9df"
-                                                                                                tabindex="0"
-                                                                                                role="button"
-                                                                                            >
-                                                                                                <svg
-                                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                                    fill="none"
-                                                                                                    viewBox="0 0 24 24"
-                                                                                                    stroke="currentColor"
-                                                                                                    aria-hidden="true"
-                                                                                                    class="w-4 h-4"
-                                                                                                >
-                                                                                                    <path
-                                                                                                        stroke-linecap="round"
-                                                                                                        stroke-linejoin="round"
-                                                                                                        stroke-width="2"
-                                                                                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                                                                    ></path>
-                                                                                                </svg>
-                                                                                            </span>
-                                                                                        </span>
-                                                                                        <p class="text-subhead leading-subhead tracking-subhead font-regular">
-                                                                                            <span class="text-label-primary">
-                                                                                                -
-                                                                                            </span>
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="flex flex-row items-start mt-4 -mb-3 justify-center">
-                                                                        <div class="text-footnote leading-footnote tracking-footnote font-regular text-label-secondary">
-                                                                            <div class="flex items-center mb-2">
-                                                                                <span
-                                                                                    class="focus:outline-none focus:shadow-outline"
-                                                                                    data-testid="tooltip-icon"
-                                                                                    aria-describedby="tooltip-b7988eeb-e595-49f2-bdb9-8c8c8c7073ae"
-                                                                                    tabindex="0"
-                                                                                    role="button"
-                                                                                >
-                                                                                    <svg
-                                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                                        fill="none"
-                                                                                        viewBox="0 0 24 24"
-                                                                                        stroke="currentColor"
-                                                                                        aria-hidden="true"
-                                                                                        class="w-3 h-3 text-label-secondary"
-                                                                                    >
-                                                                                        <path
-                                                                                            stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            stroke-width="2"
-                                                                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                                                        ></path>
-                                                                                    </svg>
-                                                                                </span>
-                                                                                <span
-                                                                                    data-testid="summary-countdown"
-                                                                                    style={{}}
-                                                                                    class="text-footnote leading-footnote tracking-footnote font-regular ml-1 text-label-secondary"
-                                                                                >
-                                                                                    <span class="text-footnote leading-footnote tracking-footnote font-regular">
-                                                                                        The
-                                                                                        price
-                                                                                        updates
-                                                                                        in
-                                                                                        4
-                                                                                        seconds
-                                                                                    </span>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div></div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="mt-auto mb-4">
-                                                                <div class=" bg-system-background-primary sm:mb-0 backdrop-blur-[30px] mb-2">
-                                                                    <div class="flex flex-col">
-                                                                        <button
-                                                                            type="submit"
-                                                                            class="text-headline leading-headline tracking-headline font-semibold font-stretch-condensed p-4 w-full focus:outline-none focus:shadow-outline transition-colors relative block text-center disabled:cursor-not-allowed flex justify-center items-center mt-4 xs:mt-8 rounded-button bg-btn-primary hover:bg-btn-hover disabled:bg-fill-secondary text-btn-label disabled:text-label-tertiary h-12"
-                                                                            onClick={
-                                                                                handleSubmit
-                                                                            }
-                                                                        >
-                                                                            Continue{' '}
-                                                                            <span class="absolute top-0 right-0 flex items-center h-full px-4">
-                                                                                <svg
-                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                    fill="none"
-                                                                                    viewBox="0 0 24 24"
-                                                                                    stroke="currentColor"
-                                                                                    aria-hidden="true"
-                                                                                    class="w-6 h-6"
-                                                                                >
-                                                                                    <path
-                                                                                        stroke-linecap="round"
-                                                                                        stroke-linejoin="round"
-                                                                                        stroke-width="2"
-                                                                                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                                                                                    ></path>
-                                                                                </svg>
-                                                                            </span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div>
-                                                                        <div class="bg-system-background-primary">
-                                                                            <div class="flex flex-row items-start mt-4 -mb-3 justify-center">
-                                                                                <div class="text-footnote leading-footnote tracking-footnote font-regular text-label-secondary">
-                                                                                    By
-                                                                                    continuing,
-                                                                                    you
-                                                                                    accept
-                                                                                    our{' '}
-                                                                                    <a
-                                                                                        href="https://www.moonpay.com/legal/cookie_policy"
-                                                                                        rel="noopener noreferrer"
-                                                                                        target="_blank"
-                                                                                        class="text-accent-primary"
-                                                                                    >
-                                                                                        cookie
-                                                                                        policy
-                                                                                    </a>
-
-                                                                                    .{' '}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: 1,
+                                                                transform:
+                                                                    'translateY(-53.8462%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '16.38px',
+                                                        opacity: 1,
+                                                        transform:
+                                                            'translateX(31.304px) translateZ(0px)',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: '1',
+                                                                transform:
+                                                                    'translateY(-38.4615%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '7.42px',
+                                                        opacity: 1,
+                                                        transform:
+                                                            'translateX(47.684px) translateZ(0px)',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: 1,
+                                                                transform:
+                                                                    'translateY(-76.9231%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '13.664px',
+                                                        opacity: '1',
+                                                        transform:
+                                                            'translateX(55.104px) translateZ(0px)',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: '1',
+                                                                transform:
+                                                                    'translateY(-15.3846%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '13.664px',
+                                                        opacity: '1',
+                                                        transform:
+                                                            'translateX(68.768px) translateZ(0px)',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: '1',
+                                                                transform:
+                                                                    'translateY(-15.3846%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '14.868px',
+                                                        opacity: '1',
+                                                        transform:
+                                                            'translateX(82.4319px) translateZ(0px)',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: '1',
+                                                                transform:
+                                                                    'translateY(-46.1538%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '7.42px',
+                                                        opacity: '1',
+                                                        transform:
+                                                            'translateX(97.2999px) translateZ(0px)',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: '1',
+                                                                transform:
+                                                                    'translateY(-76.9231%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '14.84px',
+                                                        opacity: '1',
+                                                        transform:
+                                                            'translateX(104.72px) translateZ(0px)',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: '1',
+                                                                transform:
+                                                                    'translateY(-30.7692%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '14.868px',
+                                                        opacity: '1',
+                                                        transform:
+                                                            'translateX(119.56px) translateZ(0px)',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: '1',
+                                                                transform:
+                                                                    'translateY(-46.1538%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '0px',
+                                                        left: '0px',
+                                                        pointerEvents: 'none',
+                                                        width: '15.428px',
+                                                        opacity: '1',
+                                                        transform:
+                                                            'translateX(134.428px) translateZ(0px)',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            height: '14em',
+                                                            position:
+                                                                'relative',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                left: '0px',
+                                                                opacity: '1',
+                                                                transform:
+                                                                    'translateY(-53.8462%) translateZ(0px)',
+                                                            }}
+                                                        >
+                                                            <div>9</div>
+                                                            <div>8</div>
+                                                            <div>7</div>
+                                                            <div>6</div>
+                                                            <div>5</div>
+                                                            <div>4</div>
+                                                            <div>3</div>
+                                                            <div>2</div>
+                                                            <div>1</div>
+                                                            <div>0</div>
+                                                            <div>,</div>
+                                                            <div>.</div>
+                                                            <div>-</div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="grid grid-cols-2 gap-x-6 py-4"
+                                        style={{
+                                            borderBottom: '0.5px solid #CFD9E2',
+                                        }}
+                                    >
+                                        <div>
+                                            <div class="flex items-center text-sm font-normal leading-[22px]">
+                                                <div class="flex items-center">
+                                                    <span>
+                                                        Price Per GD30D Token
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="text-[28px] font-semibold tracking-[-0.002em]">
+                                                <div
+                                                    style={{
+                                                        height: '48px',
+                                                        lineHeight: '48px',
+                                                        overflow: 'hidden',
+                                                        position: 'relative',
+                                                        width: '114px',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: 'transparent',
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                        }}
+                                                    >
+                                                        $40.21
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '15.876px',
+                                                            opacity: '1',
+                                                            transform: 'none',
+                                                        }}
+                                                    >
+                                                        $
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '9.88399px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(15.876px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-61.5385%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '7.644px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(25.76px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-84.6154%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '15.904px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(33.404px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-69.2308%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.868px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(49.308px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-46.1538%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.84px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(64.176px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-30.7692%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '9.88399px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(79.016px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-61.5385%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.868px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(88.8999px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-46.1538%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '9.88399px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(103.768px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-61.5385%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center text-sm font-normal leading-[22px]">
+                                                <span
+                                                    class="cursor-pointer decoration-black decoration-dotted underline underline-offset-[6px]"
+                                                    data-tooltip-id="oe-tooltip-estimated ytm"
+                                                >
+                                                    Estimated YTM
+                                                </span>
+                                            </div>
+                                            <div class="text-[28px] font-semibold tracking-[-0.002em]">
+                                                <div
+                                                    style={{
+                                                        height: '48px',
+                                                        lineHeight: '48px',
+                                                        overflow: 'hidden',
+                                                        position: 'relative',
+                                                        width: '71px',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: 'transparent',
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                        }}
+                                                    >
+                                                        5.31%
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.84px',
+                                                            opacity: '1',
+                                                            transform: 'none',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-30.7692%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '7.644px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(14.84px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-84.6154%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.868px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(22.484px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-46.1538%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '9.88399px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(37.352px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-61.5385%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '23.324px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(47.236px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        %
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-x-6 pt-4">
+                                        <div>
+                                            <div class="flex items-center text-sm font-normal leading-[22px]">
+                                                <span
+                                                    class="cursor-pointer decoration-black decoration-dotted underline underline-offset-[6px]"
+                                                    data-tooltip-id="oe-tooltip-liquidity"
+                                                >
+                                                    Liquidity
+                                                </span>
+                                            </div>
+                                            <div class="text-[28px] font-semibold tracking-[-0.002em]">
+                                                <div
+                                                    style={{
+                                                        height: '48px',
+                                                        lineHeight: '48px',
+                                                        overflow: 'hidden',
+                                                        position: 'relative',
+                                                        width: '108px',
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: 'transparent',
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                        }}
+                                                    >
+                                                        $138,669
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '15.876px',
+                                                            opacity: '1',
+                                                            transform: 'none',
+                                                        }}
+                                                    >
+                                                        $
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '9.88399px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(15.876px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-61.5385%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.868px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(25.76px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-46.1538%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.924px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(40.628px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-7.69231%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '7.42px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(55.552px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-76.9231%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.812px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(62.972px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-23.0769%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.812px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(77.784px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(-23.0769%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        style={{
+                                                            position:
+                                                                'absolute',
+                                                            top: '0px',
+                                                            left: '0px',
+                                                            pointerEvents:
+                                                                'none',
+                                                            width: '14.756px',
+                                                            opacity: '1',
+                                                            transform:
+                                                                'translateX(92.596px) translateZ(0px)',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                height: '14em',
+                                                                position:
+                                                                    'relative',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    position:
+                                                                        'absolute',
+                                                                    left: '0px',
+                                                                    opacity:
+                                                                        '1',
+                                                                    transform:
+                                                                        'translateY(0%) translateZ(0px)',
+                                                                }}
+                                                            >
+                                                                <div>9</div>
+                                                                <div>8</div>
+                                                                <div>7</div>
+                                                                <div>6</div>
+                                                                <div>5</div>
+                                                                <div>4</div>
+                                                                <div>3</div>
+                                                                <div>2</div>
+                                                                <div>1</div>
+                                                                <div>0</div>
+                                                                <div>,</div>
+                                                                <div>.</div>
+                                                                <div>-</div>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                            <div class="w-full lg:min-h-[570px] flex flex-wrap justify-between items-start gap-10 lg:gap-4 xl:gap-10 overflow-hidden pt-10 mobile:w-full pt-8 md:pt-10">
+                                <div class="w-full lg:w-[calc(100%-500px)] xl:w-[calc(100%-540px)]">
+                                    <div class="overflow-hidden bg-white sm:rounded-lg">
+                                        <div class="mb-0 md:mb-8">
+                                            <div class="flex flex-col md:flex-row items-start justify-between md:items-center">
+                                                <div class="flex flex-col">
+                                                    <div class="flex items-center">
+                                                        <div class="flex items-center justify-start gap-1">
+                                                            <p class="text-sm font-medium text-[#626262] leading-[20px]">
+                                                                Token Price
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center gap-x-1 h-[34px]">
+                                                        <div>
+                                                            <div class="text-[24px] font-medium leading-[34px]">
+                                                                $40.21
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center gap-x-[2px] text-sm p-1 rounded-[4px] bg-[#E7FAED]">
+                                                            <img
+                                                                src="/icons/up-arrow.svg"
+                                                                width="11"
+                                                                height="12"
+                                                            />
+                                                            <p class="font-normal text-base text-[#0CCA4A]">
+                                                                2.58%
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="py-[14px] md:py-0 flex justify-end flex-wrap items-center gap-1 border-borderGray text-sm w-full md:w-auto">
+                                                    <div class="w-full md:w-[232px]"></div>
+                                                </div>
+                                            </div>
+                                            <div class="flex justify-end h-[18px] hidden md:flex">
+                                                <a
+                                                    href="https://etherscan.io/address/0xCe9a6626Eb99eaeA829D7fA613d5D0A2eaE45F40"
+                                                    target="_blank"
+                                                    class="underline text-[12px] leading-[18px] text-[#626262] font-medium"
+                                                >
+                                                    View contract
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="h-full w-full">
+                                            <div class="relative">
+                                                <div class="z-10 md:z-0 flex justify-end h-[18px] md:hidden absolute top-[20px] right-0">
+                                                    <a
+                                                        href="https://etherscan.io/address/0xCe9a6626Eb99eaeA829D7fA613d5D0A2eaE45F40"
+                                                        target="_blank"
+                                                        class="underline text-[12px] leading-[18px] text-[#626262] font-medium"
+                                                    >
+                                                        View contract
+                                                    </a>
+                                                </div>
+                                                <canvas
+                                                    className="relative md:h-[350px] h-[340px]"
+                                                    width="939"
+                                                    style={{
+                                                        boxSizing: 'border-box',
+                                                        display: 'block',
+                                                        height: '350px',
+                                                        width: '939px',
+                                                    }}
+                                                    height="350"
+                                                ></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="mb-[1px] pl-[1px] mt-0 md:mt-10 flex justify-between md:flex md:justify-start">
+                                            <button
+                                                type="button"
+                                                class="text-black h-8 w-[54px] md:w-[38px] xl:w-[42px] rounded text-base font-medium uppercase !bg-white disabled:cursor-not-allowed"
+                                            >
+                                                1W{' '}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                class="text-black h-8 w-[54px] md:w-[38px] xl:w-[42px] rounded text-base font-medium uppercase !bg-white disabled:cursor-not-allowed"
+                                            >
+                                                1M
+                                            </button>
+                                            <button
+                                                type="button"
+                                                class="h-8 w-[54px] md:w-[38px] xl:w-[42px] rounded text-base font-medium uppercase !bg-[#F9FAFB] text-black border border-[#CFD9E2]"
+                                            >
+                                                6M
+                                            </button>
+                                            <button
+                                                type="button"
+                                                class="text-black h-8 w-[54px] md:w-[38px] xl:w-[42px] rounded text-base font-medium uppercase !bg-white disabled:cursor-not-allowed"
+                                            >
+                                                YTD
+                                            </button>
+                                            <button
+                                                type="button"
+                                                class="text-black h-8 w-[54px] md:w-[38px] xl:w-[42px] rounded text-base font-medium uppercase !bg-white disabled:cursor-not-allowed"
+                                            >
+                                                1Y
+                                            </button>
+                                            <button
+                                                type="button"
+                                                class="text-black h-8 w-[54px] md:w-[38px] xl:w-[42px] rounded text-base font-medium uppercase !bg-white disabled:cursor-not-allowed"
+                                            >
+                                                MAX
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <TransactionPanel />
+                            </div>
                         </div>
-                    ) : null}
+                    </div>
+                    <div>
+                        <div
+                            class="mx-auto max-w-[1200px] px-4 xl:px-0"
+                            id="tab-content"
+                        >
+                            <div class="border-b border-b-[#CFD9E2] rounded-t">
+                                <nav
+                                    class="-mb-px flex space-x-6 md:space-x-8 xl:space-x-10 px-0"
+                                    aria-label="Tabs"
+                                >
+                                    <button
+                                        class="border-mainBlue text-mainBlue font-semibold whitespace-nowrap border-b-2 py-4 px-1 text-lg md:text-[22px] cursor-pointer"
+                                        aria-current="page"
+                                    >
+                                        Overview
+                                    </button>
+                                    <button class="border-transparent text-gray-500 font-medium hover:border-mainBlue hover:text-mainBlue whitespace-nowrap border-b-2 py-4 px-1 text-lg md:text-[22px] cursor-pointer">
+                                        Portfolio
+                                    </button>
+                                    <button
+                                        class="border-transparent text-gray-500 font-medium hover:border-mainBlue hover:text-mainBlue font-semibold cursor-not-allowed text-black/20 border-[#CFD9E2]/30 hover:text-black/20 hover:border-transparent whitespace-nowrap border-b-2 py-4 px-1 text-lg md:text-[22px] cursor-pointer"
+                                        disabled=""
+                                    >
+                                        <span
+                                            class="underline-offset-8 cursor-not-allowed no-underline decoration-black decoration-dotted"
+                                            data-tooltip-id="oe-tooltip-disabled-tab"
+                                        >
+                                            Report
+                                        </span>
+                                        <div
+                                            id="oe-tooltip-disabled-tab"
+                                            role="tooltip"
+                                            className="react-tooltip core-styles-module_tooltip__3vRRp styles-module_tooltip__mnnfp styles-module_dark__xNqje !bg-[#374151] mobile:!max-w-[250px] max-w-[450px] !text-base !z-10 react-tooltip__place-right core-styles-module_closing__sGnxF react-tooltip__closing"
+                                            style={{
+                                                left: '349.719px',
+                                                top: '918px',
+                                            }}
+                                        >
+                                            <span>
+                                                Please sign up above to access
+                                                reports
+                                            </span>
+                                            <div
+                                                className="react-tooltip-arrow core-styles-module_arrow__cvMwQ styles-module_arrow__K0L3T"
+                                                style={{
+                                                    left: '-4px',
+                                                    top: '27px',
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </button>
+                                </nav>
+                            </div>
+                            <div id="overview">
+                                <div class="flex flex-col md:space-x-0 lg:flex-row lg:space-x-10 mobile:space-x-0 pt-10 pb-0 md:pb-[118px]">
+                                    <div class="flex-1">
+                                        <div>
+                                            <p class="max-w-full text-lg font-normal leading-7">
+                                                The GD30D Vault is the world’s
+                                                first smart-contract vault for
+                                                U.S. Treasury Bills. Earn the
+                                                U.S. risk-free rate on your
+                                                stablecoins by minting GD30D
+                                                tokens, with 24/7 liquidity. The
+                                                token issuer holds a portfolio
+                                                of short-dated Treasury Bills
+                                                via OpenEden Cayman Ltd, a
+                                                bankruptcy remote and
+                                                wholly-owned special purpose
+                                                vehicle. <br />
+                                                <br />
+                                                The Vault is developed by
+                                                OpenEden Labs, which is a
+                                                financial technology company and
+                                                not a regulated entity,
+                                                depository, bank, or credit
+                                                union.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 mobile:mt-[33px]">
+                                        <dl class="divide-y divide-[#CFD9E2]">
+                                            <div class="flex w-full flex-row items-center justify-between py-4 sm:py-3">
+                                                <dd class="text-gray-800 flex text-lg font-medium sm:mt-0">
+                                                    <span class="grow">
+                                                        <div class="flex items-center">
+                                                            <span
+                                                                style={{
+                                                                    boxSizing:
+                                                                        'border-box',
+                                                                    display:
+                                                                        'inline-block',
+                                                                    overflow:
+                                                                        'hidden',
+                                                                    width: 'initial',
+                                                                    height: 'initial',
+                                                                    background:
+                                                                        'none',
+                                                                    opacity: 1,
+                                                                    border: '0px',
+                                                                    margin: '0px',
+                                                                    padding:
+                                                                        '0px',
+                                                                    position:
+                                                                        'relative',
+                                                                    maxWidth:
+                                                                        '100%',
+                                                                }}
+                                                            >
+                                                                <span
+                                                                    style={{
+                                                                        boxSizing:
+                                                                            'border-box',
+                                                                        display:
+                                                                            'block',
+                                                                        width: 'initial',
+                                                                        height: 'initial',
+                                                                        background:
+                                                                            'none',
+                                                                        opacity: 1,
+                                                                        border: '0px',
+                                                                        margin: '0px',
+                                                                        padding:
+                                                                            '0px',
+                                                                        maxWidth:
+                                                                            '100%',
+                                                                    }}
+                                                                >
+                                                                    <img
+                                                                        alt=""
+                                                                        aria-hidden="true"
+                                                                        src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e"
+                                                                        style={{
+                                                                            display:
+                                                                                'block',
+                                                                            maxWidth:
+                                                                                '100%',
+                                                                            width: 'initial',
+                                                                            height: 'initial',
+                                                                            background:
+                                                                                'none',
+                                                                            opacity: 1,
+                                                                            border: '0px',
+                                                                            margin: '0px',
+                                                                            padding:
+                                                                                '0px',
+                                                                        }}
+                                                                    />
+                                                                </span>
+                                                                <img
+                                                                    src="/_next/image?url=https%3A%2F%2Frawcdn.githack.com%2FOpenEdenHQ%2Fopeneden.assets%2F3d1a5c6201585fb7dbda6e900174389ac9a15b57%2Ficons%2Ftbill%2Ftbill_token_128.png&w=48&q=75"
+                                                                    decoding="async"
+                                                                    data-nimg="intrinsic"
+                                                                    style={{
+                                                                        position:
+                                                                            'absolute',
+                                                                        inset: 0,
+                                                                        boxSizing:
+                                                                            'border-box',
+                                                                        padding: 0,
+                                                                        border: 'none',
+                                                                        margin: 'auto',
+                                                                        display:
+                                                                            'block',
+                                                                        width: 0,
+                                                                        height: 0,
+                                                                        minWidth:
+                                                                            '100%',
+                                                                        maxWidth:
+                                                                            '100%',
+                                                                        minHeight:
+                                                                            '100%',
+                                                                        maxHeight:
+                                                                            '100%',
+                                                                    }}
+                                                                    srcSet="/_next/image?url=https%3A%2F%2Frawcdn.githack.com%2FOpenEdenHQ%2Fopeneden.assets%2F3d1a5c6201585fb7dbda6e900174389ac9a15b57%2Ficons%2Ftbill%2Ftbill_token_128.png&w=32&q=75 1x, /_next/image?url=https%3A%2F%2Frawcdn.githack.com%2FOpenEdenHQ%2Fopeneden.assets%2F3d1a5c6201585fb7dbda6e900174389ac9a15b57%2Ficons%2Ftbill%2Ftbill_token_128.png&w=48&q=75 2x"
+                                                                />
+                                                            </span>
+
+                                                            <p class="ml-1 text-lg font-medium leading-[22px]">
+                                                                GD30D
+                                                            </p>
+                                                        </div>
+                                                    </span>
+                                                </dd>
+                                                <span class="shrink-0">
+                                                    <div class="yearn--elementWithActions-wrapper undefined">
+                                                        <p class="yearn--elementWithActions text-lg font-medium leading-[22px] text-black">
+                                                            0xdd5...f2e8a
+                                                        </p>
+                                                        <button class="cursor-pointer">
+                                                            <svg
+                                                                width="16"
+                                                                height="16"
+                                                                viewBox="0 0 16 16"
+                                                                fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                            >
+                                                                <path
+                                                                    fill-rule="evenodd"
+                                                                    clip-rule="evenodd"
+                                                                    d="M2.67085 2.67085C2.78025 2.56146 2.92862 2.5 3.08333 2.5H9.08333C9.23804 2.5 9.38642 2.56146 9.49581 2.67085C9.60521 2.78025 9.66667 2.92862 9.66667 3.08333V3.75C9.66667 4.16421 10.0025 4.5 10.4167 4.5C10.8309 4.5 11.1667 4.16421 11.1667 3.75V3.08333C11.1667 2.5308 10.9472 2.00089 10.5565 1.61019C10.1658 1.21949 9.63587 1 9.08333 1H3.08333C2.5308 1 2.0009 1.21949 1.61019 1.61019C1.21949 2.0009 1 2.5308 1 3.08333V9.08333C1 9.63587 1.21949 10.1658 1.61019 10.5565C2.00089 10.9472 2.5308 11.1667 3.08333 11.1667H3.75C4.16421 11.1667 4.5 10.8309 4.5 10.4167C4.5 10.0025 4.16421 9.66667 3.75 9.66667H3.08333C2.92862 9.66667 2.78025 9.60521 2.67085 9.49581C2.56146 9.38642 2.5 9.23804 2.5 9.08333V3.08333C2.5 2.92862 2.56146 2.78025 2.67085 2.67085ZM7.1665 7.74999C7.1665 7.42782 7.42767 7.16666 7.74984 7.16666H13.7498C14.072 7.16666 14.3332 7.42782 14.3332 7.74999V13.75C14.3332 14.0722 14.072 14.3333 13.7498 14.3333H7.74984C7.42767 14.3333 7.1665 14.0722 7.1665 13.75V7.74999ZM7.74984 5.66666C6.59924 5.66666 5.6665 6.5994 5.6665 7.74999V13.75C5.6665 14.9006 6.59924 15.8333 7.74984 15.8333H13.7498C14.9004 15.8333 15.8332 14.9006 15.8332 13.75V7.74999C15.8332 6.5994 14.9004 5.66666 13.7498 5.66666H7.74984Z"
+                                                                    fill="black"
+                                                                ></path>
+                                                            </svg>
+                                                        </button>
+                                                        <button class="cursor-pointer">
+                                                            <a
+                                                                href="https://etherscan.io/address/0xdd50C053C096CB04A3e3362E2b622529EC5f2e8a"
+                                                                target="_blank"
+                                                                class="cursor-pointer"
+                                                                rel="noreferrer"
+                                                            >
+                                                                <span class="sr-only">
+                                                                    Link to
+                                                                    explorer
+                                                                </span>
+                                                                <svg
+                                                                    width="24"
+                                                                    height="24"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    class="cursor-pointer w-4 h-4"
+                                                                >
+                                                                    <path
+                                                                        d="M7 4C5.34328 4 4 5.34328 4 7V17C4 18.6567 5.34328 20 7 20H17C18.6567 20 20 18.6567 20 17V16C20 15.4477 20.4477 15 21 15C21.5523 15 22 15.4477 22 16V17C22 19.7613 19.7613 22 17 22H7C4.23872 22 2 19.7613 2 17V7C2 4.23872 4.23872 2 7 2H8C8.55228 2 9 2.44772 9 3C9 3.55228 8.55228 4 8 4H7Z"
+                                                                        fill="currentcolor"
+                                                                    ></path>
+                                                                    <path
+                                                                        d="M14.3 2C13.6925 2 13.2 2.49249 13.2 3.1C13.2 3.70751 13.6925 4.2 14.3 4.2H18.2444L9.12223 13.3222C8.69265 13.7518 8.69265 14.4482 9.12223 14.8778C9.55181 15.3074 10.2483 15.3074 10.6779 14.8778L19.8 5.75565V9.7C19.8 10.3075 20.2925 10.8 20.9 10.8C21.5075 10.8 22 10.3075 22 9.7V3.1C22 2.92275 21.9581 2.75529 21.8836 2.607C21.8954 2.63051 21.9064 2.6545 21.9166 2.67894C21.8633 2.55017 21.7845 2.42947 21.6802 2.32456L21.6791 2.32343L21.6778 2.32213L21.6765 2.32083C21.4775 2.12256 21.2031 2 20.9 2H14.3Z"
+                                                                        fill="currentcolor"
+                                                                    ></path>
+                                                                    <path
+                                                                        d="M21.3211 2.08347C21.4545 2.13878 21.5747 2.21959 21.6755 2.31981C21.5706 2.21552 21.4499 2.13674 21.3211 2.08347Z"
+                                                                        fill="currentcolor"
+                                                                    ></path>
+                                                                </svg>
+                                                            </a>
+                                                        </button>
+                                                        <button class="h-8 w-8 justify-center items-center hidden sm:flex">
+                                                            <a class="cursor-pointer">
+                                                                <span class="sr-only">
+                                                                    Add to
+                                                                    MetaMask
+                                                                </span>
+                                                                <svg
+                                                                    width="18"
+                                                                    height="18"
+                                                                    fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    class="cursor-pointer h-4 w-4"
+                                                                >
+                                                                    <path
+                                                                        d="M19.292 2.216a.83.83 0 1 0-1.661 0v2.492h-2.493a.83.83 0 0 0 0 1.661h2.493v2.493a.83.83 0 1 0 1.661 0V6.369h2.492a.83.83 0 1 0 0-1.661h-2.492V2.216Z"
+                                                                        fill="currentcolor"
+                                                                    ></path>
+                                                                    <path
+                                                                        d="M8.632 5.699h4.293c.02.68.161 1.33.404 1.926H8.308a.9.9 0 0 1-.577-.21L4.615 4.812v4.739c0 .15-.033.297-.097.43l-2.42 5.05 8.979 6.814 8.978-6.814-1.899-3.963a5.536 5.536 0 0 0 1.95-.24l1.95 4.071a.99.99 0 0 1-.282 1.21L11.62 23.816a.892.892 0 0 1-1.086 0L.38 16.11a.99.99 0 0 1-.282-1.21l2.671-5.575V2.809c0-.37.204-.707.524-.868.32-.16.699-.115.976.116L8.632 5.7Z"
+                                                                        fill="currentcolor"
+                                                                    ></path>
+                                                                    <path
+                                                                        d="M9.23 13.405c0-.532-.413-.963-.922-.963-.51 0-.923.43-.923.963v.01c0 .531.413.963.923.963s.923-.432.923-.964v-.01ZM13.846 12.441c.51 0 .923.432.923.964v.01c0 .531-.413.963-.923.963s-.923-.432-.923-.964v-.01c0-.531.413-.963.923-.963ZM9.23 16.294c-.494 0-.898.407-.921.917a1.015 1.015 0 0 0 .153.58.937.937 0 0 0 .37.335l1.823.951a.889.889 0 0 0 .845 0l1.836-.958a.98.98 0 0 0 .372-1.37.94.94 0 0 0-.274-.294.893.893 0 0 0-.511-.16H9.23Z"
+                                                                        fill="currentcolor"
+                                                                    ></path>
+                                                                </svg>
+                                                            </a>
+                                                        </button>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>

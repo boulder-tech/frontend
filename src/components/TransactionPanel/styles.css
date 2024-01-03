@@ -1,0 +1,30 @@
+/* styles.css */
+.border {
+    border-width: 1px;
+}
+
+.border-borderGray {
+    --tw-border-opacity: 1;
+    border-color: rgb(207 217 226 / var(--tw-border-opacity));
+}
+
+.text-mainBlue {
+    --tw-text-opacity: 1;
+    color: rgb(33 81 245 / var(--tw-text-opacity));
+}
+
+.oe--input-field {
+    width: 100%;
+    border-style: none;
+    background-color: hsla(0, 0%, 100%, 0);
+    padding: 0;
+    font-size: 36px;
+    line-height: 36px;
+    font-weight: 500;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+.rounded-\[4px\] {
+    border-radius: 4px;
+}
