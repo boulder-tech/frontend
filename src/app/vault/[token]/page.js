@@ -7,7 +7,13 @@ import axios from 'axios';
 
 import { ethers } from 'ethers';
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL;
+const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
+
+Number.prototype.round = function (decimals) {
+    if (isNaN(this)) return NaN;
+    const factor = Math.pow(10, decimals);
+    return Math.round(this * factor) / factor;
+};
 
 const Vault = ({ params }) => {
     const [isNavbarOpen, setNavbarOpen] = useState(true);
@@ -25,18 +31,43 @@ const Vault = ({ params }) => {
     const [quantity, setQuantity] = useState(1);
 
     const { wallet, setWallet } = useGlobalContext();
+    const [price, setPrice] = useState(0);
 
     //For transactions
     const [error, setError] = useState();
     const [txs, setTxs] = useState([]);
 
     useEffect(() => {
+        checkIfWalletConnected();
+
         const walletDataString = localStorage.getItem('wallet');
 
         if (walletDataString) {
             const walletData = JSON.parse(walletDataString);
         }
+
+        fetchTokenPrice('GD30D');
     }, []);
+
+    const checkIfWalletConnected = async () => {
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            await signer.getAddress();
+        } catch (e) {
+            setWallet({});
+            localStorage.removeItem('wallet');
+        }
+    };
+
+    const fetchTokenPrice = async (name) => {
+        const {
+            data: { price, price_24h, last_24h },
+        } = await axios.get(`${backendUrl}/api/asset/name/${name}`);
+
+        setPrice(price.round(2));
+    };
 
     const toggleNavbar = () => {
         setNavbarOpen(!isNavbarOpen);
@@ -122,7 +153,7 @@ const Vault = ({ params }) => {
         }
     };
 
-    const startPayment = async ({ setError, setTxs, ether, addr }) => {
+    const startPaymentOriginal = async ({ setError, setTxs, ether, addr }) => {
         try {
             if (!window.ethereum)
                 throw new Error('No crypto wallet found. Please install it.');
@@ -161,7 +192,106 @@ const Vault = ({ params }) => {
         }
     };
 
+    const usdcAddress = '0xda9d4f9b69ac6C22e444eD9aF0CfC043b7a7f53f';
+
+    const usdcAbi = [
+        'function name() view returns (string)',
+        'function symbol() view returns (string)',
+        'function decimals() view returns (uint8)',
+        'function balanceOf(address) view returns (uint)',
+        'function totalSupply() view returns (uint256)',
+        'function transfer(address to, uint amount)',
+    ];
+
+    async function sendUsdcToAccount({ addr }) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        console.log('Account address s:', await signer.getAddress());
+
+        const balance = await signer.getBalance();
+        const convertToEth = 1e18;
+        console.log(
+            "account's balance in ether:",
+            balance.toString() / convertToEth
+        );
+
+        const usdcContract = new ethers.Contract(
+            usdcAddress,
+            usdcAbi,
+            provider
+        );
+
+        const name = await usdcContract.name();
+        const symbol = await usdcContract.symbol();
+        const decimals = await usdcContract.decimals();
+        const totalSupply = await usdcContract.totalSupply();
+        const myBalance = await usdcContract.balanceOf(signer.getAddress());
+
+        console.log(`name = ${name}`);
+        console.log(`symbol = ${symbol}`);
+        console.log(`decimals = ${decimals}`);
+        console.log(`totalSupply = ${totalSupply / 1e6}`);
+        console.log(`myBalance = ${myBalance / 1e6}`);
+
+        /*
+        let gasPrice = await provider.getGasPrice();
+        gasPrice = Math.round(gasPrice / 300);
+        console.log('gasPrice: ' + gasPrice);
+        const gasLimit = Math.round(gasPrice / 10); // Задайте бажаний ліміт газу
+        */
+
+        // Виконуємо передачу з встановленням параметрів газу
+        await usdcContract.connect(signer).transfer(addr, 50 * 1000000, {
+            //gasPrice,
+            //gasLimit,
+        });
+    }
+
+    const startPayment = async ({ setError, setTxs, ether, addr }) => {
+        try {
+            if (!window.ethereum)
+                throw new Error('No crypto wallet found. Please install it.');
+
+            /*
+            await window.ethereum.send('eth_requestAccounts');
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            ethers.utils.getAddress(addr);
+            const tx = await signer.sendTransaction({
+                to: addr,
+                value: ethers.utils.parseEther(ether),
+            });
+
+            console.log({ ether, addr });
+            console.log('tx', tx);
+
+            // Realiza una solicitud POST al backend con la información de la transacción usando Axios
+            const response = await axios.post(`${backendUrl}/api/transaction`, {
+                data: {
+                    amount: quantity,
+                    asset: 'GD30D',
+                    address: wallet.address,
+                    hash: tx.hash,
+                    status: 'pending',
+                },
+            });
+
+            console.log(response);
+
+            setTxs([tx]);
+
+            setShowBuyModal(false);
+            */
+            await sendUsdcToAccount({ addr });
+        } catch (err) {
+            console.log(err);
+            setError(err.message);
+        }
+    };
+
     const handleSubmit = async (e) => {
+        alert('But token');
         e.preventDefault();
         //const data = new FormData(e.target);
         setError();
@@ -169,7 +299,7 @@ const Vault = ({ params }) => {
             setError,
             setTxs,
             ether: cost.toString(),
-            addr: '0xF13b282C1a8f3965A384D71D78683dF208162753', //data.get('addr'),
+            addr: '0x6aD7faC9D241A535532B46fA313Eb80f561a3027', //data.get('addr'),
         });
     };
 
@@ -249,129 +379,6 @@ const Vault = ({ params }) => {
                         </div>
                     </div>
                 </a>
-                <a href="/swap" class="w-full">
-                    <div
-                        class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
-                            isNavbarOpen ? ' xl:px-3' : '-plain'
-                        }`}
-                    >
-                        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer min-w-5 w-5 h-5"
-                            >
-                                <path
-                                    d="M17.3006 10.5H23.1994C23.5173 10.5 23.691 10.8708 23.4874 11.1151L20.5381 14.6543C20.3882 14.8342 20.1118 14.8342 19.9619 14.6543L17.0126 11.1151C16.809 10.8708 16.9827 10.5 17.3006 10.5Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M0.800644 13.5H6.69936C7.0173 13.5 7.19099 13.1292 6.98745 12.8849L4.03809 9.3457C3.88816 9.16579 3.61184 9.16579 3.46192 9.3457L0.51256 12.8849C0.309021 13.1292 0.482705 13.5 0.800644 13.5Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M12 4.5C9.67127 4.5 7.59085 5.56045 6.21403 7.22758C5.95027 7.54696 5.47754 7.59205 5.15816 7.32829C4.83879 7.06452 4.7937 6.59179 5.05746 6.27242C6.70702 4.27504 9.20493 3 12 3C16.4126 3 20.082 6.17476 20.8516 10.3645C20.8599 10.4096 20.8678 10.4547 20.8754 10.5H19.3501C18.6556 7.07667 15.6279 4.5 12 4.5ZM4.64988 13.5C5.3444 16.9233 8.37206 19.5 12 19.5C14.3287 19.5 16.4092 18.4396 17.786 16.7724C18.0497 16.453 18.5225 16.408 18.8418 16.6717C19.1612 16.9355 19.2063 17.4082 18.9425 17.7276C17.293 19.725 14.7951 21 12 21C7.58745 21 3.91797 17.8252 3.14838 13.6355C3.1401 13.5904 3.13216 13.5453 3.12456 13.5H4.64988Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                            <p class="text-base font-semibold">Swap</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="/launchpad" class="w-full">
-                    <div
-                        class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
-                            isNavbarOpen ? ' xl:px-3' : '-plain'
-                        }`}
-                    >
-                        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer min-w-5 w-5 h-5"
-                            >
-                                <path
-                                    d="M21.75 4.5C22.1642 4.5 22.5 4.83579 22.5 5.25V18.75C22.5 19.1642 22.1642 19.5 21.75 19.5H2.25C1.83579 19.5 1.5 19.1642 1.5 18.75V5.25C1.5 4.83579 1.83579 4.5 2.25 4.5H21.75ZM2.25 3C1.00736 3 0 4.00736 0 5.25V18.75C0 19.9926 1.00736 21 2.25 21H21.75C22.9926 21 24 19.9926 24 18.75V5.25C24 4.00736 22.9926 3 21.75 3H2.25Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M10.5 8.25C10.5 7.83579 10.8358 7.5 11.25 7.5H18.75C19.1642 7.5 19.5 7.83579 19.5 8.25C19.5 8.66421 19.1642 9 18.75 9H11.25C10.8358 9 10.5 8.66421 10.5 8.25Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M8.25533 6.96967C8.54823 7.26256 8.54823 7.73744 8.25533 8.03033L6.00533 10.2803C5.71244 10.5732 5.23757 10.5732 4.94467 10.2803L4.19467 9.53033C3.90178 9.23744 3.90178 8.76256 4.19467 8.46967C4.48757 8.17678 4.96244 8.17678 5.25533 8.46967L5.475 8.68934L7.19467 6.96967C7.48757 6.67678 7.96244 6.67678 8.25533 6.96967Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M10.5 14.25C10.5 13.8358 10.8358 13.5 11.25 13.5H18.75C19.1642 13.5 19.5 13.8358 19.5 14.25C19.5 14.6642 19.1642 15 18.75 15H11.25C10.8358 15 10.5 14.6642 10.5 14.25Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M8.25533 12.9697C8.54823 13.2626 8.54823 13.7374 8.25533 14.0303L6.00533 16.2803C5.71244 16.5732 5.23757 16.5732 4.94467 16.2803L4.19467 15.5303C3.90178 15.2374 3.90178 14.7626 4.19467 14.4697C4.48757 14.1768 4.96244 14.1768 5.25533 14.4697L5.475 14.6893L7.19467 12.9697C7.48757 12.6768 7.96244 12.6768 8.25533 12.9697Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                            <p class="text-base font-semibold">Launchpad</p>
-                        </div>
-                        {isNavbarOpen ? (
-                            <div class="flex items-center text-xs font-semibold bg-green-600 py-1 px-2 rounded text-white">
-                                <span>New</span>
-                            </div>
-                        ) : (
-                            <svg
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer h-2 w-2 min-w-2 text-green-600 absolute right-0.5 top-0.5"
-                            >
-                                <rect
-                                    width="32"
-                                    height="32"
-                                    rx="16"
-                                    fill="currentColor"
-                                ></rect>
-                                <path
-                                    d="M17.767 9.86364V21.5H15.6591V11.9148H15.5909L12.8693 13.6534V11.7216L15.7614 9.86364H17.767Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                        )}
-                    </div>
-                </a>
-                <a href="/rewards" class="w-full">
-                    <div
-                        class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
-                            isNavbarOpen ? ' xl:px-3' : '-plain'
-                        }`}
-                    >
-                        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer min-w-5 w-5 h-5"
-                            >
-                                <path
-                                    d="M16.8771 0.101709C17.1786 0.277085 17.3194 0.637193 17.2169 0.970588L14.5155 9.75002H19.5C19.7992 9.75002 20.0698 9.92788 20.1885 10.2025C20.3072 10.4772 20.2512 10.7962 20.0462 11.014L8.04617 23.764C7.8071 24.0181 7.42447 24.0737 7.12294 23.8983C6.82141 23.723 6.6806 23.3629 6.78318 23.0295L9.48455 14.25H4.50002C4.2008 14.25 3.93021 14.0722 3.81153 13.7975C3.69286 13.5228 3.74879 13.2039 3.95387 12.986L15.9539 0.236C16.1929 -0.018011 16.5756 -0.073668 16.8771 0.101709ZM6.23584 12.75H10.5C10.738 12.75 10.9619 12.863 11.1033 13.0544C11.2447 13.2459 11.2868 13.4931 11.2169 13.7206L9.16611 20.3855L17.7642 11.25H13.5C13.262 11.25 13.0381 11.1371 12.8967 10.9456C12.7553 10.7541 12.7132 10.5069 12.7832 10.2795L14.8339 3.61456L6.23584 12.75Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                            <p class="text-base font-semibold">Rewards</p>
-                        </div>
-                    </div>
-                </a>
                 <a href="/portfolio" class="w-full">
                     <div
                         class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
@@ -396,30 +403,6 @@ const Vault = ({ params }) => {
                         </div>
                     </div>
                 </a>
-                <a href="/missions" class="w-full">
-                    <div
-                        class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
-                            isNavbarOpen ? ' xl:px-3' : '-plain'
-                        }`}
-                    >
-                        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer min-w-5 w-5 h-5"
-                            >
-                                <path
-                                    d="M10.5 2.12109V5.99977H3C2.17157 5.99977 1.5 6.67135 1.5 7.49977V13.4998C1.5 14.3282 2.17157 14.9998 3 14.9998H10.5V23.9998H13.5V14.9998H18.7974C19.2426 14.9998 19.6648 14.802 19.9498 14.46L22.8499 10.9799C23.0817 10.7018 23.0817 10.2978 22.8499 10.0196L19.9498 6.5395C19.6648 6.19751 19.2426 5.99977 18.7974 5.99977H13.5V2.12109C13.5 1.72327 13.342 1.34174 13.0607 1.06043C12.4749 0.474647 11.5251 0.474647 10.9393 1.06043C10.658 1.34174 10.5 1.72327 10.5 2.12109ZM18.7974 7.49977L21.2974 10.4998L18.7974 13.4998H3L3 7.49977H18.7974Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                            <p class="text-base font-semibold">Missions</p>
-                        </div>
-                    </div>
-                </a>
             </nav>
 
             <div
@@ -438,7 +421,7 @@ const Vault = ({ params }) => {
                         <div class="mx-auto max-w-[1200px] px-4 xl:px-0">
                             <div class="flex flex-row items-center space-x-3">
                                 <div class="h-[54px] w-[54px] rounded-lg border-2 border-black p-[10px]">
-                                    <img src="/./icons/tbillToken.svg" />
+                                    <img src="/logos/ARG.png" />
                                 </div>
                                 <div class="flex flex-col justify-center">
                                     <div class="text-2xl font-semibold mobile:text-2xl">
@@ -1054,7 +1037,7 @@ const Vault = ({ params }) => {
                                                             left: '0px',
                                                         }}
                                                     >
-                                                        $40.21
+                                                        {`$${price}`}
                                                     </span>
                                                     <span
                                                         aria-hidden="true"
@@ -1070,7 +1053,7 @@ const Vault = ({ params }) => {
                                                             transform: 'none',
                                                         }}
                                                     >
-                                                        $40.21
+                                                        {`$${price}`}
                                                     </span>
                                                 </div>
                                             </div>
@@ -2296,7 +2279,7 @@ const Vault = ({ params }) => {
                                                             left: '0px',
                                                         }}
                                                     >
-                                                        $40.21
+                                                        {`$${price}`}
                                                     </span>
                                                     <span
                                                         aria-hidden="true"
@@ -3367,7 +3350,7 @@ const Vault = ({ params }) => {
                                                     <div class="flex items-center gap-x-1 h-[34px]">
                                                         <div>
                                                             <div class="text-[24px] font-medium leading-[34px]">
-                                                                $40.21
+                                                                {`$${price}`}
                                                             </div>
                                                         </div>
                                                         <div class="flex items-center gap-x-[2px] text-sm p-1 rounded-[4px] bg-[#E7FAED]">
@@ -3460,7 +3443,10 @@ const Vault = ({ params }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <TransactionPanel />
+                                <TransactionPanel
+                                    tokenPrice={price}
+                                    handleSubmit={handleSubmit}
+                                />
                             </div>
                         </div>
                     </div>

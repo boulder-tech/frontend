@@ -1,12 +1,198 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { ethers } from 'ethers';
+import TermsOfUseModal from '../TermsOfUseModal';
+import TransactionConfirmationModal from '../TransactionConfirmationModal';
 import ConnectWalletModal from '../ConnectWalletModal';
+import Notification from '../Notification';
 import { useGlobalContext } from '../../app/context/store';
 
 import './styles.css';
 
-const TransactionPanel = () => {
+const usdcAddress = '0xda9d4f9b69ac6C22e444eD9aF0CfC043b7a7f53f';
+
+const usdcAbi = [
+    'function name() view returns (string)',
+    'function symbol() view returns (string)',
+    'function decimals() view returns (uint8)',
+    'function balanceOf(address) view returns (uint)',
+    'function totalSupply() view returns (uint256)',
+    'function transfer(address to, uint amount)',
+];
+
+const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
+
+function formatNumber(input) {
+    // Elimina las comas del número
+    const numberWithoutCommas = input.replace(/,/g, '');
+
+    // Formatea la parte entera con comas
+    const formattedNumber = numberWithoutCommas.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ','
+    );
+
+    return formattedNumber;
+}
+
+const unformatNumber = (input) => {
+    return input.replace(/,/g, '');
+};
+
+Number.prototype.round = function (decimals) {
+    if (isNaN(this)) return NaN;
+    const factor = Math.pow(10, decimals);
+    return Math.round(this * factor) / factor;
+};
+
+const TransactionPanel = ({ tokenPrice }) => {
     const { wallet, setWallet } = useGlobalContext();
     const [openConnectWalletModal, setOpenConnectWalletModal] = useState(false);
+    const [openTermsOfUseModal, setOpenTermsOfUseModal] = useState(false);
+    const [
+        openTransactionConfirmationModal,
+        setOpenTransactionConfirmationModal,
+    ] = useState(false);
+    const [balance, setBalance] = useState(0);
+    const [amountToInvest, setAmountToInvest] = useState(0);
+    const [totalTokens, setTotalTokens] = useState(0);
+    const [isKycApproved, setIsKycApproved] = useState(false);
+
+    useEffect(() => {
+        if (wallet.address) {
+            fetchBalance();
+
+            /*
+            Temp code just for testing
+            */
+            const temporizador = setTimeout(() => {
+                // Realizar la acción que deseas después de 10 segundos
+                setIsKycApproved(true);
+            }, 10000); // 10000 milisegundos = 10 segundos
+
+            // Limpiar el temporizador cuando el componente se desmonta
+            return () => {
+                clearTimeout(temporizador);
+            };
+        }
+    }, [wallet]);
+
+    const fetchBalance = async () => {
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            const usdcContract = new ethers.Contract(
+                usdcAddress,
+                usdcAbi,
+                provider
+            );
+
+            const usdcBalance = await usdcContract.balanceOf(
+                signer.getAddress()
+            );
+            const balance = usdcBalance / 1e6;
+
+            setBalance(balance);
+
+            return balance;
+        } catch (e) {
+            return 0;
+        }
+    };
+
+    const setMaxBalance = async () => {
+        let maxBalance = formatNumber((await fetchBalance()).toString());
+
+        setAmountToInvest(maxBalance);
+
+        setTotalTokens((unformatNumber(maxBalance) / tokenPrice).round(0));
+    };
+
+    async function sendUsdcToAccount({ addr }) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        console.log('Account address s:', await signer.getAddress());
+
+        const balance = await signer.getBalance();
+        const convertToEth = 1e18;
+        console.log(
+            "account's balance in ether:",
+            balance.toString() / convertToEth
+        );
+
+        const usdcContract = new ethers.Contract(
+            usdcAddress,
+            usdcAbi,
+            provider
+        );
+
+        const name = await usdcContract.name();
+        const symbol = await usdcContract.symbol();
+        const decimals = await usdcContract.decimals();
+        const totalSupply = await usdcContract.totalSupply();
+        const myBalance = await usdcContract.balanceOf(signer.getAddress());
+
+        console.log(`name = ${name}`);
+        console.log(`symbol = ${symbol}`);
+        console.log(`decimals = ${decimals}`);
+        console.log(`totalSupply = ${totalSupply / 1e6}`);
+        console.log(`myBalance = ${myBalance / 1e6}`);
+
+        /*
+        let gasPrice = await provider.getGasPrice();
+        gasPrice = Math.round(gasPrice / 300);
+        console.log('gasPrice: ' + gasPrice);
+        const gasLimit = Math.round(gasPrice / 10); // Задайте бажаний ліміт газу
+        */
+
+        // Виконуємо передачу з встановленням параметрів газу
+        const transaction = await usdcContract
+            .connect(signer)
+            .transfer(addr, unformatNumber(amountToInvest) * 1000000, {
+                //gasPrice,
+                //gasLimit,
+            });
+
+        console.log(transaction);
+
+        const response = await axios.post(`${backendUrl}/api/transaction`, {
+            address: wallet.address,
+            hash: transaction.hash,
+            amount_stable: unformatNumber(amountToInvest),
+            type_stable: 'USDC',
+            token: 'GD30D',
+        });
+
+        console.log(response);
+
+        setOpenTransactionConfirmationModal(true);
+    }
+
+    const startPayment = async ({ setError, setTxs, ether, addr }) => {
+        try {
+            if (!window.ethereum)
+                throw new Error('No crypto wallet found. Please install it.');
+
+            await sendUsdcToAccount({ addr });
+        } catch (err) {
+            console.log(err);
+            //setError(err.message);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        //const data = new FormData(e.target);
+        //setError();
+        await startPayment({
+            //setError,
+            //setTxs,
+            //ether: cost.toString(),
+            addr: '0x6aD7faC9D241A535532B46fA313Eb80f561a3027', //data.get('addr'),
+        });
+    };
 
     return (
         <div class="overflow-hidden w-full lg:w-[460px] xl:w-[500px] h-auto md:min-h-[524px] border border-borderGray bg-white rounded-[4px] lg:mt-0">
@@ -44,7 +230,7 @@ const TransactionPanel = () => {
                                         MAX
                                     </button>
                                     <p class="text-[#626262] leading-[24px] text-lg">
-                                        0
+                                        {balance}
                                     </p>
                                 </div>
                             </div>
@@ -126,7 +312,10 @@ const TransactionPanel = () => {
                                         </span>
                                     </div>
                                     <div>
-                                        <button class="rounded-[100px] px-[10px] py-[2px] text-xs text-[#646464] border border-[#646464] hover:border-mainBlue hover:text-mainBlue mobile:hidden">
+                                        <button
+                                            class="rounded-[100px] px-[10px] py-[2px] text-xs text-[#646464] border border-[#646464] hover:border-mainBlue hover:text-mainBlue mobile:hidden"
+                                            onClick={setMaxBalance}
+                                        >
                                             MAX
                                         </button>
                                     </div>
@@ -150,7 +339,35 @@ const TransactionPanel = () => {
                                                     min="0"
                                                     placeholder="0.00"
                                                     max="0"
-                                                    value=""
+                                                    value={amountToInvest}
+                                                    onChange={async (e) => {
+                                                        console.log(
+                                                            e.target.value
+                                                        );
+                                                        const { value } =
+                                                            e.target;
+
+                                                        const unformattedValue =
+                                                            unformatNumber(
+                                                                value
+                                                            );
+
+                                                        const amount =
+                                                            formatNumber(
+                                                                unformattedValue
+                                                            );
+
+                                                        setAmountToInvest(
+                                                            amount
+                                                        );
+
+                                                        setTotalTokens(
+                                                            (
+                                                                unformattedValue /
+                                                                tokenPrice
+                                                            ).round(0)
+                                                        );
+                                                    }}
                                                     style={{
                                                         fontSize: '2.1rem',
                                                     }}
@@ -246,7 +463,7 @@ const TransactionPanel = () => {
                                             <span class="inline-flex items-center justify-end rounded-full text-[#626262] leading-[24px] text-lg font-normal mobile:w-auto mobile:text-base">
                                                 <span>1 GD30D ≈</span>
                                                 <span class="pl-1">
-                                                    40.21&nbsp;USDC
+                                                    {`${tokenPrice} USDC`}
                                                 </span>
                                             </span>
                                         </div>
@@ -325,6 +542,7 @@ const TransactionPanel = () => {
                                     </div>
                                 </div>
                             </div>
+
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-x-1 w-[150px] mobile:w-[150px]">
                                     <span
@@ -393,7 +611,7 @@ const TransactionPanel = () => {
                                                 minHeight: '100%',
                                                 maxHeight: '100%',
                                             }}
-                                            srcSet="/_next/image?url=https%3A%2F%2Frawcdn.githack.com%2FOpenEdenHQ%2Fopeneden.assets%2F3d1a5c6201585fb7dbda6e900174389ac9a15b57%2Ficons%2Ftbill%2Ftbill_token_128.png&amp;w=32&amp;q=75 1x, /_next/image?url=https%3A%2F%2Frawcdn.githack.com%2FOpenEdenHQ%2Fopeneden.assets%2F3d1a5c6201585fb7dbda6e900174389ac9a15b57%2Ficons%2Ftbill%2Ftbill_token_128.png&amp;w=48&amp;q=75 2x"
+                                            srcSet="/logos/ARG.png"
                                         />
                                     </span>
 
@@ -415,26 +633,46 @@ const TransactionPanel = () => {
                                             maxlength="79"
                                             spellcheck="false"
                                             readonly=""
-                                            value="0,00"
+                                            value={totalTokens}
                                         />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="flex items-center">
+                        <p class="mt-1 text-sm text-red-900">
+                            {`You will receive approximately ${totalTokens} GD30D. Read more`}
+                        </p>
+                        <a
+                            class="mt-1 ml-1 text-sm text-red-900 underline"
+                            href=""
+                        >
+                            here
+                        </a>
+                        <p class="mt-1 text-sm text-red-900">.</p>
+                    </div>
                 </div>
+
                 <div class="px-4 md:px-6">
                     <div class="mt-4 mb-7 w-full">
                         <button
                             class="w-full bg-black py-4 text-[22px] leading-[20px] font-semibold text-white shadow-xl"
                             onClick={
                                 wallet.address
-                                    ? () => {}
-                                    : () => setOpenConnectWalletModal(true)
+                                    ? isKycApproved
+                                        ? (e) => handleSubmit(e)
+                                        : () => {
+                                              alert('KYC Process');
+                                          }
+                                    : () => setOpenTermsOfUseModal(true)
                             }
                         >
                             {wallet.address
-                                ? 'PENDING ONBOARDING'
+                                ? isKycApproved
+                                    ? 'BUY'
+                                    : 'PENDING ONBOARDING'
                                 : 'CONNECT WALLET'}
                         </button>
                     </div>
@@ -459,11 +697,23 @@ const TransactionPanel = () => {
                     </p>
                 </div>
             </div>
+            <TermsOfUseModal
+                isOpen={openTermsOfUseModal}
+                onClose={() => setOpenTermsOfUseModal(false)}
+                closeModal={() => setOpenTermsOfUseModal(false)}
+                acceptTerms={() => setOpenConnectWalletModal(true)}
+            />
             <ConnectWalletModal
                 isOpen={openConnectWalletModal}
                 onClose={() => setOpenConnectWalletModal(false)}
                 closeModal={() => setOpenConnectWalletModal(false)}
             />
+            <TransactionConfirmationModal
+                isOpen={openTransactionConfirmationModal}
+                onClose={() => setOpenTransactionConfirmationModal(false)}
+                closeModal={() => setOpenTransactionConfirmationModal(false)}
+            />
+            {isKycApproved && <Notification />}
         </div>
     );
 };

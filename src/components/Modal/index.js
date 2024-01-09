@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Modal = ({ isOpen, onClose, title, children }) => {
+const Modal = ({ isOpen, onClose, title, maxWitdh, children }) => {
     return (
         <>
             {isOpen ? (
@@ -8,7 +8,9 @@ const Modal = ({ isOpen, onClose, title, children }) => {
                     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
                             {/*content*/}
-                            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                            <div
+                                className={`border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none ${maxWitdh}`}
+                            >
                                 {/*header*/}
                                 <div className="ml-auto mr-3 mt-3">
                                     <svg
@@ -29,9 +31,14 @@ const Modal = ({ isOpen, onClose, title, children }) => {
                                     </svg>
                                 </div>
                                 <div className="flex items-start justify-between pt-1 pb-1 pl-5 pr-5 border-b border-solid border-blueGray-200 rounded-t">
-                                    <p className="text-2xl text-black">
+                                    <h2
+                                        class="text-xl font-semibold leading-6 text-gray-900"
+                                        id="headlessui-dialog-title-:r2m:"
+                                        data-headlessui-state="open"
+                                    >
                                         {title}
-                                    </p>
+                                    </h2>
+
                                     <button
                                         className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                                         onClick={onClose}

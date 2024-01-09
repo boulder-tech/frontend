@@ -182,30 +182,6 @@ const Home = () => {
                         )}
                     </div>
                 </a>
-                <a href="/rewards" class="w-full">
-                    <div
-                        class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
-                            isNavbarOpen ? ' xl:px-3' : '-plain'
-                        }`}
-                    >
-                        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer min-w-5 w-5 h-5"
-                            >
-                                <path
-                                    d="M16.8771 0.101709C17.1786 0.277085 17.3194 0.637193 17.2169 0.970588L14.5155 9.75002H19.5C19.7992 9.75002 20.0698 9.92788 20.1885 10.2025C20.3072 10.4772 20.2512 10.7962 20.0462 11.014L8.04617 23.764C7.8071 24.0181 7.42447 24.0737 7.12294 23.8983C6.82141 23.723 6.6806 23.3629 6.78318 23.0295L9.48455 14.25H4.50002C4.2008 14.25 3.93021 14.0722 3.81153 13.7975C3.69286 13.5228 3.74879 13.2039 3.95387 12.986L15.9539 0.236C16.1929 -0.018011 16.5756 -0.073668 16.8771 0.101709ZM6.23584 12.75H10.5C10.738 12.75 10.9619 12.863 11.1033 13.0544C11.2447 13.2459 11.2868 13.4931 11.2169 13.7206L9.16611 20.3855L17.7642 11.25H13.5C13.262 11.25 13.0381 11.1371 12.8967 10.9456C12.7553 10.7541 12.7132 10.5069 12.7832 10.2795L14.8339 3.61456L6.23584 12.75Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                            <p class="text-base font-semibold">Rewards</p>
-                        </div>
-                    </div>
-                </a>
                 <a href="/portfolio" class="w-full">
                     <div
                         class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
@@ -227,30 +203,6 @@ const Home = () => {
                                 ></path>
                             </svg>
                             <p class="text-base font-semibold">Portfolio</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="/missions" class="w-full">
-                    <div
-                        class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
-                            isNavbarOpen ? ' xl:px-3' : '-plain'
-                        }`}
-                    >
-                        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer min-w-5 w-5 h-5"
-                            >
-                                <path
-                                    d="M10.5 2.12109V5.99977H3C2.17157 5.99977 1.5 6.67135 1.5 7.49977V13.4998C1.5 14.3282 2.17157 14.9998 3 14.9998H10.5V23.9998H13.5V14.9998H18.7974C19.2426 14.9998 19.6648 14.802 19.9498 14.46L22.8499 10.9799C23.0817 10.7018 23.0817 10.2978 22.8499 10.0196L19.9498 6.5395C19.6648 6.19751 19.2426 5.99977 18.7974 5.99977H13.5V2.12109C13.5 1.72327 13.342 1.34174 13.0607 1.06043C12.4749 0.474647 11.5251 0.474647 10.9393 1.06043C10.658 1.34174 10.5 1.72327 10.5 2.12109ZM18.7974 7.49977L21.2974 10.4998L18.7974 13.4998H3L3 7.49977H18.7974Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                            <p class="text-base font-semibold">Missions</p>
                         </div>
                     </div>
                 </a>

@@ -11,11 +11,23 @@ const ConnectWalletModal = ({ isOpen, onClose, closeModal }) => {
     const connectWallet = async ({ isOpen, onClose }) => {
         try {
             let walletName = 'unknown';
+            let chainId = null;
 
             if (window.ethereum) {
                 // Detectar la billetera según las propiedades de window.ethereum
                 if (window.ethereum.isMetaMask) {
                     walletName = 'Metamask';
+
+                    chainId = await window.ethereum.request({
+                        method: 'eth_chainId',
+                    });
+
+                    if (chainId !== '0xaa36a7') {
+                        await ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0xaa36a7' }],
+                        });
+                    }
                 } else if (window.ethereum.isBinanceSmartChain) {
                     walletName = 'Binance Smart Chain Wallet';
                 } // Agrega más condiciones según sea necesario
@@ -44,7 +56,10 @@ const ConnectWalletModal = ({ isOpen, onClose, closeModal }) => {
                 const walletObject = {
                     wallet: walletName,
                     address: public_address,
+                    chainId,
                 };
+
+                console.log(walletObject);
 
                 setWallet(walletObject);
 
