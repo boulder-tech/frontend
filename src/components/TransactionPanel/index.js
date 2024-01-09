@@ -57,6 +57,7 @@ const TransactionPanel = ({ tokenPrice }) => {
     const [amountToInvest, setAmountToInvest] = useState(0);
     const [totalTokens, setTotalTokens] = useState(0);
     const [isKycApproved, setIsKycApproved] = useState(false);
+    const [isDepositing, setIsDepositing] = useState(false);
 
     useEffect(() => {
         if (wallet.address) {
@@ -165,9 +166,22 @@ const TransactionPanel = ({ tokenPrice }) => {
             token: 'GD30D',
         });
 
-        console.log(response);
+        setIsDepositing(true);
 
-        setOpenTransactionConfirmationModal(true);
+        provider
+            .waitForTransaction(transaction.hash)
+            .then((receipt) => {
+                console.log(receipt);
+                setIsDepositing(false);
+                setAmountToInvest(0);
+                setTotalTokens(0);
+                setOpenTransactionConfirmationModal(true);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        console.log(response);
     }
 
     const startPayment = async ({ setError, setTxs, ether, addr }) => {
@@ -650,22 +664,53 @@ const TransactionPanel = ({ tokenPrice }) => {
                 <div class="px-4 md:px-6">
                     <div class="mt-4 mb-7 w-full">
                         <button
-                            class="w-full bg-black py-4 text-[22px] leading-[20px] font-semibold text-white shadow-xl"
-                            onClick={
-                                wallet.address
-                                    ? isKycApproved
-                                        ? (e) => handleSubmit(e)
-                                        : () => {
-                                              alert('KYC Process');
-                                          }
-                                    : () => setOpenTermsOfUseModal(true)
-                            }
+                            className={`w-full py-4 text-[22px] leading-[20px] font-semibold shadow-xl ${
+                                wallet.address ? 'bg-black' : 'bg-black' // Puedes ajustar los colores de fondo según tus necesidades
+                            } ${
+                                isDepositing
+                                    ? 'bg-gray-500 cursor-not-allowed'
+                                    : 'text-white'
+                            }`}
+                            onClick={(e) => {
+                                if (wallet.address) {
+                                    if (isKycApproved) {
+                                        handleSubmit(e);
+                                    } else {
+                                        alert('KYC Process');
+                                    }
+                                } else {
+                                    setOpenTermsOfUseModal(true);
+                                }
+                            }}
+                            disabled={isDepositing}
                         >
-                            {wallet.address
-                                ? isKycApproved
-                                    ? 'BUY'
-                                    : 'PENDING ONBOARDING'
-                                : 'CONNECT WALLET'}
+                            {isDepositing ? (
+                                <span className="ml-2 inline-flex">
+                                    <svg
+                                        className="animate-spin h-5 w-5 text-white"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M15.9997 0L12.7997 3.19999H15.9997L15.9997 6.39998L19.1997 3.19999V0H15.9997Z"
+                                            fill="#FAFBFF"
+                                        ></path>
+                                        <path
+                                            d="M-0.000244141 16H13.737C15.1858 16 16.5753 15.4244 17.5997 14.4C18.6242 13.3755 19.1997 11.986 19.1997 10.5372L19.1997 6.39998H15.9997H9.59975L6.39976 9.59997H15.9997V10.0589C15.9997 10.7895 15.7095 11.4902 15.1929 12.0068C14.6844 12.5153 13.9972 12.8048 13.2782 12.8135L3.06305 12.9367L-0.000244141 16Z"
+                                            fill="#FAFBFF"
+                                        ></path>
+                                    </svg>
+                                </span>
+                            ) : wallet.address ? (
+                                isKycApproved ? (
+                                    'DEPOSIT'
+                                ) : (
+                                    'PENDING ONBOARDING'
+                                )
+                            ) : (
+                                'CONNECT WALLET'
+                            )}
                         </button>
                     </div>
                 </div>
