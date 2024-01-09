@@ -207,15 +207,7 @@ const TransactionPanel = ({ tokenPrice }) => {
                     >
                         deposit
                     </button>
-                    <button class="text-gray-500 hover:text-gray-700 font-medium rounded-full capitalize">
-                        withdraw
-                    </button>
                 </nav>
-                <button class="bg-[#F5F8FB] flex items-center justify-between gap-x-2 text-[14px] md:text-lg font-medium px-2 md:px-[12px] py-[6px]">
-                    <img src="/icons/uniswap.svg" width="14" height="15" />
-                    Swap USDC{' '}
-                    <img src="/icons/arrow-up.svg" width="10" height="10" />
-                </button>
             </div>
             <div>
                 <div class="grid grid-cols-1 gap-4 px-4 md:px-6 md:grid-cols-1">
