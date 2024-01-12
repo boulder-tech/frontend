@@ -21,7 +21,7 @@ const Notification = () => {
         >
             <p className="text-base font-semibold">KYC Approved!</p>
             <p className="text-sm mt-2">
-                Your Know Your Customer (KYC) process has been successfully
+                Your KYC process has been successfully
                 approved.
             </p>
         </div>

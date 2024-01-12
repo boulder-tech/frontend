@@ -21,7 +21,7 @@ const Home = () => {
                         class="pl-2 text-xs font-semibold max-xl:hidden"
                         style={isNavbarOpen ? {} : { display: 'none' }}
                     >
-                        Grow your assets
+                        Diversify your portfolio
                     </p>
                     <svg
                         onClick={toggleNavbar}
@@ -81,105 +81,6 @@ const Home = () => {
                             </svg>
                             <p class="text-base font-semibold">Vaults</p>
                         </div>
-                    </div>
-                </a>
-                <a href="/swap" class="w-full">
-                    <div
-                        class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
-                            isNavbarOpen ? ' xl:px-3' : '-plain'
-                        }`}
-                    >
-                        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer min-w-5 w-5 h-5"
-                            >
-                                <path
-                                    d="M17.3006 10.5H23.1994C23.5173 10.5 23.691 10.8708 23.4874 11.1151L20.5381 14.6543C20.3882 14.8342 20.1118 14.8342 19.9619 14.6543L17.0126 11.1151C16.809 10.8708 16.9827 10.5 17.3006 10.5Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M0.800644 13.5H6.69936C7.0173 13.5 7.19099 13.1292 6.98745 12.8849L4.03809 9.3457C3.88816 9.16579 3.61184 9.16579 3.46192 9.3457L0.51256 12.8849C0.309021 13.1292 0.482705 13.5 0.800644 13.5Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M12 4.5C9.67127 4.5 7.59085 5.56045 6.21403 7.22758C5.95027 7.54696 5.47754 7.59205 5.15816 7.32829C4.83879 7.06452 4.7937 6.59179 5.05746 6.27242C6.70702 4.27504 9.20493 3 12 3C16.4126 3 20.082 6.17476 20.8516 10.3645C20.8599 10.4096 20.8678 10.4547 20.8754 10.5H19.3501C18.6556 7.07667 15.6279 4.5 12 4.5ZM4.64988 13.5C5.3444 16.9233 8.37206 19.5 12 19.5C14.3287 19.5 16.4092 18.4396 17.786 16.7724C18.0497 16.453 18.5225 16.408 18.8418 16.6717C19.1612 16.9355 19.2063 17.4082 18.9425 17.7276C17.293 19.725 14.7951 21 12 21C7.58745 21 3.91797 17.8252 3.14838 13.6355C3.1401 13.5904 3.13216 13.5453 3.12456 13.5H4.64988Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                            <p class="text-base font-semibold">Swap</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="/launchpad" class="w-full">
-                    <div
-                        class={`flex justify-between w-full cursor-pointer p-2 px-4 sm:px-2 hover:rounded hover:bg-green-600 hover:bg-opacity-10 relative sidebar${
-                            isNavbarOpen ? ' xl:px-3' : '-plain'
-                        }`}
-                    >
-                        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer min-w-5 w-5 h-5"
-                            >
-                                <path
-                                    d="M21.75 4.5C22.1642 4.5 22.5 4.83579 22.5 5.25V18.75C22.5 19.1642 22.1642 19.5 21.75 19.5H2.25C1.83579 19.5 1.5 19.1642 1.5 18.75V5.25C1.5 4.83579 1.83579 4.5 2.25 4.5H21.75ZM2.25 3C1.00736 3 0 4.00736 0 5.25V18.75C0 19.9926 1.00736 21 2.25 21H21.75C22.9926 21 24 19.9926 24 18.75V5.25C24 4.00736 22.9926 3 21.75 3H2.25Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M10.5 8.25C10.5 7.83579 10.8358 7.5 11.25 7.5H18.75C19.1642 7.5 19.5 7.83579 19.5 8.25C19.5 8.66421 19.1642 9 18.75 9H11.25C10.8358 9 10.5 8.66421 10.5 8.25Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M8.25533 6.96967C8.54823 7.26256 8.54823 7.73744 8.25533 8.03033L6.00533 10.2803C5.71244 10.5732 5.23757 10.5732 4.94467 10.2803L4.19467 9.53033C3.90178 9.23744 3.90178 8.76256 4.19467 8.46967C4.48757 8.17678 4.96244 8.17678 5.25533 8.46967L5.475 8.68934L7.19467 6.96967C7.48757 6.67678 7.96244 6.67678 8.25533 6.96967Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M10.5 14.25C10.5 13.8358 10.8358 13.5 11.25 13.5H18.75C19.1642 13.5 19.5 13.8358 19.5 14.25C19.5 14.6642 19.1642 15 18.75 15H11.25C10.8358 15 10.5 14.6642 10.5 14.25Z"
-                                    fill="currentColor"
-                                ></path>
-                                <path
-                                    d="M8.25533 12.9697C8.54823 13.2626 8.54823 13.7374 8.25533 14.0303L6.00533 16.2803C5.71244 16.5732 5.23757 16.5732 4.94467 16.2803L4.19467 15.5303C3.90178 15.2374 3.90178 14.7626 4.19467 14.4697C4.48757 14.1768 4.96244 14.1768 5.25533 14.4697L5.475 14.6893L7.19467 12.9697C7.48757 12.6768 7.96244 12.6768 8.25533 12.9697Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                            <p class="text-base font-semibold">Launchpad</p>
-                        </div>
-                        {isNavbarOpen ? (
-                            <div class="flex items-center text-xs font-semibold bg-green-600 py-1 px-2 rounded text-white">
-                                <span>New</span>
-                            </div>
-                        ) : (
-                            <svg
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="cursor-pointer h-2 w-2 min-w-2 text-green-600 absolute right-0.5 top-0.5"
-                            >
-                                <rect
-                                    width="32"
-                                    height="32"
-                                    rx="16"
-                                    fill="currentColor"
-                                ></rect>
-                                <path
-                                    d="M17.767 9.86364V21.5H15.6591V11.9148H15.5909L12.8693 13.6534V11.7216L15.7614 9.86364H17.767Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                        )}
                     </div>
                 </a>
                 <a href="/portfolio" class="w-full">

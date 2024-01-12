@@ -5,7 +5,17 @@ import { useGlobalContext } from '../../app/context/store';
 
 const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
 
-const ConnectWalletModal = ({ isOpen, onClose, closeModal }) => {
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const ConnectWalletModal = ({
+    isOpen,
+    onClose,
+    closeModal,
+    testFunction,
+    testFunction2,
+}) => {
     const { wallet, setWallet } = useGlobalContext();
 
     const connectWallet = async ({ isOpen, onClose }) => {
@@ -71,12 +81,46 @@ const ConnectWalletModal = ({ isOpen, onClose, closeModal }) => {
 
                 // Realizar las operaciones necesarias después de conectar la billetera
                 // ...
+                kycProcess(public_address);
             } else {
                 console.warn('La billetera no está disponible');
             }
         } catch (error) {
             console.error('Error al conectar la billetera:', error);
             // Manejar el error según sea necesario
+        }
+    };
+
+    const kycProcess = async (public_address) => {
+        try {
+            const {
+                data: {
+                    client: { status },
+                },
+            } = await axios.get(
+                `${backendUrl}/api/client/public-address/${public_address}`
+            );
+
+            if (status === 'approved') {
+                testFunction();
+            } else {
+                await axios.put(`${backendUrl}/api/client/updateData`, {
+                    address: public_address,
+                    status: 'pending_review',
+                });
+
+                await delay(10000);
+
+                await axios.put(`${backendUrl}/api/client/updateData`, {
+                    address: public_address,
+                    status: 'approved',
+                });
+
+                testFunction();
+                testFunction2();
+            }
+        } catch (e) {
+            console.log(e);
         }
     };
 

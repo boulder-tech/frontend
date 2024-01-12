@@ -1,0 +1,4 @@
+.border-mainBlue {
+    --tw-border-opacity: 1;
+    border-color: rgb(33 81 245 / var(--tw-border-opacity));
+}

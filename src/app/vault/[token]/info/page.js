@@ -21,7 +21,7 @@ const Info = ({ params }) => {
                         class="pl-2 text-xs font-semibold max-xl:hidden"
                         style={isNavbarOpen ? {} : { display: 'none' }}
                     >
-                        Grow your assets
+                        Diversify your portfolio
                     </p>
                     <svg
                         onClick={toggleNavbar}
