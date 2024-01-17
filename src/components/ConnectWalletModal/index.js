@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import web3 from 'web3';
 import Modal from '../../components/Modal';
 import { useGlobalContext } from '../../app/context/store';
 
@@ -49,7 +50,11 @@ const ConnectWalletModal = ({
                 console.log('backendUrl', backendUrl);
 
                 // Obtener la dirección pública de la primera cuenta
-                const public_address = accounts[0];
+                const public_address = web3.utils.toChecksumAddress(
+                    accounts[0]
+                );
+
+                console.log('public_address', public_address);
 
                 const response = await axios.post(
                     `${backendUrl}/api/client/connect-wallet`,
@@ -81,7 +86,7 @@ const ConnectWalletModal = ({
 
                 // Realizar las operaciones necesarias después de conectar la billetera
                 // ...
-                kycProcess(public_address);
+                //kycProcess(public_address);
             } else {
                 console.warn('La billetera no está disponible');
             }
@@ -102,6 +107,7 @@ const ConnectWalletModal = ({
             );
 
             if (status === 'approved') {
+                console.log('here');
                 testFunction();
             } else {
                 await axios.put(`${backendUrl}/api/client/updateData`, {

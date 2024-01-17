@@ -82,7 +82,7 @@ const Liquidity = ({ params }) => {
                                     fill="currentColor"
                                 ></path>
                             </svg>
-                            <p class="text-base font-semibold">Vaults</p>
+                            <p class="text-base font-semibold">Products</p>
                         </div>
                     </div>
                 </a>

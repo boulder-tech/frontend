@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
             <body>
                 <GlobalContextProvider>
                     <Header />
-                    <main className="flex flex-col bg-background">
+                    <main className="flex flex-col">
                         {children}
                     </main>
                 </GlobalContextProvider>

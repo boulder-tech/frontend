@@ -25,6 +25,7 @@ const options = [
 
 const RegistrationForm = () => {
     const defaultEmail = 'example@example.com';
+    const [isNavbarOpen, setIsNavbarOpen] = useState(true);
     const [openBuyModal, setOpenBuyModal] = useState(false);
     const [isWalletConnected, setWalletConnected] = useState(false);
 

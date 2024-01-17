@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ethers } from 'ethers';
+import io from 'socket.io-client';
 import TermsOfUseModal from '../TermsOfUseModal';
 import TransactionConfirmationModal from '../TransactionConfirmationModal';
 import ConnectWalletModal from '../ConnectWalletModal';
@@ -64,18 +65,40 @@ const TransactionPanel = ({ tokenPrice }) => {
     const [isDepositing, setIsDepositing] = useState(false);
     const [showKycNotification, setShowKycNotification] = useState(false);
     const [renderTransactionPanel, setRenderTransactionPanel] = useState(false);
+    const [client, setClient] = useState(null);
+    const [kycOneTimeLink, setKycOneTimeLink] = useState(null);
 
     useEffect(() => {
         console.log('wallet -> ', wallet);
         if (wallet.address) {
             loadClientData();
+
+            const socket = io.connect(`${backendUrl}`);
+
+            socket.emit('subscribe', {
+                address: wallet.address,
+            });
+
+            socket.on('kyc-approved', async (data) => {
+                console.log('data', data);
+
+                await fetchClient();
+
+                setShowKycNotification(true);
+            });
         } else {
             loadOffline();
         }
     }, [wallet]);
 
+    useEffect(() => {
+        if (client) {
+            if (client.status === 'created') generateKycOneTimeLink();
+        }
+    }, [client]);
+
     const loadClientData = async () => {
-        await Promise.all([fetchBalance()]);
+        await Promise.all([fetchBalance(), checkKYCstatus(), fetchClient()]);
 
         setRenderTransactionPanel(true);
     };
@@ -95,6 +118,28 @@ const TransactionPanel = ({ tokenPrice }) => {
         );
 
         if (status === 'approved') setIsKycApproved(true);
+    };
+
+    const fetchClient = async () => {
+        const {
+            data: { client },
+        } = await axios.get(
+            `${backendUrl}/api/client/public-address/${wallet.address}`
+        );
+
+        setClient(client);
+    };
+
+    const generateKycOneTimeLink = async () => {
+        const {
+            data: { kyc },
+        } = await axios.post(`${backendUrl}/api/client/kyc/one-time-link`, {
+            public_address: wallet.address,
+        });
+
+        setKycOneTimeLink(kyc['one-time-link-short']);
+
+        console.log(kyc['one-time-link-short']);
     };
 
     const kycProcess = async () => {
@@ -757,11 +802,18 @@ const TransactionPanel = ({ tokenPrice }) => {
                                             : 'text-white'
                                     }`}
                                     onClick={(e) => {
-                                        if (wallet.address) {
-                                            if (isKycApproved) {
+                                        if (client) {
+                                            if (client.status === 'approved') {
                                                 handleSubmit(e);
+                                            } else if (
+                                                client.status === 'created'
+                                            ) {
+                                            } else if (
+                                                client.status ===
+                                                'pending_review'
+                                            ) {
                                             } else {
-                                                alert('KYC Process');
+                                                alert('KYC Under Review');
                                             }
                                         } else {
                                             setOpenTermsOfUseModal(true);
@@ -787,9 +839,21 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                 ></path>
                                             </svg>
                                         </span>
-                                    ) : wallet.address ? (
-                                        isKycApproved ? (
-                                            'DEPOSIT'
+                                    ) : client ? (
+                                        client.status === 'created' ? (
+                                            <a
+                                                href={kycOneTimeLink}
+                                                target="_blank"
+                                                style={{
+                                                    display: 'block',
+                                                    width: '100%',
+                                                    height: '100%',
+                                                }}
+                                            >
+                                                SIGN UP
+                                            </a>
+                                        ) : client.status === 'approved' ? (
+                                            'BID' //ASK
                                         ) : (
                                             'PENDING ONBOARDING'
                                         )
@@ -798,18 +862,6 @@ const TransactionPanel = ({ tokenPrice }) => {
                                     )}
                                 </button>
                             </div>
-                        </div>
-                        <p>¿Guille que significan estos fields?</p>
-                        <div class="flex justify-between px-6 pb-2 font-normal">
-                            <span
-                                class="cursor-pointer underline underline-offset-8 text-[#626262] text-base leading-[20px] decoration-black decoration-dotted !underline-offset-2"
-                                data-tooltip-id="oe-tooltip-allowance"
-                            >
-                                Allowance
-                            </span>
-                            <p class="text-[#626262] text-base leading-[20px]">
-                                0 USDC
-                            </p>
                         </div>
                         <div class="flex justify-between px-6 pb-7 font-normal">
                             <p class="text-[#626262] text-base leading-[20px]">

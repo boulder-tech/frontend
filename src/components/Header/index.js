@@ -4,6 +4,8 @@ import { useGlobalContext } from '../../app/context/store';
 import Link from 'next/link';
 import Imagotype from './imagotype';
 import AddressButton from '../buttons/address-button';
+import TermsOfUseModal from '../TermsOfUseModal';
+import ConnectWalletModal from '../ConnectWalletModal';
 import GhostButton from '../buttons/ghost-button';
 import Web3 from 'web3';
 import clsx from 'clsx';
@@ -11,11 +13,13 @@ import { Menu, Dropdown, Icon } from 'semantic-ui-react';
 import { PersonCircle, BoxArrowRight } from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
+import io from 'socket.io-client';
 //import { useAuth } from '../../context/AuthContext';
 
 //import './Header.css';
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL;
+const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
+const backendWS = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_WS_URL;
 
 const Header = () => {
     //const { user, logout } = useAuth();
@@ -25,6 +29,8 @@ const Header = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [showUserSettings, setShowUserSettings] = useState(false);
+    const [openTermsOfUseModal, setOpenTermsOfUseModal] = useState(false);
+    const [openConnectWalletModal, setOpenConnectWalletModal] = useState(false);
 
     const { wallet, setWallet } = useGlobalContext();
 
@@ -40,6 +46,12 @@ const Header = () => {
             }
         }
     }, []);
+
+    useEffect(() => {
+        if (wallet.address) {
+            
+        }
+    }, [wallet]);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -155,7 +167,7 @@ const Header = () => {
 
     return (
         <div clasName="h-full-flex h-full min-h-screen w-full overflow-hidden bg-cover bg-right-bottom max-w-screen-4xl mx-auto">
-            <header className="w-full items-center justify-between py-3 px-4 sm:px-6 md:px-8 sticky top-0 z-50 bg-black">
+            <header className="w-full items-center justify-between py-3 px-4 sm:px-6 md:px-8 sticky top-0 z-50 bg-[#0F2656]">
                 <div className="flex items-center justify-between 2xl:px-[300px] lg:px-[150px] md:px-[75px] px-[20px]">
                     <div className="flex gap-4 items-center justify-center divide-border-grey-200 divide-x-[1px]">
                         <Link href={'/'}>
@@ -305,7 +317,7 @@ const Header = () => {
                                     <button
                                         class="uppercase grow border border-transparent bg-black px-3 py-1 text-center text-base font-semibold text-white shadow-sm hover:bg-[#0052FF] md:px-5 md:py-3"
                                         onClick={() => {
-                                            alert('Still in progress Pablo');
+                                            setOpenTermsOfUseModal(true);
                                         }}
                                     >
                                         Connect
@@ -499,9 +511,26 @@ const Header = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                    <div className="opacity-25 fixed inset-0 z-40"></div>
                 </>
             ) : null}
+            <TermsOfUseModal
+                isOpen={openTermsOfUseModal}
+                onClose={() => setOpenTermsOfUseModal(false)}
+                closeModal={() => setOpenTermsOfUseModal(false)}
+                acceptTerms={() => setOpenConnectWalletModal(true)}
+            />
+            <ConnectWalletModal
+                isOpen={openConnectWalletModal}
+                onClose={() => setOpenConnectWalletModal(false)}
+                closeModal={() => setOpenConnectWalletModal(false)}
+                testFunction={() => {
+                    setIsKycApproved(true);
+                }}
+                testFunction2={() => {
+                    setShowKycNotification(true);
+                }}
+            />
         </div>
     );
 };

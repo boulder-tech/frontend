@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { ethers } from 'ethers';
+import { Tooltip } from 'react-tooltip';
 import { useGlobalContext } from '../../context/store';
 import MainSection from '../../../components/sections/main-section';
 import AlertPanel from '../../../components/AlertPanel';
@@ -45,6 +46,8 @@ const Vault = ({ params }) => {
     const [error, setError] = useState();
     const [txs, setTxs] = useState([]);
     const intervalRef = useRef(null);
+
+    const [showTooltip, setShowTooltip] = useState(false);
 
     useEffect(() => {
         if (window.ethereum) {
@@ -505,7 +508,7 @@ const Vault = ({ params }) => {
                                     fill="currentColor"
                                 ></path>
                             </svg>
-                            <p class="text-base font-semibold">Vaults</p>
+                            <p class="text-base font-semibold">Products</p>
                         </div>
                     </div>
                 </a>
@@ -567,9 +570,10 @@ const Vault = ({ params }) => {
                             <AlertPanel>
                                 <p class="text-sm leading-[160%]">
                                     🚀 Exciting News: A new token launch is
-                                    imminent! Stay tuned as GD30D prepares to
-                                    unveil its latest token. Get ready for the
-                                    launch by checking the details at the
+                                    imminent! Stay tuned as Boulder Tech
+                                    prepares to unveil its latest token. Get
+                                    ready for the launch by checking the details
+                                    at the
                                     <a
                                         class="font-semibold underline ml-1"
                                         href="https://bouldertech.fi"
@@ -1126,9 +1130,7 @@ const Vault = ({ params }) => {
                                         <div class="mt-auto flex-col justify-start">
                                             <div class="flex items-center text-sm font-normal leading-[22px]">
                                                 <div class="flex items-center">
-                                                    <span>
-                                                        Price Per GD30D Token
-                                                    </span>
+                                                    <span>Estimated Price</span>
                                                 </div>
                                             </div>
                                             <div class="text-[32px] font-semibold tracking-[-0.002em]">
@@ -1175,41 +1177,24 @@ const Vault = ({ params }) => {
                                     <div class="flex flex-col vault_grid-item___r8p8">
                                         <div class="mt-auto flex-col justify-start">
                                             <div class="flex items-center text-sm font-normal leading-[22px]">
-                                                <div class="flex items-center">
+                                                <div className="flex items-center">
                                                     <span>Estimated YTM</span>
-                                                    <span
-                                                        class="cursor-pointer"
-                                                        data-tooltip-id="oe-tooltip-Estimated YTM"
-                                                    >
+                                                    <span className="cursor-pointer">
                                                         <img
                                                             src="/icons/info.svg"
                                                             width="20"
                                                             height="20"
+                                                            alt="Info"
                                                         />
                                                     </span>
-                                                    <div
-                                                        id="oe-tooltip-Estimated YTM"
-                                                        role="tooltip"
-                                                        class="react-tooltip core-styles-module_tooltip__3vRRp styles-module_tooltip__mnnfp styles-module_dark__xNqje !bg-[#374151] mobile:!max-w-[250px] max-w-[450px] !text-base !z-10 react-tooltip__place-bottom core-styles-module_closing__sGnxF react-tooltip__closing"
-                                                        style={{
-                                                            left: '6.789px',
-                                                            top: '421.594px',
-                                                        }}
+                                                    <Tooltip
+                                                        anchorSelect=".cursor-pointer"
+                                                        style={{ zIndex: 1 }}
+                                                        place="bottom"
                                                     >
-                                                        <div class="text-base text-[#E5E7EB]">
-                                                            <span>
-                                                                Estimated Yield
-                                                                To Maturity
-                                                            </span>
-                                                        </div>
-                                                        <div
-                                                            class="react-tooltip-arrow core-styles-module_arrow__cvMwQ styles-module_arrow__K0L3T"
-                                                            style={{
-                                                                left: '106.5px',
-                                                                top: '-4px',
-                                                            }}
-                                                        ></div>
-                                                    </div>
+                                                        Estimated Yield To
+                                                        Maturity
+                                                    </Tooltip>
                                                 </div>
                                             </div>
                                             <div class="text-[32px] font-semibold tracking-[-0.002em]">
@@ -1219,7 +1204,7 @@ const Vault = ({ params }) => {
                                                         lineHeight: '48px',
                                                         overflow: 'hidden',
                                                         position: 'relative',
-                                                        width: '81px',
+                                                        width: '130px',
                                                     }}
                                                 >
                                                     <span
@@ -1242,208 +1227,12 @@ const Vault = ({ params }) => {
                                                             left: '0px',
                                                             pointerEvents:
                                                                 'none',
-                                                            width: '16.96px',
+                                                            width: '18.144px',
                                                             opacity: '1',
                                                             transform: 'none',
                                                         }}
                                                     >
-                                                        <div
-                                                            style={{
-                                                                height: '14em',
-                                                                position:
-                                                                    'relative',
-                                                            }}
-                                                        >
-                                                            <div
-                                                                style={{
-                                                                    position:
-                                                                        'absolute',
-                                                                    left: '0px',
-                                                                    opacity:
-                                                                        '1',
-                                                                    transform:
-                                                                        'translateY(-30.7692%) translateZ(0px)',
-                                                                }}
-                                                            >
-                                                                <div>9</div>
-                                                                <div>8</div>
-                                                                <div>7</div>
-                                                                <div>6</div>
-                                                                <div>5</div>
-                                                                <div>4</div>
-                                                                <div>3</div>
-                                                                <div>2</div>
-                                                                <div>1</div>
-                                                                <div>0</div>
-                                                                <div>,</div>
-                                                                <div>.</div>
-                                                                <div>-</div>
-                                                            </div>
-                                                        </div>
-                                                    </span>
-                                                    <span
-                                                        aria-hidden="true"
-                                                        style={{
-                                                            position:
-                                                                'absolute',
-                                                            top: '0px',
-                                                            left: '0px',
-                                                            pointerEvents:
-                                                                'none',
-                                                            width: '8.73599px',
-                                                            opacity: '1',
-                                                            transform:
-                                                                'translateX(16.96px) translateZ(0px)',
-                                                        }}
-                                                    >
-                                                        <div
-                                                            style={{
-                                                                height: '14em',
-                                                                position:
-                                                                    'relative',
-                                                            }}
-                                                        >
-                                                            <div
-                                                                style={{
-                                                                    position:
-                                                                        'absolute',
-                                                                    left: '0px',
-                                                                    opacity:
-                                                                        '1',
-                                                                    transform:
-                                                                        'translateY(-84.6154%) translateZ(0px)',
-                                                                }}
-                                                            >
-                                                                <div>9</div>
-                                                                <div>8</div>
-                                                                <div>7</div>
-                                                                <div>6</div>
-                                                                <div>5</div>
-                                                                <div>4</div>
-                                                                <div>3</div>
-                                                                <div>2</div>
-                                                                <div>1</div>
-                                                                <div>0</div>
-                                                                <div>,</div>
-                                                                <div>.</div>
-                                                                <div>-</div>
-                                                            </div>
-                                                        </div>
-                                                    </span>
-                                                    <span
-                                                        aria-hidden="true"
-                                                        style={{
-                                                            position:
-                                                                'absolute',
-                                                            top: '0px',
-                                                            left: '0px',
-                                                            pointerEvents:
-                                                                'none',
-                                                            width: '16.992px',
-                                                            opacity: '1',
-                                                            transform:
-                                                                'translateX(25.696px) translateZ(0px)',
-                                                        }}
-                                                    >
-                                                        <div
-                                                            style={{
-                                                                height: '14em',
-                                                                position:
-                                                                    'relative',
-                                                            }}
-                                                        >
-                                                            <div
-                                                                style={{
-                                                                    position:
-                                                                        'absolute',
-                                                                    left: '0px',
-                                                                    opacity:
-                                                                        '1',
-                                                                    transform:
-                                                                        'translateY(-46.1538%) translateZ(0px)',
-                                                                }}
-                                                            >
-                                                                <div>9</div>
-                                                                <div>8</div>
-                                                                <div>7</div>
-                                                                <div>6</div>
-                                                                <div>5</div>
-                                                                <div>4</div>
-                                                                <div>3</div>
-                                                                <div>2</div>
-                                                                <div>1</div>
-                                                                <div>0</div>
-                                                                <div>,</div>
-                                                                <div>.</div>
-                                                                <div>-</div>
-                                                            </div>
-                                                        </div>
-                                                    </span>
-                                                    <span
-                                                        aria-hidden="true"
-                                                        style={{
-                                                            position:
-                                                                'absolute',
-                                                            top: '0px',
-                                                            left: '0px',
-                                                            pointerEvents:
-                                                                'none',
-                                                            width: '11.296px',
-                                                            opacity: '1',
-                                                            transform:
-                                                                'translateX(42.688px) translateZ(0px)',
-                                                        }}
-                                                    >
-                                                        <div
-                                                            style={{
-                                                                height: '14em',
-                                                                position:
-                                                                    'relative',
-                                                            }}
-                                                        >
-                                                            <div
-                                                                style={{
-                                                                    position:
-                                                                        'absolute',
-                                                                    left: '0px',
-                                                                    opacity:
-                                                                        '1',
-                                                                    transform:
-                                                                        'translateY(-61.5385%) translateZ(0px)',
-                                                                }}
-                                                            >
-                                                                <div>9</div>
-                                                                <div>8</div>
-                                                                <div>7</div>
-                                                                <div>6</div>
-                                                                <div>5</div>
-                                                                <div>4</div>
-                                                                <div>3</div>
-                                                                <div>2</div>
-                                                                <div>1</div>
-                                                                <div>0</div>
-                                                                <div>,</div>
-                                                                <div>.</div>
-                                                                <div>-</div>
-                                                            </div>
-                                                        </div>
-                                                    </span>
-                                                    <span
-                                                        aria-hidden="true"
-                                                        style={{
-                                                            position:
-                                                                'absolute',
-                                                            top: '0px',
-                                                            left: '0px',
-                                                            pointerEvents:
-                                                                'none',
-                                                            width: '26.656px',
-                                                            opacity: '1',
-                                                            transform:
-                                                                'translateX(53.984px) translateZ(0px)',
-                                                        }}
-                                                    >
-                                                        %
+                                                        5.31%
                                                     </span>
                                                 </div>
                                             </div>
@@ -3503,17 +3292,7 @@ const Vault = ({ params }) => {
                                                         View contract
                                                     </a>
                                                 </div>
-                                                <canvas
-                                                    className="relative md:h-[350px] h-[340px]"
-                                                    width="939"
-                                                    style={{
-                                                        boxSizing: 'border-box',
-                                                        display: 'block',
-                                                        height: '350px',
-                                                        width: '939px',
-                                                    }}
-                                                    height="350"
-                                                ></canvas>
+                                                <img src="/demo/image.webp" />
                                             </div>
                                         </div>
                                         <div class="mb-[1px] pl-[1px] mt-0 md:mt-10 flex justify-between md:flex md:justify-start">
@@ -3596,8 +3375,12 @@ const Vault = ({ params }) => {
                                     </button>
                                 </nav>
                             </div>
-                            {activeTab === 'overview' && <OverviewPanel />}
-                            {activeTab === 'portfolio' && <PortfolioPanel />}
+                            {activeTab === 'overview' && (
+                                <OverviewPanel token={token} />
+                            )}
+                            {activeTab === 'portfolio' && (
+                                <PortfolioPanel token={token} />
+                            )}
                         </div>
                     </div>
                 </div>

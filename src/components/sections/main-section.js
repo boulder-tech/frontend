@@ -12,10 +12,10 @@ const MainSection = () => {
                     showThumbs={false}
                 >
                     <div>
-                        <img src="/carousel/carousel-1.png" />
+                        <img src="/carousel/1.png" />
                     </div>
                     <div>
-                        <img src="/carousel/carousel-2.png" />
+                        <img src="/carousel/2.png" />
                     </div>
                 </Carousel>
             </div>

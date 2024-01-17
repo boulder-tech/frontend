@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
 
-const OverviewPanel = ({}) => {
+const OverviewPanel = ({ token }) => {
+    const products = {
+        GD30D: `The GD30D is a tokenized bond product available on BoulderTech's platform. It represents a digital version of the "Bono USD 2030 Ley NY (GD30)," a U.S. dollar-denominated public bond from Argentina with a fixed annual interest rate of 0.75%, maturing in 2030. The bond's original value is 100.00 dollars, and it is currently trading at a lower market price, offering potential for investment gains. By tokenizing this bond, BoulderTech makes it accessible for fractional ownership and trading on the blockchain, providing liquidity and global accessibility.`,
+        TBILL: `The TBill, or Treasury Bill, is a short-term U.S. government debt security, often regarded as one of the safest investments. These bills are issued with maturities ranging from a few days to one year and are sold at a discount to their face value. Upon maturity, the government pays the holder the full face value, with the difference between the purchase price and the face value constituting the interest earned. TBills are highly liquid and are commonly used by investors as a temporary investment for idle funds, offering a reliable return with virtually no risk of default, due to their backing by the full faith and credit of the U.S. government. This makes them a cornerstone in conservative investment strategies and a benchmark for short-term interest rates.`,
+    };
+
     return (
         <div id="overview">
             <div class="flex flex-col md:space-x-0 lg:flex-row lg:space-x-10 mobile:space-x-0 pt-10 pb-0 md:pb-[118px]">
                 <div class="flex-1">
                     <div>
                         <p class="max-w-full text-lg font-normal leading-7">
-                            The GD30D Vault is the world’s first smart-contract
-                            vault for U.S. Treasury Bills. Earn the U.S.
-                            risk-free rate on your stablecoins by minting GD30D
-                            tokens, with 24/7 liquidity. The token issuer holds
-                            a portfolio of short-dated Treasury Bills via
-                            OpenEden Cayman Ltd, a bankruptcy remote and
-                            wholly-owned special purpose vehicle. <br />
-                            <br />
-                            The Vault is developed by OpenEden Labs, which is a
-                            financial technology company and not a regulated
-                            entity, depository, bank, or credit union.
+                            {products[token]}
                         </p>
                     </div>
                 </div>
