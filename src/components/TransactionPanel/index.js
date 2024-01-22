@@ -51,7 +51,8 @@ function delay(ms) {
 }
 
 const TransactionPanel = ({ tokenPrice }) => {
-    const { wallet, setWallet } = useGlobalContext();
+    const { wallet, setWallet, client, setClient, socket, setSocket } =
+        useGlobalContext();
     const [openConnectWalletModal, setOpenConnectWalletModal] = useState(false);
     const [openTermsOfUseModal, setOpenTermsOfUseModal] = useState(false);
     const [
@@ -65,27 +66,13 @@ const TransactionPanel = ({ tokenPrice }) => {
     const [isDepositing, setIsDepositing] = useState(false);
     const [showKycNotification, setShowKycNotification] = useState(false);
     const [renderTransactionPanel, setRenderTransactionPanel] = useState(false);
-    const [client, setClient] = useState(null);
     const [kycOneTimeLink, setKycOneTimeLink] = useState(null);
+    const [isSubscribed, setIsSubscribed] = useState(false);
 
     useEffect(() => {
         console.log('wallet -> ', wallet);
         if (wallet.address) {
             loadClientData();
-
-            const socket = io.connect(`${backendUrl}`);
-
-            socket.emit('subscribe', {
-                address: wallet.address,
-            });
-
-            socket.on('kyc-approved', async (data) => {
-                console.log('data', data);
-
-                await fetchClient();
-
-                setShowKycNotification(true);
-            });
         } else {
             loadOffline();
         }
@@ -93,11 +80,46 @@ const TransactionPanel = ({ tokenPrice }) => {
 
     useEffect(() => {
         if (client) {
-            if (client.status === 'created') generateKycOneTimeLink();
+            if (!isSubscribed) {
+                const socket = io.connect(`${backendUrl}`);
+
+                setSocket(socket);
+
+                socket.emit('subscribe', {
+                    address: wallet.address,
+                });
+
+                setIsSubscribed(true);
+            }
         }
     }, [client]);
 
+    useEffect(() => {
+        if (socket) {
+            socket.on('kyc-approved', async (data) => {
+                console.log('KYC APPROVED', data);
+
+                await fetchClient();
+
+                setShowKycNotification(true);
+            });
+
+            socket.on('kyc-started', async (data) => {
+                console.log('KYC STARTED', data);
+
+                await fetchClient();
+            });
+
+            socket.on('kyc-expired', async (data) => {
+                console.log('KYC EXPIRED', data);
+
+                await fetchClient();
+            });
+        }
+    }, [isSubscribed]);
+
     const loadClientData = async () => {
+        console.log('LOADING CLIENT DATA');
         await Promise.all([fetchBalance(), checkKYCstatus(), fetchClient()]);
 
         setRenderTransactionPanel(true);
@@ -813,7 +835,7 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                 'pending_review'
                                             ) {
                                             } else {
-                                                alert('KYC Under Review');
+                                                //alert('KYC Under Review');
                                             }
                                         } else {
                                             setOpenTermsOfUseModal(true);
@@ -842,7 +864,27 @@ const TransactionPanel = ({ tokenPrice }) => {
                                     ) : client ? (
                                         client.status === 'created' ? (
                                             <a
-                                                href={kycOneTimeLink}
+                                                href={client.kyc_url}
+                                                target="_blank"
+                                                style={{
+                                                    display: 'block',
+                                                    width: '100%',
+                                                    height: '100%',
+                                                }}
+                                                onClick={() => {
+                                                    socket.emit('start-kyc', {
+                                                        address: wallet.address,
+                                                    });
+                                                }}
+                                            >
+                                                SIGN UP
+                                            </a>
+                                        ) : client.status === 'approved' ? (
+                                            'BID' //ASK
+                                        ) : client.status ===
+                                          'pending_onboarding' ? (
+                                            <a
+                                                href={client.kyc_url}
                                                 target="_blank"
                                                 style={{
                                                     display: 'block',
@@ -850,12 +892,10 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                     height: '100%',
                                                 }}
                                             >
-                                                SIGN UP
+                                                PENDING ONBOARDING
                                             </a>
-                                        ) : client.status === 'approved' ? (
-                                            'BID' //ASK
                                         ) : (
-                                            'PENDING ONBOARDING'
+                                            'PENDING REVIEW'
                                         )
                                     ) : (
                                         'CONNECT WALLET'

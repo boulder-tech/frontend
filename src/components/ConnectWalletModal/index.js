@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import web3 from 'web3';
+import io from 'socket.io-client';
 import Modal from '../../components/Modal';
 import { useGlobalContext } from '../../app/context/store';
 
@@ -17,7 +18,7 @@ const ConnectWalletModal = ({
     testFunction,
     testFunction2,
 }) => {
-    const { wallet, setWallet } = useGlobalContext();
+    const { wallet, setWallet, socket, setSocket } = useGlobalContext();
 
     const connectWallet = async ({ isOpen, onClose }) => {
         try {
@@ -56,14 +57,20 @@ const ConnectWalletModal = ({
 
                 console.log('public_address', public_address);
 
-                const response = await axios.post(
+                const { data: kyc_url } = await axios.post(
                     `${backendUrl}/api/client/connect-wallet`,
                     {
                         public_address,
                     }
                 );
 
-                console.log(response);
+                const socket = io.connect(`${backendUrl}`);
+
+                setSocket(socket);
+
+                socket.emit('subscribe', {
+                    address: public_address,
+                });
 
                 closeModal();
 

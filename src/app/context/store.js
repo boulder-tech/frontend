@@ -16,9 +16,13 @@ const GlobalContext = createContext({
 
 export const GlobalContextProvider = ({ children }) => {
     const [wallet, setWallet] = useState({});
+    const [client, setClient] = useState(null);
+    const [socket, setSocket] = useState(null);
 
     return (
-        <GlobalContext.Provider value={{ wallet, setWallet }}>
+        <GlobalContext.Provider
+            value={{ wallet, setWallet, client, setClient, socket, setSocket }}
+        >
             {children}
         </GlobalContext.Provider>
     );
