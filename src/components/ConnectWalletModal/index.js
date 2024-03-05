@@ -29,24 +29,31 @@ const ConnectWalletModal = ({
                 // Detectar la billetera según las propiedades de window.ethereum
                 if (window.ethereum.isMetaMask) {
                     walletName = 'Metamask';
-
-                    chainId = await window.ethereum.request({
-                        method: 'eth_chainId',
-                    });
-
-                    if (chainId !== '0xaa36a7') {
-                        await ethereum.request({
-                            method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: '0xaa36a7' }],
+                    
+                    try {
+                        chainId = await window.ethereum.request({
+                            method: 'eth_chainId',
                         });
+    
+                        if (chainId !== '0x66eee') {
+                            await ethereum.request({
+                                method: 'wallet_switchEthereumChain',
+                                params: [{ chainId: '0x66eee' }],
+                            });
+                        }
+                    } catch(e) {
+                        console.log('ERROR: wallet not connected', e)
                     }
+
+                    
                 } else if (window.ethereum.isBinanceSmartChain) {
                     walletName = 'Binance Smart Chain Wallet';
                 } // Agrega más condiciones según sea necesario
-
+                console.log('1')
                 const accounts = await window.ethereum.request({
                     method: 'eth_requestAccounts',
                 });
+                console.log('2')
 
                 console.log('backendUrl', backendUrl);
 
@@ -94,6 +101,37 @@ const ConnectWalletModal = ({
                 // Realizar las operaciones necesarias después de conectar la billetera
                 // ...
                 //kycProcess(public_address);
+
+               
+                
+                  if (window.ethereum && window.ethereum.networkVersion === chainId) {
+                    console.log("La red ya está agregada en la wallet");
+                  } else {
+                    console.log("La red no está agregada en la wallet");
+                    await window.ethereum.request({
+                        "method": "wallet_addEthereumChain",
+                        "params": [
+                          {
+                            "blockExplorerUrls": ["https://sepolia.arbiscan.io/"],
+                            "iconUrls": [],
+                            "nativeCurrency": {
+                              "symbol": "ETH",
+                              "decimals": 18
+                            },
+                            "rpcUrls": [
+                              "https://sepolia-rollup.arbitrum.io/rpc"
+                            ],
+                            "chainId": "0x66eee",
+                            "chainName": "Arbitrum Sepolia"
+                          }
+                        ]
+                      });
+                  }
+
+
+                
+
+
             } else {
                 console.warn('La billetera no está disponible');
             }

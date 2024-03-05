@@ -10,7 +10,8 @@ import { useGlobalContext } from '../../app/context/store';
 
 import './styles.css';
 
-const usdcAddress = '0xda9d4f9b69ac6C22e444eD9aF0CfC043b7a7f53f';
+//const usdcAddress = '0xda9d4f9b69ac6C22e444eD9aF0CfC043b7a7f53f';
+const usdcAddress = '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d';
 
 const usdcAbi = [
     'function name() view returns (string)',
@@ -68,6 +69,8 @@ const TransactionPanel = ({ tokenPrice }) => {
     const [renderTransactionPanel, setRenderTransactionPanel] = useState(false);
     const [kycOneTimeLink, setKycOneTimeLink] = useState(null);
     const [isSubscribed, setIsSubscribed] = useState(false);
+    const [isFractionable, setIsFractionable] = useState(false);
+    const offchainFees = 0.03;
 
     useEffect(() => {
         console.log('wallet -> ', wallet);
@@ -330,14 +333,14 @@ const TransactionPanel = ({ tokenPrice }) => {
     return (
         <>
             {renderTransactionPanel ? (
-                <div class="overflow-hidden w-full lg:w-[460px] xl:w-[500px] h-auto md:min-h-[524px] border border-borderGray bg-white rounded-[4px] lg:mt-0">
+                <div class="overflow-hidden w-full h-auto md:min-h-[524px] border rounded-2xl shadow-2xl bg-[#FAFBFF] bg-opacity-5 rounded-[4px] lg:mt-0">
                     <div class="flex justify-between px-4 py-4 md:px-6 md:py-6">
                         <nav
-                            class="-mb-px flex justify-start space-x-3 md:space-x-8 text-base md:text-[22px]"
+                            class="-mb-px flex justify-start space-x-3 md:space-x-8 text-[24px]"
                             aria-label="Tabs"
                         >
                             <button
-                                class="text-mainBlue font-semibold rounded-full capitalize"
+                                class="text-[#245BFF] font-bold rounded-full capitalize"
                                 aria-current="page"
                             >
                                 deposit
@@ -347,16 +350,13 @@ const TransactionPanel = ({ tokenPrice }) => {
                     <div>
                         <div class="grid grid-cols-1 gap-4 px-4 md:px-6 md:grid-cols-1">
                             <div class="relative">
-                                <div class="ml-[-3px] flex flex-col space-y-4 rounded-lg border border-[#E5E7EB] bg-slate-50 p-4 md:px-4 md:py-6">
+                                <div class="h-[111px] ml-[-3px] flex flex-col space-y-4 rounded-lg border bg-[#FAFBFF] bg-opacity-10 p-4 md:px-4 ">
                                     <div class="flex justify-between font-normal">
-                                        <p class="text-[#626262] leading-[24px] text-lg">
-                                            Balance
+                                        <p class="text-[#FFFFFF] leading-[24px] text-[16px]">
+                                            Estimated YTM
                                         </p>
                                         <div class="flex flex-end items-center gap-x-2">
-                                            <button class="block md:hidden rounded-[100px] px-[10px] py-[2px] text-xs text-[#646464] border border-[#646464] hover:border-mainBlue hover:text-mainBlue">
-                                                MAX
-                                            </button>
-                                            <p class="text-[#626262] leading-[24px] text-lg">
+                                            <p class="text-[#FFFFFF] leading-[24px] text-lg">
                                                 {balance}
                                             </p>
                                         </div>
@@ -439,14 +439,13 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                         srcSet="/logos/usdc_token_logo_128.png"
                                                     />
                                                 </span>
-
-                                                <span class="text-2xl font-medium">
+                                                <span class="text-[32px] font-bold text-[#FAFBFF]">
                                                     USDC
                                                 </span>
                                             </div>
                                             <div>
                                                 <button
-                                                    class="rounded-[100px] px-[10px] py-[2px] text-xs text-[#646464] border border-[#646464] hover:border-mainBlue hover:text-mainBlue mobile:hidden"
+                                                    class="w-[51px] h-[40px] rounded-[4px] px-[10px] py-[2px] text-xs text-[#245BFF] bg-[#245BFF] bg-opacity-20 border border-[#245BFF] hover:border-mainBlue hover:text-mainBlue mobile:hidden"
                                                     onClick={setMaxBalance}
                                                 >
                                                     MAX
@@ -468,7 +467,7 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                         </span>
                                                         <input
                                                             type="text"
-                                                            class="oe--input-field whitespace-nowrap overflow-hidden overflow-ellipsis appearance-none text-right"
+                                                            className="oe--input-field text-right text-[#FFFFFF] font-bold"
                                                             min="0"
                                                             placeholder="0.00"
                                                             max="0"
@@ -500,11 +499,26 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                                     amount
                                                                 );
 
+                                                                let totalToReceive =
+                                                                    unformattedValue /
+                                                                    tokenPrice;
+
+                                                                totalToReceive =
+                                                                    totalToReceive -
+                                                                    totalToReceive *
+                                                                        offchainFees;
+
+                                                                totalToReceive =
+                                                                    isFractionable
+                                                                        ? totalToReceive.round(
+                                                                              2
+                                                                          )
+                                                                        : Math.floor(
+                                                                              totalToReceive
+                                                                          );
+
                                                                 setTotalTokens(
-                                                                    Math.floor(
-                                                                        unformattedValue /
-                                                                            tokenPrice
-                                                                    )
+                                                                    totalToReceive
                                                                 );
                                                             }}
                                                             style={{
@@ -518,183 +532,21 @@ const TransactionPanel = ({ tokenPrice }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="absolute bottom-[-30px] left-1/2 mobile:left-[45%]">
-                                    <span
-                                        style={{
-                                            boxSizing: 'border-box',
-                                            display: 'inline-block',
-                                            overflow: 'hidden',
-                                            width: 'initial',
-                                            height: 'initial',
-                                            background: 'none',
-                                            opacity: 1,
-                                            border: '0px',
-                                            margin: '0px',
-                                            padding: '0px',
-                                            position: 'relative',
-                                            maxWidth: '100%',
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                boxSizing: 'border-box',
-                                                display: 'block',
-                                                width: 'initial',
-                                                height: 'initial',
-                                                background: 'none',
-                                                opacity: 1,
-                                                border: '0px',
-                                                margin: '0px',
-                                                padding: '0px',
-                                                maxWidth: '100%',
-                                            }}
-                                        >
-                                            <img
-                                                alt=""
-                                                aria-hidden="true"
-                                                src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2730%27%20height=%2730%27/%3e"
-                                                style={{
-                                                    display: 'block',
-                                                    maxWidth: '100%',
-                                                    width: 'initial',
-                                                    height: 'initial',
-                                                    background: 'none',
-                                                    opacity: 1,
-                                                    border: '0px',
-                                                    margin: '0px',
-                                                    padding: '0px',
-                                                }}
-                                            />
-                                        </span>
-                                        <img
-                                            src="/icons/arrow-down.svg"
-                                            decoding="async"
-                                            data-nimg="intrinsic"
-                                            className="z-10"
-                                            style={{
-                                                position: 'absolute',
-                                                inset: '0px',
-                                                boxSizing: 'border-box',
-                                                padding: '0px',
-                                                border: 'none',
-                                                margin: 'auto',
-                                                display: 'block',
-                                                width: '0px',
-                                                height: '0px',
-                                                minWidth: '100%',
-                                                maxWidth: '100%',
-                                                minHeight: '100%',
-                                                maxHeight: '100%',
-                                            }}
-                                            srcSet="/icons/arrow-down.svg 1x, /icons/arrow-down.svg 2x"
-                                        />
-                                    </span>
-                                </div>
                             </div>
                             <div>
-                                <div class="ml-[-3px] flex flex-col space-y-4 rounded-lg border border-[#E5E7EB] p-4 md:px-4 md:py-6">
+                                <div class="h-[111px] ml-[-3px] flex flex-col space-y-4 rounded-lg border bg-[#FAFBFF] bg-opacity-10 p-4 md:px-4">
                                     <div class="flex justify-between font-normal h-[24px]">
-                                        <p class="text-[#626262] leading-[24px] flex text-lg mobile:text-base">
-                                            Rate
+                                        <p class="text-[#FFFFFF] leading-[24px] text-[16px]">
+                                            Indicative Rate
                                         </p>
                                         <div class="text-[#626262] leading-[24px] text-lg flex">
                                             <div class="flex items-center">
                                                 <div class="w-[175px] md:w-[197px]">
-                                                    <span class="inline-flex items-center justify-end rounded-full text-[#626262] leading-[24px] text-lg font-normal mobile:w-auto mobile:text-base">
+                                                    <span class="inline-flex items-center justify-end rounded-full text-[#FFFFFF] leading-[24px] text-lg font-normal mobile:w-auto mobile:text-base">
                                                         <span>1 GD30D ≈</span>
                                                         <span class="pl-1">
                                                             {`${tokenPrice} USDC`}
                                                         </span>
-                                                    </span>
-                                                </div>
-                                                <div class="flex h-[30px] w-[24px] items-center justify-center">
-                                                    <span
-                                                        style={{
-                                                            boxSizing:
-                                                                'border-box',
-                                                            display:
-                                                                'inline-block',
-                                                            overflow: 'hidden',
-                                                            width: 'initial',
-                                                            height: 'initial',
-                                                            background: 'none',
-                                                            opacity: 1,
-                                                            border: '0px',
-                                                            margin: '0px',
-                                                            padding: '0px',
-                                                            position:
-                                                                'relative',
-                                                            maxWidth: '100%',
-                                                        }}
-                                                    >
-                                                        <span
-                                                            style={{
-                                                                boxSizing:
-                                                                    'border-box',
-                                                                display:
-                                                                    'block',
-                                                                width: 'initial',
-                                                                height: 'initial',
-                                                                background:
-                                                                    'none',
-                                                                opacity: 1,
-                                                                border: '0px',
-                                                                margin: '0px',
-                                                                padding: '0px',
-                                                                maxWidth:
-                                                                    '100%',
-                                                            }}
-                                                        >
-                                                            <img
-                                                                alt=""
-                                                                aria-hidden="true"
-                                                                src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e"
-                                                                style={{
-                                                                    display:
-                                                                        'block',
-                                                                    maxWidth:
-                                                                        '100%',
-                                                                    width: 'initial',
-                                                                    height: 'initial',
-                                                                    background:
-                                                                        'none',
-                                                                    opacity: 1,
-                                                                    border: '0px',
-                                                                    margin: '0px',
-                                                                    padding:
-                                                                        '0px',
-                                                                }}
-                                                            />
-                                                        </span>
-                                                        <img
-                                                            src="/icons/swap.svg"
-                                                            decoding="async"
-                                                            data-nimg="intrinsic"
-                                                            className="cursor-pointer"
-                                                            style={{
-                                                                position:
-                                                                    'absolute',
-                                                                inset: '0px',
-                                                                boxSizing:
-                                                                    'border-box',
-                                                                padding: '0px',
-                                                                border: 'none',
-                                                                margin: 'auto',
-                                                                display:
-                                                                    'block',
-                                                                width: '0px',
-                                                                height: '0px',
-                                                                minWidth:
-                                                                    '100%',
-                                                                maxWidth:
-                                                                    '100%',
-                                                                minHeight:
-                                                                    '100%',
-                                                                maxHeight:
-                                                                    '100%',
-                                                            }}
-                                                            srcSet="/icons/swap.svg 1x, /icons/swap.svg 2x"
-                                                        />
                                                     </span>
                                                 </div>
                                             </div>
@@ -769,18 +621,18 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                         minHeight: '100%',
                                                         maxHeight: '100%',
                                                     }}
-                                                    srcSet="/logos/ARG.png"
+                                                    srcSet="/logos/ARG_old.png"
                                                 />
                                             </span>
 
-                                            <span class="text-2xl font-medium">
+                                            <span class="text-[32px] font-bold text-[#FAFBFF]">
                                                 GD30D
                                             </span>
                                         </div>
                                         <div>
                                             <div class="flex justify-end h-9">
                                                 <input
-                                                    class="oe--input-field !w-[80%] !appearance-none !overflow-hidden !text-ellipsis !whitespace-nowrap !text-right !text-[36px] h-[36px] leading-[36px] !font-light !text-neutral-900/60"
+                                                    class="oe--input-field text-right text-[32px] font-bold text-[#FAFBFF]"
                                                     inputmode="decimal"
                                                     autocomplete="off"
                                                     autocorrect="off"
@@ -799,25 +651,25 @@ const TransactionPanel = ({ tokenPrice }) => {
                                 </div>
                             </div>
 
-                            <div class="flex items-center">
-                                <p class="mt-1 text-sm text-red-900">
+                            <div class="flex items-center text-[16px]">
+                                <p class="mt-1 text-sm text-[#F43F5E]">
                                     {`You will receive approximately ${totalTokens} GD30D. Read more`}
                                 </p>
                                 <a
-                                    class="mt-1 ml-1 text-sm text-red-900 underline"
+                                    class="mt-1 ml-1 text-sm text-[#F43F5E] underline"
                                     href=""
                                 >
                                     here
                                 </a>
-                                <p class="mt-1 text-sm text-red-900">.</p>
+                                <p class="mt-1 text-sm text-[#F43F5E]">.</p>
                             </div>
                         </div>
 
                         <div class="px-4 md:px-6">
                             <div class="mt-4 mb-7 w-full">
                                 <button
-                                    className={`w-full py-4 text-[22px] leading-[20px] font-semibold shadow-xl ${
-                                        wallet.address ? 'bg-black' : 'bg-black' // Puedes ajustar los colores de fondo según tus necesidades
+                                    className={`w-full rounded-xl py-4 text-[22px] leading-[20px] font-semibold shadow-xl ${
+                                        wallet.address ? 'bg-[#245BFF]' : 'bg-[#245BFF]' // Puedes ajustar los colores de fondo según tus necesidades
                                     } ${
                                         isDepositing
                                             ? 'bg-gray-500 cursor-not-allowed'
@@ -880,7 +732,7 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                 SIGN UP
                                             </a>
                                         ) : client.status === 'approved' ? (
-                                            'BID' //ASK
+                                            'BID ORDER' //ASK
                                         ) : client.status ===
                                           'pending_onboarding' ? (
                                             <a
@@ -904,14 +756,50 @@ const TransactionPanel = ({ tokenPrice }) => {
                             </div>
                         </div>
                         <div class="flex justify-between px-6 pb-7 font-normal">
-                            <p class="text-[#626262] text-base leading-[20px]">
-                                Estimated Fees
+                            <p class="text-[#FFFFFF] text-base leading-[20px]">
+                                Estimated Offchain Fees
                             </p>
-                            <p class="text-[#626262] text-base leading-[20px]">
-                                0 USDC
+                            <p class="text-[#FFFFFF] text-base leading-[20px]">
+                                3.0%
                             </p>
                         </div>
                     </div>
+                    <div class="flex justify-between px-6 pb-7 font-normal">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                value={true}
+                                class="sr-only peer"
+                                checked={isFractionable}
+                                onChange={() => {
+                                    const isFractionableCopy = !isFractionable;
+
+                                    const unformattedValue =
+                                        unformatNumber(amountToInvest);
+
+                                    let totalToReceive =
+                                        unformattedValue / tokenPrice;
+
+                                    totalToReceive =
+                                        totalToReceive -
+                                        totalToReceive * offchainFees;
+
+                                    totalToReceive = isFractionableCopy
+                                        ? totalToReceive.round(2)
+                                        : Math.floor(totalToReceive);
+
+                                    setTotalTokens(totalToReceive);
+
+                                    setIsFractionable(isFractionableCopy);
+                                }}
+                            />
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            <span class="ml-2 text-[#FFFFFF] text-base leading-[20px]">
+                                Fractionable Order
+                            </span>
+                        </label>
+                    </div>
+
                     <TermsOfUseModal
                         isOpen={openTermsOfUseModal}
                         onClose={() => setOpenTermsOfUseModal(false)}

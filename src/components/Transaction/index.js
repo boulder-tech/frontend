@@ -17,32 +17,41 @@ function shortenTextWithEllipsis(text, maxLength) {
 }
 
 const Transaction = ({
-    transaction: { hash, amount_stable, type_stable, token, status, createdAt },
+    transaction: { hash, hash_mint, amount_stable, type_stable, token, token_minted, status, createdAt },
 }) => {
     return (
-        <tr class="border-b-[0.5px] border-[#CFD9E2] py-3.5 text-[17px]">
-            <td class="relative py-5 pr-3 text-lg text-left font-normal">
+        <tr class="border-b-[0.5px] border-[#AEAEAE] py-3.5 text-[20px] text-[#FFFFFF]">
+            <td class="relative py-7 pr-3 text-lg text-left font-normal">
                 <a
                     href={`https://sepolia.etherscan.io/tx/${hash}`}
                     target="_blank"
-                    class="text-blue-600/100"
+                    class="text-[#FFFFFF] underline underline-offset-4"
                 >
-                    {shortenTextWithEllipsis(hash, 30)}
+                    {hash ? shortenTextWithEllipsis(hash, 20): '-'}
                 </a>
             </td>
-            <td class="py-5 text-lg lg:table-cell text-left font-normal">{`${amount_stable} ${type_stable}`}</td>
-            <td class="py-5 text-gray-500 lg:table-cell text-left text-lg font-normal">
-                {`-`}
+            <td class="relative py-5 pr-3 text-lg text-left font-normal">
+                {hash_mint ? <a
+                    href={`https://sepolia.etherscan.io/tx/${hash_mint}`}
+                    target="_blank"
+                    class="text-[#FFFFFF] underline underline-offset-4"
+                >
+                    {hash_mint ? shortenTextWithEllipsis(hash_mint, 20): '-'}
+                </a> : <span>-</span>}
+                
             </td>
-            <td class="py-5 text-gray-500 lg:table-cell text-left text-lg font-normal">
+            <td class="py-5">{`${amount_stable} ${type_stable}`}</td>
+            <td class="py-5">
+                {token_minted ? token_minted :'-'}
+            </td>
+            <td class="py-5">
                 {token}
             </td>
-            <td class="py-5 text-gray-500 text-left text-lg font-normal">
-                {status === 'pending_mint' ? 'PENDING' : ''}
+            <td class="text-[#FFFFFF] text-opacity-60">
+                {moment(createdAt).local().format('MM/DD/YYYY hh:mm')}
             </td>
-            <td class="relative py-5 pr-4 text-lg sm:pr-6 text-left">-</td>
-            <td class="relative py-5 pr-4 text-lg sm:pr-6 text-left">
-                {moment(createdAt).local().format('MM/DD/YYYY hh:mm A')}
+            <td class={`py-5 ${status === 'pending_mint' ? 'text-[#FFD645]' : status === 'tokens_minted' ? 'text-[#24B400]' : '' }`}>
+                {status === 'pending_mint' ? 'PENDING' : status === 'tokens_minted' ? 'COMPLETED': '-'}
             </td>
         </tr>
     );

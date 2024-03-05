@@ -35,10 +35,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
-            <body>
+            <body className="bg-fractal bg-center">
+                <div className="absolute top-0 right-0 w-full h-full bg-gradient-dark-top-left"></div>
                 <GlobalContextProvider>
                     <Header />
-                    <main className="flex flex-col">
+                    <main className="">
                         {children}
                     </main>
                 </GlobalContextProvider>

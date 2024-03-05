@@ -23,7 +23,6 @@ const backendWS = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_WS_URL;
 
 const Header = () => {
     //const { user, logout } = useAuth();
-
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -167,12 +166,34 @@ const Header = () => {
 
     return (
         <div clasName="h-full-flex h-full min-h-screen w-full overflow-hidden bg-cover bg-right-bottom max-w-screen-4xl mx-auto">
-            <header className="w-full items-center justify-between py-3 px-4 sm:px-6 md:px-8 sticky top-0 z-50 bg-[#0F2656]">
-                <div className="flex items-center justify-between 2xl:px-[300px] lg:px-[150px] md:px-[75px] px-[20px]">
-                    <div className="flex gap-4 items-center justify-center divide-border-grey-200 divide-x-[1px]">
+            <header className="w-full items-center justify-between py-3 px-4 sm:px-6 md:px-8 sticky top-0 z-50">
+                <div className="flex items-center justify-between">
+                    <div className="flex gap-4 items-center justify-center divide-border-grey-200 divide-x-[1px] ">
                         <Link href={'/'}>
-                            <Imagotype />
+                            <Imagotype  />
                         </Link>
+                    </div>
+                    <div className="flex justify-items-start w-full">
+                        <div className="ml-4">
+                            <button
+                                className="flex w-fit h-12 items-center justify-center px-10 py-3 gap-2.5 border rounded-lg text-[#FAFBFF] bg-[#FAFBFF]/[0.04] text-sm"
+                                onClick={() => {
+                                    window.location.href = '/';
+                                }}
+                            >
+                                Products
+                            </button>
+                        </div>
+                        <div className="ml-4">
+                            <button
+                                className="flex w-fit h-12 items-center justify-center px-10 py-3 gap-2.5 border rounded-lg text-[#FAFBFF] bg-[#FAFBFF]/[0.04] text-sm"
+                                onClick={() => {
+                                    window.location.href = '/portfolio';
+                                }}
+                            >
+                                Your Portfolio
+                            </button>
+                        </div>
                     </div>
                     {wallet?.address ? (
                         <div className="relative">
@@ -315,12 +336,12 @@ const Header = () => {
                             <div class="relative ml-3" data-headlessui-state="">
                                 <div>
                                     <button
-                                        class="uppercase grow border border-transparent bg-black px-3 py-1 text-center text-base font-semibold text-white shadow-sm hover:bg-[#0052FF] md:px-5 md:py-3"
+                                        class="grow border border-transparent bg-[#245BFF] px-3 py-1 text-center text-sm font-medium text-slate-50 shadow-sm hover:bg-[#0052FF] md:px-5 md:py-3 w-28 h-12 rounded-full"
                                         onClick={() => {
                                             setOpenTermsOfUseModal(true);
                                         }}
                                     >
-                                        Connect
+                                        Connect →
                                     </button>
                                 </div>
                             </div>
