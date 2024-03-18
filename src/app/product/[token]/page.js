@@ -106,15 +106,6 @@ const Vault = ({ params }) => {
     }, []);
 
     useEffect(() => {
-        if(account && chainId !== '0x66eee') 
-            setShowIncorrectNetworkModal(true);
-        else 
-            setShowIncorrectNetworkModal(false);
-        
-    }, [chainId])
-
-
-    useEffect(() => {
         /*
         const fetchData = async () => {
             try {
@@ -164,52 +155,7 @@ const Vault = ({ params }) => {
             localStorage.removeItem('wallet');
         }
     };
-
-    const checkIfCorrectNetwork = async () => {
-        if(chainId) {
-            console.log('chainId', chainId)
-            try {
-                const chainId = await window.ethereum.request({
-                    method: 'eth_chainId',
-                });
-
-                console.log('chainId', chainId)
-
-                if (chainId !== '0x66eee') {
-                    setShowIncorrectNetworkModal(true);
-                }
-            } catch(e) {
-                console.log('ERROR', e)
-            }
-        }
-
-        
-    };
-
-    const switchToEthereumNetwork = async () => {            
-        await Moralis.addNetwork('0x66eee', "Arbitrum Sepolia", "ETH", "ETH", "https://sepolia-rollup.arbitrum.io/rpc", "https://sepolia.arbiscan.io/");
-        
-        switchNetwork("0x66eee");
-        /*
-        try {
-            await ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: '0x66eee' }],
-            });
     
-            const chainId = await window.ethereum.request({
-                method: 'eth_chainId',
-            });
-    
-            if (chainId === '0x66eee') {
-                setShowIncorrectNetworkModal(true);
-            }
-        } catch(e) {
-            console.log('ERROR', e)
-        }
-        */
-    };
-
     const fetchTokenPrice = async (name) => {
         const {
             data: { price, price_24h, last_24h },
@@ -653,25 +599,6 @@ const Vault = ({ params }) => {
                     </div>
                 </div>
             </div>
-            <Modal isOpen={showIncorrectNetworkModal}>
-                <div class="flex flex-col items-center justify-center py-10 px-6">
-                    <img src="/icons/wrongNetwork.svg" />
-                    <span class="mt-4 text-2xl font-bold leading-[34px]">
-                        Wrong network!
-                    </span>
-                    <p class="mt-2 w-full text-center text-xl font-normal leading-[30px]">
-                        Please switch back to <span class="mx-1">Ethereum</span>
-                        to continue{' '}
-                    </p>
-                    <button
-                        type="button"
-                        class="mt-4 inline-flex items-center rounded-md !bg-black px-4 py-2 text-base font-semibold text-white shadow-sm focus:outline-none focus:ring-0"
-                        onClick={() => switchToEthereumNetwork()}
-                    >
-                        Switch to Ethereum
-                    </button>
-                </div>
-            </Modal>
         </div>
     );
 };
