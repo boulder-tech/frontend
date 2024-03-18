@@ -4,6 +4,7 @@ import { useGlobalContext } from '../../app/context/store';
 import Link from 'next/link';
 import Imagotype from './imagotype';
 import AddressButton from '../buttons/address-button';
+import Modal from '../Modal';
 import TermsOfUseModal from '../TermsOfUseModal';
 import ConnectWalletModal from '../ConnectWalletModal';
 import GhostButton from '../buttons/ghost-button';
@@ -18,8 +19,17 @@ import io from 'socket.io-client';
 
 //import './Header.css';
 
+import { useChain, useMoralis } from "react-moralis";
+
 const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
 const backendWS = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_WS_URL;
+
+function ConnectWallet() { 
+    const { isConnected } = useAccount() 
+    if (isConnected) return <Account /> 
+    return <WalletOptions /> 
+  } 
+
 
 const Header = () => {
     //const { user, logout } = useAuth();
@@ -30,8 +40,14 @@ const Header = () => {
     const [showUserSettings, setShowUserSettings] = useState(false);
     const [openTermsOfUseModal, setOpenTermsOfUseModal] = useState(false);
     const [openConnectWalletModal, setOpenConnectWalletModal] = useState(false);
+    const [showIncorrectNetworkModal, setShowIncorrectNetworkModal] =
+        useState(false);
 
     const { wallet, setWallet } = useGlobalContext();
+
+    const { switchNetwork, chainId, chain } = useChain();
+    const { enableWeb3, isWeb3Enabled, isWeb3EnableLoading, account, Moralis, deactivateWeb3 } =
+        useMoralis();
 
     useEffect(() => {
         const walletDataString = localStorage.getItem('wallet');
@@ -44,6 +60,15 @@ const Header = () => {
                 setIsWalletConnected(true);
             }
         }
+
+        Moralis.onAccountChanged((newAccount) => {
+            console.log(`Account changed to ${newAccount}`)
+            if (newAccount == null) {
+                window.localStorage.removeItem("connected")
+                deactivateWeb3()
+                console.log("Null Account found")
+            }
+        })
     }, []);
 
     useEffect(() => {
@@ -51,6 +76,26 @@ const Header = () => {
             
         }
     }, [wallet]);
+
+    useEffect(() => {
+        if(account && chainId !== '0x66eee') 
+            setShowIncorrectNetworkModal(true);
+        else 
+            setShowIncorrectNetworkModal(false);
+        console.log('chainId', chainId)
+    }, [chainId])
+
+    //
+    const handleConnect = async () => {
+        try {
+        await Moralis.Web3.authenticate();
+        alert('Connected successfully!');
+        } catch (error) {
+        console.error('Error connecting:', error);
+        alert('Failed to connect. Please try again.');
+        }
+    };
+    //
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -164,6 +209,30 @@ const Header = () => {
         }
     };
 
+    const switchToEthereumNetwork = async () => {            
+        await Moralis.addNetwork('0x66eee', "Arbitrum Sepolia", "ETH", "ETH", "https://sepolia-rollup.arbitrum.io/rpc", "https://sepolia.arbiscan.io/");
+        
+        switchNetwork("0x66eee");
+        /*
+        try {
+            await ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x66eee' }],
+            });
+    
+            const chainId = await window.ethereum.request({
+                method: 'eth_chainId',
+            });
+    
+            if (chainId === '0x66eee') {
+                setShowIncorrectNetworkModal(true);
+            }
+        } catch(e) {
+            console.log('ERROR', e)
+        }
+        */
+    };
+
     return (
         <div clasName="h-full-flex h-full min-h-screen w-full overflow-hidden bg-cover bg-right-bottom max-w-screen-4xl mx-auto">
             <header className="w-full items-center justify-between py-3 px-4 sm:px-6 md:px-8 sticky top-0 z-50">
@@ -195,114 +264,13 @@ const Header = () => {
                             </button>
                         </div>
                     </div>
-                    {wallet?.address ? (
+                    {account ? (
                         <div className="relative">
                             <AddressButton
                                 onClick={() => setShowUserSettings(true)}
                             >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 33.9 31.3"
-                                    className="cursor-pointer h-4 w-4 min-w-4 cursor-pointer h-4 w-4 min-w-4 mr-2"
-                                >
-                                    <path
-                                        fill="#E17726"
-                                        stroke="#E17726"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M32.1.1 18.9 9.8l2.4-5.7 10.8-4z"
-                                    ></path>
-                                    <path
-                                        fill="#E27625"
-                                        stroke="#E27625"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m1.8.1 13 9.8-2.3-5.8L1.8.1zM27.4 22.7 23.9 28l7.5 2.1 2.1-7.3-6.1-.1zM.4 22.8l2.1 7.3L10 28l-3.5-5.3-6.1.1z"
-                                    ></path>
-                                    <path
-                                        fill="#E27625"
-                                        stroke="#E27625"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m9.6 13.6-2.1 3.1 7.4.3-.2-8-5.1 4.6zM24.3 13.6 19.1 9l-.2 8.1 7.4-.3-2-3.2zM10 28l4.5-2.2-3.9-3L10 28zM19.4 25.8l4.5 2.2-.6-5.2-3.9 3z"
-                                    ></path>
-                                    <path
-                                        fill="#D5BFB2"
-                                        stroke="#D5BFB2"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m23.9 28-4.5-2.2.4 2.9v1.2l4.1-1.9zM10 28l4.2 2v-1.2l.4-2.9L10 28z"
-                                    ></path>
-                                    <path
-                                        fill="#233447"
-                                        stroke="#233447"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m14.2 20.9-3.7-1.1 2.6-1.2 1.1 2.3zM19.6 20.9l1.1-2.3 2.6 1.2-3.7 1.1z"
-                                    ></path>
-                                    <path
-                                        fill="#CC6228"
-                                        stroke="#CC6228"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m10 28 .6-5.3-4.1.1L10 28zM23.2 22.7l.6 5.3 3.5-5.2-4.1-.1zM26.4 16.8l-7.4.3.7 3.8 1.1-2.3 2.6 1.2 3-3zM10.5 19.8l2.6-1.2 1.1 2.3.7-3.8-7.4-.3 3 3z"
-                                    ></path>
-                                    <path
-                                        fill="#E27525"
-                                        stroke="#E27525"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m7.5 16.8 3.1 6.1-.1-3-3-3.1zM23.4 19.8l-.1 3 3.1-6.1-3 3.1zM14.9 17.1l-.7 3.8.9 4.5.2-5.9-.4-2.4zM18.9 17.1l-.4 2.4.2 5.9.9-4.5-.7-3.8z"
-                                    ></path>
-                                    <path
-                                        fill="#F5841F"
-                                        stroke="#F5841F"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m19.6 20.9-.9 4.5.6.4 3.9-3 .1-3-3.7 1.1zM10.5 19.8l.1 3 3.9 3 .6-.4-.9-4.5-3.7-1.1z"
-                                    ></path>
-                                    <path
-                                        fill="#C0AC9D"
-                                        stroke="#C0AC9D"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M19.7 30v-1.2l-.3-.3h-5l-.3.3V30L10 28l1.5 1.2 2.9 2h5.1l3-2 1.4-1.2-4.2 2z"
-                                    ></path>
-                                    <path
-                                        fill="#161616"
-                                        stroke="#161616"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m19.4 25.8-.6-.4h-3.7l-.6.4-.4 2.9.3-.3h5l.3.3-.3-2.9z"
-                                    ></path>
-                                    <path
-                                        fill="#763E1A"
-                                        stroke="#763E1A"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m32.6 10.5 1.1-5.4-1.7-5-12.6 9.4 4.9 4.1 6.9 2 1.5-1.8-.7-.4 1.1-1-.8-.6 1.1-.8-.8-.5zM.1 5.1l1.1 5.4-.7.5 1.1.8-.8.6 1.1 1-.7.5 1.5 1.8 6.9-2 4.9-4.1L1.8.1l-1.7 5z"
-                                    ></path>
-                                    <path
-                                        fill="#F5841F"
-                                        stroke="#F5841F"
-                                        stroke-width=".25"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m31.2 15.6-6.9-2 2.1 3.1-3.1 6.1 4.1-.1h6.1l-2.3-7.1zM9.6 13.6l-6.9 2-2.3 7.1h6.1l4.1.1-3.1-6.1 2.1-3.1zM18.9 17.1l.4-7.6 2-5.4h-8.9l2 5.4.4 7.6.2 2.4v5.9h3.7v-5.9l.2-2.4z"
-                                    ></path>
-                                </svg>
-                                {wallet.address}
+                                <img src="https://app.bouldertech.fi/icons/metamask.svg" className="cursor-pointer h-4 w-4 min-w-4 cursor-pointer h-4 w-4 min-w-4 mr-2"/>
+                                {account}
                             </AddressButton>
                             <div
                                 class="absolute right-0 z-10 mt-[0px] w-48 origin-top-right rounded-[4px] bg-white shadow-sm focus:outline-none transform opacity-100 scale-100"
@@ -325,7 +293,10 @@ const Header = () => {
                                     role="menuitem"
                                     tabindex="-1"
                                     data-headlessui-state=""
-                                    onClick={() => disconnectWallet()}
+                                    onClick={() => {
+                                        deactivateWeb3();
+                                        setShowUserSettings(false);
+                                    }}
                                 >
                                     Sign out
                                 </button>
@@ -337,9 +308,19 @@ const Header = () => {
                                 <div>
                                     <button
                                         class="grow border border-transparent bg-[#245BFF] px-3 py-1 text-center text-sm font-medium text-slate-50 shadow-sm hover:bg-[#0052FF] md:px-5 md:py-3 w-28 h-12 rounded-full"
-                                        onClick={() => {
+                                        onClick={async() => {
                                             setOpenTermsOfUseModal(true);
+                                            /*
+                                            const ret = await enableWeb3()
+                                            if (typeof ret !== "undefined") {
+                                                // depends on what button they picked
+                                                if (typeof window !== "undefined") {
+                                                    window.localStorage.setItem("connected", "injected")
+                                                    // window.localStorage.setItem("connected", "walletconnect")
+                                                }
+                                            }*/
                                         }}
+                                        disabled={isWeb3EnableLoading}
                                     >
                                         Connect →
                                     </button>
@@ -349,192 +330,6 @@ const Header = () => {
                     )}
                 </div>
             </header>
-            {/* Modal */}
-            {isModalOpen ? (
-                <>
-                    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                        <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                            {/*content*/}
-                            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                {/*header*/}
-                                <div className="ml-auto mr-3 mt-3">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        aria-hidden="true"
-                                        className="cursor-pointer h-5 w-5 min-w-5 text-gray-600 hover:text-green-600"
-                                        onClick={() => setIsModalOpen(false)}
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        ></path>
-                                    </svg>
-                                </div>
-                                <div className="flex items-start justify-between pt-1 pb-1 pl-5 pr-5 border-b border-solid border-blueGray-200 rounded-t">
-                                    <p className="text-2xl text-black">
-                                        Connect to Wallet
-                                    </p>
-                                    <button
-                                        className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                        onClick={() => setIsModalOpen(false)}
-                                    >
-                                        <span className="text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                            ×
-                                        </span>
-                                    </button>
-                                </div>
-                                {/*body*/}
-                                <div className="relative p-6 flex-auto">
-                                    <li className="block cursor-pointer rounded-lg bg-white hover:bg-green-200">
-                                        <div className="flex items-center p-4 sm:px-6">
-                                            <div className="flex min-w-0 flex-1 items-center">
-                                                <div className="mr-3 shrink-0 sm:mr-4">
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 33.9 31.3"
-                                                        className="cursor-pointer min-w-6 sm:min-w-8 h-6 w-6 sm:h-8 sm:w-8"
-                                                    >
-                                                        <path
-                                                            fill="#E17726"
-                                                            stroke="#E17726"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="M32.1.1 18.9 9.8l2.4-5.7 10.8-4z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#E27625"
-                                                            stroke="#E27625"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m1.8.1 13 9.8-2.3-5.8L1.8.1zM27.4 22.7 23.9 28l7.5 2.1 2.1-7.3-6.1-.1zM.4 22.8l2.1 7.3L10 28l-3.5-5.3-6.1.1z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#E27625"
-                                                            stroke="#E27625"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m9.6 13.6-2.1 3.1 7.4.3-.2-8-5.1 4.6zM24.3 13.6 19.1 9l-.2 8.1 7.4-.3-2-3.2zM10 28l4.5-2.2-3.9-3L10 28zM19.4 25.8l4.5 2.2-.6-5.2-3.9 3z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#D5BFB2"
-                                                            stroke="#D5BFB2"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m23.9 28-4.5-2.2.4 2.9v1.2l4.1-1.9zM10 28l4.2 2v-1.2l.4-2.9L10 28z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#233447"
-                                                            stroke="#233447"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m14.2 20.9-3.7-1.1 2.6-1.2 1.1 2.3zM19.6 20.9l1.1-2.3 2.6 1.2-3.7 1.1z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#CC6228"
-                                                            stroke="#CC6228"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m10 28 .6-5.3-4.1.1L10 28zM23.2 22.7l.6 5.3 3.5-5.2-4.1-.1zM26.4 16.8l-7.4.3.7 3.8 1.1-2.3 2.6 1.2 3-3zM10.5 19.8l2.6-1.2 1.1 2.3.7-3.8-7.4-.3 3 3z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#E27525"
-                                                            stroke="#E27525"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m7.5 16.8 3.1 6.1-.1-3-3-3.1zM23.4 19.8l-.1 3 3.1-6.1-3 3.1zM14.9 17.1l-.7 3.8.9 4.5.2-5.9-.4-2.4zM18.9 17.1l-.4 2.4.2 5.9.9-4.5-.7-3.8z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#F5841F"
-                                                            stroke="#F5841F"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m19.6 20.9-.9 4.5.6.4 3.9-3 .1-3-3.7 1.1zM10.5 19.8l.1 3 3.9 3 .6-.4-.9-4.5-3.7-1.1z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#C0AC9D"
-                                                            stroke="#C0AC9D"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="M19.7 30v-1.2l-.3-.3h-5l-.3.3V30L10 28l1.5 1.2 2.9 2h5.1l3-2 1.4-1.2-4.2 2z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#161616"
-                                                            stroke="#161616"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m19.4 25.8-.6-.4h-3.7l-.6.4-.4 2.9.3-.3h5l.3.3-.3-2.9z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#763E1A"
-                                                            stroke="#763E1A"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m32.6 10.5 1.1-5.4-1.7-5-12.6 9.4 4.9 4.1 6.9 2 1.5-1.8-.7-.4 1.1-1-.8-.6 1.1-.8-.8-.5zM.1 5.1l1.1 5.4-.7.5 1.1.8-.8.6 1.1 1-.7.5 1.5 1.8 6.9-2 4.9-4.1L1.8.1l-1.7 5z"
-                                                        ></path>
-                                                        <path
-                                                            fill="#F5841F"
-                                                            stroke="#F5841F"
-                                                            stroke-width=".25"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m31.2 15.6-6.9-2 2.1 3.1-3.1 6.1 4.1-.1h6.1l-2.3-7.1zM9.6 13.6l-6.9 2-2.3 7.1h6.1l4.1.1-3.1-6.1 2.1-3.1zM18.9 17.1l.4-7.6 2-5.4h-8.9l2 5.4.4 7.6.2 2.4v5.9h3.7v-5.9l.2-2.4z"
-                                                        ></path>
-                                                    </svg>
-                                                </div>
-                                                <div className="min-w-0 flex-1 text-left sm:px-4 md:grid md:grid-cols-1 md:gap-4">
-                                                    <div
-                                                        onClick={connectWallet}
-                                                    >
-                                                        <p className="truncate text-base font-medium text-black sm:text-xl">
-                                                            Metamask
-                                                        </p>
-                                                        <p className="hidden items-center text-sm text-gray-600 sm:flex mt-1">
-                                                            Connect using
-                                                            browser wallet
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="hidden text-black sm:block">
-                                                    <svg
-                                                        fill="currentColor"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 20 20"
-                                                        className="cursor-pointer h-5 w-5 -rotate-90 hover:text-green-600"
-                                                    >
-                                                        <path
-                                                            fillRule="evenodd"
-                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                            clipRule="evenodd"
-                                                        ></path>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    ;
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="opacity-25 fixed inset-0 z-40"></div>
-                </>
-            ) : null}
             <TermsOfUseModal
                 isOpen={openTermsOfUseModal}
                 onClose={() => setOpenTermsOfUseModal(false)}
@@ -552,6 +347,25 @@ const Header = () => {
                     setShowKycNotification(true);
                 }}
             />
+            <Modal isOpen={showIncorrectNetworkModal}>
+                <div class="flex flex-col items-center justify-center py-10 px-6">
+                    <img src="/icons/wrongNetwork.svg" />
+                    <span class="mt-4 text-2xl font-bold leading-[34px]">
+                        Wrong network!
+                    </span>
+                    <p class="mt-2 w-full text-center text-xl font-normal leading-[30px]">
+                        Please switch back to <span class="mx-1">Ethereum</span>
+                        to continue{' '}
+                    </p>
+                    <button
+                        type="button"
+                        class="mt-4 inline-flex items-center rounded-md !bg-black px-4 py-2 text-base font-semibold text-white shadow-sm focus:outline-none focus:ring-0"
+                        onClick={() => switchToEthereumNetwork()}
+                    >
+                        Switch to Ethereum
+                    </button>
+                </div>
+            </Modal>
         </div>
     );
 };

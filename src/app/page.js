@@ -19,7 +19,7 @@ const Home = () => {
     };
 
     return (
-        <div className="xs:px-6 mx-auto h-full grow px-4 pt-4 md:px-8 text-black grid gap-4 grid-cols-12 grid-rows-[75%,25%]">
+        <div className="xs:px-6 mx-auto h-full grow px-4 pt-4 md:px-[30px] text-black grid gap-4 grid-cols-12 grid-rows-[75%,25%]">
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-dark-top-right"></div>
             <div className="col-span-3">
                 <MainPanel />

@@ -5,6 +5,7 @@ import './globals.css';
 import Header from '../components/Header';
 //import Footer from '@/components/sections/footer';
 import { GlobalContextProvider } from './context/store';
+import MoralisProvider from './context/MoralisProvider'
 
 const atypDisplay = localFont({
     variable: '--font-atyp-display',
@@ -37,12 +38,14 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body className="bg-fractal bg-center">
                 <div className="absolute top-0 right-0 w-full h-full bg-gradient-dark-top-left"></div>
-                <GlobalContextProvider>
-                    <Header />
-                    <main className="">
-                        {children}
-                    </main>
-                </GlobalContextProvider>
+                <MoralisProvider>
+                    <GlobalContextProvider>
+                        <Header />
+                        <main className="">
+                            {children}
+                        </main>
+                    </GlobalContextProvider>
+                </MoralisProvider>
             </body>
         </html>
     );

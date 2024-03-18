@@ -64,8 +64,38 @@ const Portfolio = ({}) => {
         if(Object.keys(tokenInfo).length) {
             fetchData();
         }
-
+        /*
         setTransactions([
+            {
+                hash: '0xb5c8bd9430b6cc87a0e2fe110ece6bf527fa4f170a4bc8cd032f768fc5219838',
+                hash_mint: '0x956829212332bf9a22ef7e35f0c60d91e237770bfa2b33b1ad55ee0ab3d7f4e3',
+                amount_stable: 100,
+                type_stable: 'USDC',
+                token: 'GD30D',
+                token_minted: 2.2,
+                status: 'tokens_minted',
+                createdAt: '2024-02-10T10:12:09'
+            },
+            {
+                hash: '0xb5c8bd9430b6cc87a0e2fe110ece6bf527fa4f170a4bc8cd032f768fc5219838',
+                hash_mint: null,
+                amount_stable: 500,
+                type_stable: 'USDC',
+                token: 'GD30D',
+                token_minted: 0,
+                status: 'pending_mint',
+                createdAt: '2024-02-08T12:15:00'
+            },
+            {
+                hash: '0xb5c8bd9430b6cc87a0e2fe110ece6bf527fa4f170a4bc8cd032f768fc5219838',
+                hash_mint: null,
+                amount_stable: 1500,
+                type_stable: 'USDC',
+                token: 'GD30D',
+                token_minted: 0,
+                status: 'pending_mint',
+                createdAt: '2024-02-01T10:25:00'
+            },
             {
                 hash: '0xb5c8bd9430b6cc87a0e2fe110ece6bf527fa4f170a4bc8cd032f768fc5219838',
                 hash_mint: '0x956829212332bf9a22ef7e35f0c60d91e237770bfa2b33b1ad55ee0ab3d7f4e3',
@@ -127,6 +157,7 @@ const Portfolio = ({}) => {
                 createdAt: '2024-02-01T10:25:00'
             }
         ]);
+        */
     },[tokenInfo])
 
     useEffect(() => {
@@ -214,7 +245,7 @@ const Portfolio = ({}) => {
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-dark-top-right-2"></div>
                 <div style={{ opacity: 1, transform: 'none' }}>
                     <div
-                        class="z-0 w-full pt-[40px] pb-8 border-t border-[#CFD9E2]"
+                        class="w-full pt-[40px] pb-8 border-t border-[#CFD9E2]"
                         id="portfolio"
                     >
                         <div class="pt-0 pb-8">

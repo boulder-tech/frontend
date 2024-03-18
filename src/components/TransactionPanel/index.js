@@ -8,6 +8,8 @@ import ConnectWalletModal from '../ConnectWalletModal';
 import Notification from '../Notification';
 import { useGlobalContext } from '../../app/context/store';
 
+import {useMoralis, useWeb3Contract } from "react-moralis";
+
 import './styles.css';
 
 //const usdcAddress = '0xda9d4f9b69ac6C22e444eD9aF0CfC043b7a7f53f';
@@ -52,6 +54,8 @@ function delay(ms) {
 }
 
 const TransactionPanel = ({ tokenPrice }) => {
+    //const { Moralis } = useMoralis();
+
     const { wallet, setWallet, client, setClient, socket, setSocket } =
         useGlobalContext();
     const [openConnectWalletModal, setOpenConnectWalletModal] = useState(false);
@@ -641,8 +645,8 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                     placeholder="0"
                                                     minlength="1"
                                                     maxlength="79"
-                                                    spellcheck="false"
-                                                    readonly=""
+                                                    spellCheck="false"
+                                                    readOnly
                                                     value={totalTokens}
                                                 />
                                             </div>

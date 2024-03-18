@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { ethers } from 'ethers';
 import { Tooltip } from 'react-tooltip';
+import { useChain, useMoralis } from "react-moralis";
 import { useGlobalContext } from '../../context/store';
 import MainSection from '../../../components/sections/main-section';
 import AlertPanel from '../../../components/AlertPanel';
@@ -54,7 +55,12 @@ const Vault = ({ params }) => {
 
     const [content, setContent] = useState('chart');
 
+    const { switchNetwork, chainId, chain, account } = useChain();
+    const { enableWeb3, isWeb3Enabled, isWeb3EnableLoading, Moralis, deactivateWeb3 } =
+        useMoralis();
+
     useEffect(() => {
+        /*
         if (window.ethereum) {
             window.ethereum.on('chainChanged', async () => {
                 if (window.ethereum.isMetaMask) {
@@ -72,15 +78,21 @@ const Vault = ({ params }) => {
                 }
             });
         }
+        */
+
+        /*
 
         checkIfWalletConnected();
+        
         checkIfCorrectNetwork();
+        
 
         const walletDataString = localStorage.getItem('wallet');
 
         if (walletDataString) {
             const walletData = JSON.parse(walletDataString);
         }
+        */
 
         fetchTokenPrice('GD30D');
 
@@ -92,6 +104,15 @@ const Vault = ({ params }) => {
             clearInterval(priceUpdateInterval); // Limpiar el intervalo al desmontar el componente
           };
     }, []);
+
+    useEffect(() => {
+        if(account && chainId !== '0x66eee') 
+            setShowIncorrectNetworkModal(true);
+        else 
+            setShowIncorrectNetworkModal(false);
+        
+    }, [chainId])
+
 
     useEffect(() => {
         /*
@@ -145,8 +166,8 @@ const Vault = ({ params }) => {
     };
 
     const checkIfCorrectNetwork = async () => {
-        if (window.ethereum && window.ethereum.isMetaMask && window.ethereum.selectedAddress) {
-            console.log('HERE 1')
+        if(chainId) {
+            console.log('chainId', chainId)
             try {
                 const chainId = await window.ethereum.request({
                     method: 'eth_chainId',
@@ -161,9 +182,15 @@ const Vault = ({ params }) => {
                 console.log('ERROR', e)
             }
         }
+
+        
     };
 
-    const switchToEthereumNetwork = async () => {
+    const switchToEthereumNetwork = async () => {            
+        await Moralis.addNetwork('0x66eee', "Arbitrum Sepolia", "ETH", "ETH", "https://sepolia-rollup.arbitrum.io/rpc", "https://sepolia.arbiscan.io/");
+        
+        switchNetwork("0x66eee");
+        /*
         try {
             await ethereum.request({
                 method: 'wallet_switchEthereumChain',
@@ -180,7 +207,7 @@ const Vault = ({ params }) => {
         } catch(e) {
             console.log('ERROR', e)
         }
-        
+        */
     };
 
     const fetchTokenPrice = async (name) => {

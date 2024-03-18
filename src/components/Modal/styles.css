@@ -1,0 +1,17 @@
+/*
+.custom-filter > *:not(.modal) {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter-filter: blur(8px);
+}
+*/
+
+.custom-filter {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px);
+    z-index: -1 !important;
+}
+
+.blur-background {
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+}
