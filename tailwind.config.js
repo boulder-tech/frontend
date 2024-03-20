@@ -203,6 +203,8 @@ module.exports = {
                 'gradient-dark-top-left': 'linear-gradient(180deg, rgba(1, 3, 18,0.8) 0%, rgba(0,0,0,0) 40%)',
                 'gradient-dark-top-left-2': 'linear-gradient(135deg, rgba(1, 3, 18,0.5) 0%, rgba(0,0,0,0) 100%)', //correct
                 'gradient-yellow-top-bottom': 'linear-gradient(180deg, rgba(209, 201, 0,0.07) 0%, rgba(0,0,0,0) 100%)',
+                'main-gradient': 'linear-gradient(to bottom, #010312 70%, rgba(0, 0, 0, 0.1) 100%)',
+                'background-image': 'url("/backgrounds/bg-theme.png"), var(--main-gradient)'
             },
             backgroundColor: {
                 'fractal-opacity-50': 'rgba(0, 0, 0, 1)',

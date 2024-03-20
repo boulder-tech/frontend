@@ -8,7 +8,7 @@ import Modal from '../Modal';
 import TermsOfUseModal from '../TermsOfUseModal';
 import ConnectWalletModal from '../ConnectWalletModal';
 import GhostButton from '../buttons/ghost-button';
-import Web3 from 'web3';
+import web3 from 'web3';
 import clsx from 'clsx';
 import { Menu, Dropdown, Icon } from 'semantic-ui-react';
 import { PersonCircle, BoxArrowRight } from 'react-bootstrap-icons';
@@ -43,10 +43,10 @@ const Header = () => {
     const [showIncorrectNetworkModal, setShowIncorrectNetworkModal] =
         useState(false);
 
-    const { wallet, setWallet } = useGlobalContext();
+    const { wallet, setWallet, setClient } = useGlobalContext();
 
     const { switchNetwork, chainId, chain } = useChain();
-    const { enableWeb3, isWeb3Enabled, isWeb3EnableLoading, account, Moralis, deactivateWeb3 } =
+    const { enableWeb3, isWeb3Enabled, isWeb3EnableLoading, account, Moralis, deactivateWeb3, isAuthenticated } =
         useMoralis();
 
     useEffect(() => {
@@ -61,6 +61,8 @@ const Header = () => {
             }
         }
 
+        //test();
+
         Moralis.onAccountChanged((newAccount) => {
             console.log(`Account changed to ${newAccount}`)
             if (newAccount == null) {
@@ -71,11 +73,37 @@ const Header = () => {
         })
     }, []);
 
+    useEffect(() => { 
+        console.log('isAuthenticated', isAuthenticated)
+    },[isAuthenticated])
+
     useEffect(() => {
         if (wallet.address) {
             
         }
     }, [wallet]);
+
+    useEffect(() => {
+        if(account) {
+            const address = web3.utils.toChecksumAddress(
+                account
+            );
+
+            console.log('CONNECT WALLET', address)
+
+            axios.post(
+                `${backendUrl}/api/client/connect-wallet`,
+                {
+                    public_address: address,
+                }
+            );
+    
+            setWallet({address});
+    
+            const walletJSON = JSON.stringify({address});
+            localStorage.setItem('wallet', walletJSON);
+        }
+    },[account])
 
     useEffect(() => {
         if(account && chainId !== '0x66eee') 
@@ -84,6 +112,11 @@ const Header = () => {
             setShowIncorrectNetworkModal(false);
         console.log('chainId', chainId)
     }, [chainId])
+
+    const test = async () => {
+        if (isWeb3Enabled)
+            await enableWeb3();
+    }
 
     //
     const handleConnect = async () => {
@@ -264,13 +297,13 @@ const Header = () => {
                             </button>
                         </div>
                     </div>
-                    {account ? (
+                    {wallet?.address ? (
                         <div className="relative">
                             <AddressButton
                                 onClick={() => setShowUserSettings(true)}
                             >
                                 <img src="https://app.bouldertech.fi/icons/metamask.svg" className="cursor-pointer h-4 w-4 min-w-4 cursor-pointer h-4 w-4 min-w-4 mr-2"/>
-                                {account}
+                                {wallet?.address}
                             </AddressButton>
                             <div
                                 class="absolute right-0 z-10 mt-[0px] w-48 origin-top-right rounded-[4px] bg-white shadow-sm focus:outline-none transform opacity-100 scale-100"
@@ -295,6 +328,9 @@ const Header = () => {
                                     data-headlessui-state=""
                                     onClick={() => {
                                         deactivateWeb3();
+                                        setWallet({});
+                                        setClient(null);
+                                        localStorage.removeItem("wallet")
                                         setShowUserSettings(false);
                                     }}
                                 >

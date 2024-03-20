@@ -60,6 +60,7 @@ const Vault = ({ params }) => {
         useMoralis();
 
     useEffect(() => {
+        console.log('Moralis.Units', Moralis.Units)
         /*
         if (window.ethereum) {
             window.ethereum.on('chainChanged', async () => {
@@ -155,7 +156,7 @@ const Vault = ({ params }) => {
             localStorage.removeItem('wallet');
         }
     };
-    
+
     const fetchTokenPrice = async (name) => {
         const {
             data: { price, price_24h, last_24h },
@@ -403,8 +404,13 @@ const Vault = ({ params }) => {
 
     return (
         <div class="mx-auto flex w-full grow px-4 text-black">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-dark-top-left-2"></div>
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-dark-top-right-3"></div>
+            {
+                /*
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-dark-top-left-2"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-dark-top-right-3"></div>
+                */
+            }
+            <div className="absolute top-0 left-0 w-full h-full bg-[#010312] bg-opacity-70"></div>
             <div
                 style={{
                     fontFamily: 'Barlow, sans-serif',

@@ -138,25 +138,35 @@ const TransactionPanel = ({ tokenPrice }) => {
     };
 
     const checkKYCstatus = async () => {
-        const {
-            data: {
-                client: { status },
-            },
-        } = await axios.get(
-            `${backendUrl}/api/client/public-address/${wallet.address}`
-        );
+        console.log('checkKYCstatus', wallet?.address);
 
-        if (status === 'approved') setIsKycApproved(true);
+        if(wallet?.address) {
+            const {
+                data: {
+                    client: { status },
+                },
+            } = await axios.get(
+                `${backendUrl}/api/client/public-address/${wallet.address}`
+            );
+    
+            if (status === 'approved') setIsKycApproved(true);
+        }
     };
 
     const fetchClient = async () => {
-        const {
-            data: { client },
-        } = await axios.get(
-            `${backendUrl}/api/client/public-address/${wallet.address}`
-        );
+        console.log('fetchClient', wallet?.address);
 
-        setClient(client);
+        if(wallet?.address) {
+            const {
+                data: { client },
+            } = await axios.get(
+                `${backendUrl}/api/client/public-address/${wallet.address}`
+            );
+    
+            console.log('FECTHED CLIENT', client)
+    
+            setClient(client);
+        }
     };
 
     const generateKycOneTimeLink = async () => {
@@ -448,12 +458,12 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                 </span>
                                             </div>
                                             <div>
-                                                <button
-                                                    class="w-[51px] h-[40px] rounded-[4px] px-[10px] py-[2px] text-xs text-[#245BFF] bg-[#245BFF] bg-opacity-20 border border-[#245BFF] hover:border-mainBlue hover:text-mainBlue mobile:hidden"
-                                                    onClick={setMaxBalance}
-                                                >
-                                                    MAX
-                                                </button>
+                                            <button
+                                                className="flex items-center justify-center w-[38px] h-[22px] rounded-[4px] px-[10px] py-[2px] text-[10px] text-[#245BFF] bg-[#245BFF] bg-opacity-20 border border-[#245BFF] hover:border-mainBlue hover:text-mainBlue mobile:hidden"
+                                                onClick={setMaxBalance}
+                                            >
+                                                MAX
+                                            </button>
                                             </div>
                                         </div>
                                         <div class="w-[60%] mobile:ml-1 mobile:w-full">
@@ -656,11 +666,11 @@ const TransactionPanel = ({ tokenPrice }) => {
                             </div>
 
                             <div class="flex items-center text-[16px]">
-                                <p class="mt-1 text-sm text-[#F43F5E]">
-                                    {`You will receive approximately ${totalTokens} GD30D. Read more`}
+                                <p class="mt-1 text-sm text-[#FFFFFF]">
+                                    {`You will receive approximately`} <span className="text-[#BCD7FF]">{`${totalTokens} GD30D`}</span> {`. Read more`}
                                 </p>
                                 <a
-                                    class="mt-1 ml-1 text-sm text-[#F43F5E] underline"
+                                    class="mt-1 ml-1 text-sm text-[#FFFFFF] font-bold underline"
                                     href=""
                                 >
                                     here

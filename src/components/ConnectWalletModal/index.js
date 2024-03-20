@@ -24,7 +24,8 @@ const ConnectWalletModal = ({
         useMoralis()
 
     useEffect(() => {
-        console.log('ACCOUNT', account)
+        //console.log('ACCOUNT ------', account);
+        //setWallet({address: account})
     }, [account])
 
     const connectWallet = async ({ isOpen, onClose }) => {
