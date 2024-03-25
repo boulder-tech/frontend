@@ -34,7 +34,7 @@ const Product = ({ name, token, stable_coin, progress, icon }) => {
     };
 
     return (
-        <div className="flex-col w-full h-full items-start justify-start p-5 gap-5 border rounded-2xl shadow-2xl">
+        <div className="flex-col w-full h-full items-start justify-start p-5 gap-5 border rounded-2xl shadow-2xl bg-[#FAFBFF] bg-opacity-5">
             <div className="grid grid-cols-6">
                 <div className="col-span-1">
                     <img
@@ -60,7 +60,12 @@ const Product = ({ name, token, stable_coin, progress, icon }) => {
                     {token === 'GD30D' ? `$${price.round(2)}` : `${price.round(2)}%`}
                 </div>
                 <div className="flex items-center gap-1 mt-4">
-                    <a href={`/product/${token}`} className="w-full">
+                    <a href={`/product/${token}`} onClick={(e) => {
+                        if (token === 'TBILL') {
+                            e.preventDefault(); // Evita que se redirija
+                            alert('Coming Soon');
+                        }
+                    }} className="w-full">
                         <button
                             type="button"
                             className="flex items-center rounded-lg outline-none py-3 px-4 text-sm h-10 max-h-10 w-full bg-[#245BFF] hover:bg-[#2e4f92] text-white"

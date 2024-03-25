@@ -21,7 +21,7 @@ const Transaction = ({
 }) => {
     return (
         <tr class="border-b-[0.5px] border-[#AEAEAE] py-3.5 text-[20px] text-[#FFFFFF]">
-            <td class="relative py-7 pr-3 text-lg text-left font-normal">
+            <td class="relative py-7 text-lg text-left font-normal w-[16%]">
                 <a
                     href={`https://sepolia.etherscan.io/tx/${hash}`}
                     target="_blank"
@@ -30,7 +30,7 @@ const Transaction = ({
                     {hash ? shortenTextWithEllipsis(hash, 20): '-'}
                 </a>
             </td>
-            <td class="relative py-5 pr-3 text-lg text-left font-normal">
+            <td class="relative py-5 text-lg text-left font-normal w-[16%]">
                 {hash_mint ? <a
                     href={`https://sepolia.etherscan.io/tx/${hash_mint}`}
                     target="_blank"
@@ -40,17 +40,17 @@ const Transaction = ({
                 </a> : <span>-</span>}
                 
             </td>
-            <td class="py-5">{`${amount_stable} ${type_stable}`}</td>
-            <td class="py-5">
+            <td class="py-5 w-[15%] text-left">{`${amount_stable} ${type_stable}`}</td>
+            <td class="py-5 w-[15%] text-left">
                 {token_minted ? token_minted :'-'}
             </td>
-            <td class="py-5">
+            <td class="py-5 w-[12%] text-left">
                 {token}
             </td>
-            <td class="text-[#FFFFFF] text-opacity-60">
+            <td class="text-[#FFFFFF] text-opacity-60 w-[14%] text-left">
                 {moment(createdAt).local().format('MM/DD/YYYY hh:mm')}
             </td>
-            <td class={`py-5 ${status === 'pending_mint' ? 'text-[#FFD645]' : status === 'tokens_minted' ? 'text-[#24B400]' : '' }`}>
+            <td class={`py-5 w-[12%] text-left ${status === 'pending_mint' ? 'text-[#FFD645]' : status === 'tokens_minted' ? 'text-[#24B400]' : '' }`}>
                 {status === 'pending_mint' ? 'PENDING' : status === 'tokens_minted' ? 'COMPLETED': '-'}
             </td>
         </tr>

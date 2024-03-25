@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-const Notification = () => {
+const Notification = ({title, message, onHide = () => {}}) => {
     const [isActive, setIsActive] = useState(true);
 
     useEffect(() => {
         if (isActive) {
             const timeout = setTimeout(() => {
                 setIsActive(false);
+                onHide();
             }, 5000); // Ocultar la notificación después de 5 segundos
 
             return () => clearTimeout(timeout);
@@ -19,10 +20,9 @@ const Notification = () => {
                 isActive ? 'opacity-100' : 'opacity-0'
             }`}
         >
-            <p className="text-base font-semibold">KYC Approved!</p>
+            <p className="text-base font-semibold">{title}</p>
             <p className="text-sm mt-2">
-                Your KYC process has been successfully
-                approved.
+                {message}
             </p>
         </div>
     );

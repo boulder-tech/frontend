@@ -242,7 +242,10 @@ const Portfolio = ({}) => {
     return (
         
             <div class="mx-auto mb-0 flex w-full flex-col text-black">
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-dark-top-right-2"></div>
+                {
+                    //<div className="absolute top-0 left-0 w-full h-full bg-gradient-dark-top-right-2"></div>
+                }
+                <div className="absolute top-0 left-0 w-full h-full bg-[#010312] bg-opacity-70"></div>
                 <div style={{ opacity: 1, transform: 'none' }}>
                     <div
                         class="w-full pt-[40px] pb-8 border-t border-[#CFD9E2]"
@@ -264,9 +267,6 @@ const Portfolio = ({}) => {
                                                     </div>
                                                     <div className="text-[48px] text-bold text-[#FAFBFF]">
                                                         ${totalBalance}
-                                                    </div>
-                                                    <div className="text-[20px] text-bold text-[#FAFBFF]">
-                                                        0
                                                     </div>
                                                 </div>
                                             </div>
@@ -318,7 +318,7 @@ const Portfolio = ({}) => {
                                     ) : (
                                         <div class="mb-[150px] mt-[53px] flex flex-col items-center justify-center">
                                             <img
-                                                src="/illustrations/noTransaction.svg"
+                                                src="/icons/transactions.svg"
                                                 alt="noTransaction"
                                             />
                                             <div class="mt-6 flex-col text-center">
@@ -329,7 +329,7 @@ const Portfolio = ({}) => {
                                                     href="/"
                                                     class="mt-2 text-xl font-normal leading-[30px] underline"
                                                 >
-                                                    Mint your first RWA token
+                                                    Purchase your first RWA token
                                                     now
                                                 </a>
                                             </div>

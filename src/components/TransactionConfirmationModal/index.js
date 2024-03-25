@@ -16,7 +16,7 @@ const TransactionConfirmationModal = ({ isOpen, onClose, closeModal }) => {
             <div className="p-6 pt-0">
                 <div class="mt-2">
                     <p class="text-base text-slate-500 font-light">
-                        Your token purchase has been successfully processed. We
+                        Your bid order has been successfully processed. We
                         are currently finalizing the transaction, and the
                         minting of the asset will be completed within the next
                         72 hours. You will receive a notification as soon as the

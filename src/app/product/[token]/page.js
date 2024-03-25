@@ -45,6 +45,7 @@ const Vault = ({ params }) => {
     const { wallet, setWallet } = useGlobalContext();
     const [price, setPrice] = useState(0);
     const [newPrice, setNewPrice] = useState(0);
+    const [tirValue, setTirValue] = useState(0);
 
     //For transactions
     const [error, setError] = useState();
@@ -96,9 +97,11 @@ const Vault = ({ params }) => {
         */
 
         fetchTokenPrice('GD30D');
+        fetchTIR('GD30D');
 
         const priceUpdateInterval = setInterval(() => {
             fetchTokenPrice('GD30D');
+            fetchTIR('GD30D');
           }, 60000); // 5 minutos en milisegundos
       
           return () => {
@@ -163,6 +166,14 @@ const Vault = ({ params }) => {
         } = await axios.get(`${backendUrl}/api/asset/name/${name}`);
 
         setPrice(price.round(2));
+    };
+
+    const fetchTIR = async (name) => {
+        const {
+            data: { value },
+        } = await axios.get(`${backendUrl}/api/tir/name/${name}`);
+
+        setTirValue(value.round(2));
     };
 
     const toggleNavbar = () => {
@@ -433,12 +444,12 @@ const Vault = ({ params }) => {
                                             <img className="w-[54px] h-[54px]" src="/logos/ARG.png" />
                                         </div>
                                         <div className="w-5/6 pl-2 leading-tight">
-                                            <p className="text-[32px] text-bold text-[#FAFBFF]">GD30D VAULT</p>
+                                            <p className="text-[32px] text-bold text-[#FAFBFF]">GD30D</p>
                                             <p className="text-[#FFFFFF]">Last updated: less than a minute ago</p>
                                         </div>
                                     </div>
                                     <div className="flex">
-                                        <a href="https://sepolia.etherscan.io/address/0x2c137DdB30757e70e4cC491B0d47082996144E37%7D" target="_blank" rel="noopener noreferrer">
+                                        <a href="https://sepolia.arbiscan.io/address/0x9dade022223a4b8f6a60da791aec5a0a768e8b5c" target="_blank" rel="noopener noreferrer">
                                             <button className="bg-[#FF20F6] bg-opacity-[15%] rounded-[12px] w-[201px] h-[45px] text-[#FAFBFF] font-bold flex justify-center items-center">
                                                 <div className="flex items-center">
                                                     <img src="/icons/view-on-explorer.svg" className="mr-2" alt="Explorer Icon" />
@@ -450,10 +461,10 @@ const Vault = ({ params }) => {
                                     <div className="flex">
                                         <div className="h-[120px] w-full ml-[3px] flex flex-col space-y-1 rounded-lg bg-[#FAFBFF] bg-opacity-5 p-4 md:px-4 mt-10 mb-4">
                                             <div>
-                                                <p className="text-[16px] text-[#FFFFFF]">Total Value Locked</p>
+                                                <p className="text-[16px] text-[#FFFFFF]">Maturity</p>
                                             </div>
                                             <div>
-                                                <p className="text-[48px] text-[#FFFFFF] font-bold">$24,773,532</p>
+                                                <p className="text-[48px] text-[#FFFFFF] font-bold">09/07/2030</p>
                                             </div>
                                         </div>
                                     </div>
@@ -473,17 +484,17 @@ const Vault = ({ params }) => {
                                                 <p className="text-[16px] text-[#FFFFFF]">Estimated YTM</p>
                                             </div>
                                             <div>
-                                                <p className="text-[48px] text-[#FFFFFF] font-bold">5.31%</p>
+                                                <p className="text-[48px] text-[#FFFFFF] font-bold">1.76%</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="flex">
-                                        <div className="h-[120px] w-full ml-[3px] flex flex-col space-y-1 rounded-lg bg-[#FAFBFF] bg-opacity-5 p-4 md:px-4">
+                                        <div className="h-[120px] w-full ml-[3px] flex flex-col space-y-1 rounded-lg bg-[#FAFBFF] bg-opacity-5 p-4 md:px-4 mb-4">
                                             <div>
-                                                <p className="text-[16px] text-[#FFFFFF]">Liquidity</p>
+                                                <p className="text-[16px] text-[#FFFFFF]">TIR</p>
                                             </div>
                                             <div>
-                                                <p className="text-[48px] text-[#FFFFFF] font-bold">$138,669</p>
+                                                <p className="text-[48px] text-[#FFFFFF] font-bold">{`${tirValue}%`}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -571,11 +582,6 @@ const Vault = ({ params }) => {
                                                         </> : null}
                                                     </div>
                                                     <div className="relative w-[27%] text-right">
-                                                        <a className="absolute bottom-0 right-0 text-[16px] leading-[20px] text-[#FAFBFF] font-semibold underline underline-offset-2" 
-                                                        href="https://etherscan.io/address/0xCe9a6626Eb99eaeA829D7fA613d5D0A2eaE45F40" 
-                                                        target="_blank">
-                                                            View contract
-                                                        </a>
                                                     </div>
                                                 </div>
                                                 <div class="h-[477px] w-full">

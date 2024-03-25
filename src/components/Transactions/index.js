@@ -21,56 +21,35 @@ const Transactions = ({ children }) => {
                         }}
                     />
                 </div>
-                <table class="w-[99%] table-fixed">
-                    <thead class="sticky top-0 text-[20px] text-[#FFFFFF] border-b border-white">
+                <table class="w-[98.52%] table-fixed">
+                    <thead class="sticky top-0 text-[20px] text-white border-b border-white">
                         <tr>
-                            <th
-                                scope="col"
-                                class="pb-5 text-left font-semibold w-[14%]"
-                            >
+                            <th scope="col" class="pb-5 text-left font-semibold w-[16%]">
                                 Hash
                             </th>
-                            <th
-                                scope="col"
-                                class="pb-5 text-left font-semibold w-[14%]"
-                            >
+                            <th scope="col" class="pb-5 text-left font-semibold w-[16%]">
                                 Transfer Hash
                             </th>
-                            <th
-                                scope="col"
-                                class="pb-5 text-left font-semibold items-center w-[12%]"
-                            >
-                                <div class="flex items-center">
+                            <th scope="col" class="pb-5 text-left font-semibold w-[15%]">
+                                <div class="flex items-left">
                                     Amount
                                 </div>
                             </th>
-                            <th
-                                scope="col"
-                                class="pb-5 text-left font-semibold w-[12%]"
-                            >
-                                Total Minted
+                            <th scope="col" class="pb-5 text-left font-semibold w-[15%]">
+                                Total Transferred
                             </th>
-                            <th
-                                scope="col"
-                                class="pb-5 text-left font-semibold items-center w-[12%]"
-                            >
-                                <div class="flex items-center">
+                            <th scope="col" class="pb-5 text-left font-semibold w-[12%]">
+                                <div class="flex items-left">
                                     Token
                                 </div>
                             </th>
-                            <th
-                                scope="col"
-                                class="pb-5 text-left font-semibold items-center w-[12%]"
-                            >
-                                <div class="flex items-center">
+                            <th scope="col" class="pb-5 text-left font-semibold w-[14%]">
+                                <div class="flex items-left">
                                     Date
                                 </div>
                             </th>
-                            <th
-                                scope="col"
-                                class="pb-5 text-left font-semibold items-center w-[12%]"
-                            >
-                                <div class="flex items-center">
+                            <th scope="col" class="pb-5 text-left font-semibold w-[12%]">
+                                <div class="flex items-left">
                                     Status
                                 </div>
                             </th>
@@ -92,19 +71,19 @@ const Transactions = ({ children }) => {
                                 <tr>
                                     <th
                                         scope="col"
-                                        class="pb-5 text-left font-semibold w-[14%]"
+                                        class="pb-5 text-left font-semibold w-[16%]"
                                     >
                                         Hash
                                     </th>
                                     <th
                                         scope="col"
-                                        class="pb-5 text-left font-semibold w-[14%]"
+                                        class="pb-5 text-left font-semibold w-[16%]"
                                     >
                                         Transfer Hash
                                     </th>
                                     <th
                                         scope="col"
-                                        class="pb-5 text-left font-semibold items-center w-[12%]"
+                                        class="pb-5 text-left font-semibold items-center w-[15%]"
                                     >
                                         <div class="flex items-center">
                                             Amount
@@ -112,9 +91,9 @@ const Transactions = ({ children }) => {
                                     </th>
                                     <th
                                         scope="col"
-                                        class="pb-5 text-left font-semibold w-[12%]"
+                                        class="pb-5 text-left font-semibold w-[15%]"
                                     >
-                                        Total Minted
+                                        Total Transferred
                                     </th>
                                     <th
                                         scope="col"
@@ -126,7 +105,7 @@ const Transactions = ({ children }) => {
                                     </th>
                                     <th
                                         scope="col"
-                                        class="pb-5 text-left font-semibold items-center w-[12%]"
+                                        class="pb-5 text-left font-semibold items-center w-[14%]"
                                     >
                                         <div class="flex items-center">
                                             Date

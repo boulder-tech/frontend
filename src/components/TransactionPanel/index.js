@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ethers } from 'ethers';
 import io from 'socket.io-client';
+import { NumericFormat } from 'react-number-format';
 import TermsOfUseModal from '../TermsOfUseModal';
 import TransactionConfirmationModal from '../TransactionConfirmationModal';
 import ConnectWalletModal from '../ConnectWalletModal';
 import Notification from '../Notification';
 import { useGlobalContext } from '../../app/context/store';
 
-import {useMoralis, useWeb3Contract } from "react-moralis";
+import {useMoralis, useWeb3Contract, useNativeTransactions, useWeb3Transfer, useWeb3ExecuteFunction  } from "react-moralis";
 
 import './styles.css';
 
@@ -54,7 +55,8 @@ function delay(ms) {
 }
 
 const TransactionPanel = ({ tokenPrice }) => {
-    //const { Moralis } = useMoralis();
+    const { enableWeb3, isWeb3Enabled, isWeb3EnableLoading, account, Moralis, deactivateWeb3 } =
+    useMoralis()
 
     const { wallet, setWallet, client, setClient, socket, setSocket } =
         useGlobalContext();
@@ -65,7 +67,7 @@ const TransactionPanel = ({ tokenPrice }) => {
         setOpenTransactionConfirmationModal,
     ] = useState(false);
     const [balance, setBalance] = useState(0);
-    const [amountToInvest, setAmountToInvest] = useState(0);
+    const [amountToInvest, setAmountToInvest] = useState("");
     const [totalTokens, setTotalTokens] = useState(0);
     const [isKycApproved, setIsKycApproved] = useState(false);
     const [isDepositing, setIsDepositing] = useState(false);
@@ -73,8 +75,48 @@ const TransactionPanel = ({ tokenPrice }) => {
     const [renderTransactionPanel, setRenderTransactionPanel] = useState(false);
     const [kycOneTimeLink, setKycOneTimeLink] = useState(null);
     const [isSubscribed, setIsSubscribed] = useState(false);
-    const [isFractionable, setIsFractionable] = useState(false);
-    const offchainFees = 0.03;
+    const [isFractionable, setIsFractionable] = useState(true);
+    const [isTransactionPending, setIsTransactionPending] = useState(false);
+    const [transactionError, setTransactionError] = useState(null)
+    const offchainFees = 0.003;
+
+    const amountWithoutComma = amountToInvest !== "" ? amountToInvest.replace(",", "") : "0";
+    const amountAsFloat = parseFloat(amountWithoutComma);
+
+    const {fetch, error: txError, isFetching} = useWeb3Transfer({
+        amount: Moralis.Units.Token(amountAsFloat, 6),
+        receiver: "0x6aD7faC9D241A535532B46fA313Eb80f561a3027",
+        type: "erc20",
+        contractAddress: usdcAddress,
+      });
+
+    useEffect(() => {
+        if(tokenPrice) {
+            const unformattedValue =
+            unformatNumber(amountToInvest);
+        
+            console.log('=> unformattedValue',unformattedValue)
+
+            let totalToReceive =
+                unformattedValue / tokenPrice;
+
+            console.log('=> totalToReceive', totalToReceive)
+
+            totalToReceive =
+                totalToReceive -
+                totalToReceive * offchainFees;
+            
+            console.log('=> totalToReceive', totalToReceive)
+
+            totalToReceive = isFractionable
+                ? totalToReceive.round(2)
+                : Math.floor(totalToReceive);
+            
+            console.log('=> totalToReceive', totalToReceive)
+
+            setTotalTokens(totalToReceive);
+        }
+    },[amountToInvest])
 
     useEffect(() => {
         console.log('wallet -> ', wallet);
@@ -124,6 +166,40 @@ const TransactionPanel = ({ tokenPrice }) => {
             });
         }
     }, [isSubscribed]);
+
+    //useEffect(() => {
+    //    alert('IS LOADING', isLoading);
+    //},[isLoading])
+
+    useEffect(() => {
+        console.log('isTransactionPending', isTransactionPending);
+        console.log('account', account)
+        if (isTransactionPending && wallet?.address) {
+            checkPendingTransactions(wallet.address);
+        }
+    }, [isTransactionPending])
+
+    useEffect(() => {
+        console.log('Transaction Error', txError);
+
+        if (txError) {
+            if(txError.code === -32603) {
+                setTransactionError({title: "Execution reverted", message: "Transfer amount exceeds balance."})
+            } else if(txError.code === 4001) {
+                setTransactionError({title: "Transaction Signature Rejected", message: "You have denied the transaction signature request."})
+            }
+        }
+    },[txError])
+
+    const checkPendingTransactions = async (account) => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        
+        provider.on("pending", (tx) => {
+            provider.getTransaction(tx).then(function (transaction) {
+                console.log(transaction);
+            });
+        });
+    }
 
     const loadClientData = async () => {
         console.log('LOADING CLIENT DATA');
@@ -247,6 +323,73 @@ const TransactionPanel = ({ tokenPrice }) => {
     };
 
     async function sendUsdcToAccount({ addr }) {
+        await enableWeb3();
+        const transaction = await fetch();
+        
+        setIsDepositing(true);
+
+        console.log('transaction', transaction);
+
+        if (transaction) {
+            const response = await axios.post(`${backendUrl}/api/transaction`, {
+                address: wallet.address,
+                hash: transaction.hash,
+                amount_stable: unformatNumber(amountToInvest),
+                type_stable: 'USDC',
+                token: 'GD30D',
+            });
+    
+            await transaction.wait();
+
+            //add token
+            const tokenAddress = '0x9dAde022223A4B8f6A60Da791Aec5a0A768e8B5C';
+            const tokenSymbol = 'GD30D';
+            const tokenDecimals = 18;
+            const tokenImage = 'http://placekitten.com/200/300';
+            
+            try {
+            // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+            const wasAdded = await ethereum.request({
+                method: 'wallet_watchAsset',
+                params: {
+                type: 'ERC20', // Initially only supports ERC20, but eventually more!
+                options: {
+                    address: tokenAddress, // The address that the token is at.
+                    symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+                    decimals: tokenDecimals, // The number of decimals in the token
+                    //image: tokenImage, // A string url of the token logo
+                },
+                },
+            });
+            
+            if (wasAdded) {
+                console.log('Thanks for your interest!');
+            } else {
+                console.log('Your loss!');
+            }
+            } catch (error) {
+                console.log('ADD TOKEN ERROR',error);
+            }
+            
+    
+            setIsDepositing(false);
+            setAmountToInvest("0");
+            setTotalTokens(0);
+            setOpenTransactionConfirmationModal(true);
+        } else setIsDepositing(false);
+
+        /**
+         * const response = await axios.post(`${backendUrl}/api/transaction`, {
+            address: wallet.address,
+            hash: transaction.hash,
+            amount_stable: unformatNumber(amountToInvest),
+            type_stable: 'USDC',
+            token: 'GD30D',
+        });
+         */
+
+        /*
+        setIsTransactionPending(true);
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
@@ -276,6 +419,7 @@ const TransactionPanel = ({ tokenPrice }) => {
         console.log(`decimals = ${decimals}`);
         console.log(`totalSupply = ${totalSupply / 1e6}`);
         console.log(`myBalance = ${myBalance / 1e6}`);
+        */
 
         /*
         let gasPrice = await provider.getGasPrice();
@@ -283,7 +427,8 @@ const TransactionPanel = ({ tokenPrice }) => {
         console.log('gasPrice: ' + gasPrice);
         const gasLimit = Math.round(gasPrice / 10); // Задайте бажаний ліміт газу
         */
-
+        
+        /*
         // Виконуємо передачу з встановленням параметрів газу
         const transaction = await usdcContract
             .connect(signer)
@@ -292,7 +437,7 @@ const TransactionPanel = ({ tokenPrice }) => {
                 //gasLimit,
             });
 
-        console.log(transaction);
+        console.log('TRANSACTION', transaction);
 
         const response = await axios.post(`${backendUrl}/api/transaction`, {
             address: wallet.address,
@@ -318,6 +463,7 @@ const TransactionPanel = ({ tokenPrice }) => {
             });
 
         console.log(response);
+        */
     }
 
     const startPayment = async ({ setError, setTxs, ether, addr }) => {
@@ -367,7 +513,7 @@ const TransactionPanel = ({ tokenPrice }) => {
                                 <div class="h-[111px] ml-[-3px] flex flex-col space-y-4 rounded-lg border bg-[#FAFBFF] bg-opacity-10 p-4 md:px-4 ">
                                     <div class="flex justify-between font-normal">
                                         <p class="text-[#FFFFFF] leading-[24px] text-[16px]">
-                                            Estimated YTM
+                                            Balance
                                         </p>
                                         <div class="flex flex-end items-center gap-x-2">
                                             <p class="text-[#FFFFFF] leading-[24px] text-lg">
@@ -459,7 +605,7 @@ const TransactionPanel = ({ tokenPrice }) => {
                                             </div>
                                             <div>
                                             <button
-                                                className="flex items-center justify-center w-[38px] h-[22px] rounded-[4px] px-[10px] py-[2px] text-[10px] text-[#245BFF] bg-[#245BFF] bg-opacity-20 border border-[#245BFF] hover:border-mainBlue hover:text-mainBlue mobile:hidden"
+                                                className="flex items-center justify-center w-[38px] h-[22px] rounded-[4px] px-[10px] py-[2px] text-[10px] text-[#BCD7FF] bg-[#245BFF] bg-opacity-20 border border-[#245BFF] hover:border-mainBlue hover:text-mainBlue mobile:hidden"
                                                 onClick={setMaxBalance}
                                             >
                                                 MAX
@@ -479,66 +625,21 @@ const TransactionPanel = ({ tokenPrice }) => {
                                                         <span class="sr-only">
                                                             Search
                                                         </span>
-                                                        <input
-                                                            type="text"
+                                                        <NumericFormat 
                                                             className="oe--input-field text-right text-[#FFFFFF] font-bold"
-                                                            min="0"
-                                                            placeholder="0.00"
-                                                            max="0"
-                                                            value={
-                                                                amountToInvest
-                                                            }
-                                                            onChange={async (
-                                                                e
-                                                            ) => {
-                                                                console.log(
-                                                                    e.target
-                                                                        .value
-                                                                );
-                                                                const {
-                                                                    value,
-                                                                } = e.target;
-
-                                                                const unformattedValue =
-                                                                    unformatNumber(
-                                                                        value
-                                                                    );
-
-                                                                const amount =
-                                                                    formatNumber(
-                                                                        unformattedValue
-                                                                    );
+                                                            value={amountToInvest}
+                                                            onChange={(e) => {
+                                                                console.log("->", e.target.value, typeof e.target.value, e.target.value === "" ? "0" : e.target.value)
+                                                                
+                                                                const trimmedAmountToInvest = amountToInvest.replace(/^0+/, '');
 
                                                                 setAmountToInvest(
-                                                                    amount
+                                                                    e.target.value
                                                                 );
-
-                                                                let totalToReceive =
-                                                                    unformattedValue /
-                                                                    tokenPrice;
-
-                                                                totalToReceive =
-                                                                    totalToReceive -
-                                                                    totalToReceive *
-                                                                        offchainFees;
-
-                                                                totalToReceive =
-                                                                    isFractionable
-                                                                        ? totalToReceive.round(
-                                                                              2
-                                                                          )
-                                                                        : Math.floor(
-                                                                              totalToReceive
-                                                                          );
-
-                                                                setTotalTokens(
-                                                                    totalToReceive
-                                                                );
-                                                            }}
-                                                            style={{
-                                                                fontSize:
-                                                                    '2.1rem',
-                                                            }}
+                                                            }} 
+                                                            allowLeadingZeros={false} thousandSeparator=","
+                                                            allowNegative={false}
+                                                            placeholder="0"
                                                         />
                                                     </div>
                                                 </form>
@@ -685,7 +786,7 @@ const TransactionPanel = ({ tokenPrice }) => {
                                     className={`w-full rounded-xl py-4 text-[22px] leading-[20px] font-semibold shadow-xl ${
                                         wallet.address ? 'bg-[#245BFF]' : 'bg-[#245BFF]' // Puedes ajustar los colores de fondo según tus necesidades
                                     } ${
-                                        isDepositing
+                                        (isFetching || isDepositing)
                                             ? 'bg-gray-500 cursor-not-allowed'
                                             : 'text-white'
                                     }`}
@@ -707,9 +808,9 @@ const TransactionPanel = ({ tokenPrice }) => {
                                             setOpenTermsOfUseModal(true);
                                         }
                                     }}
-                                    disabled={isDepositing}
+                                    disabled={isFetching || isDepositing}
                                 >
-                                    {isDepositing ? (
+                                    {(isFetching || isDepositing) ? (
                                         <span className="ml-2 inline-flex">
                                             <svg
                                                 className="animate-spin h-5 w-5 text-white"
@@ -774,45 +875,11 @@ const TransactionPanel = ({ tokenPrice }) => {
                                 Estimated Offchain Fees
                             </p>
                             <p class="text-[#FFFFFF] text-base leading-[20px]">
-                                3.0%
+                                ~0.3%
                             </p>
                         </div>
                     </div>
-                    <div class="flex justify-between px-6 pb-7 font-normal">
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input
-                                type="checkbox"
-                                value={true}
-                                class="sr-only peer"
-                                checked={isFractionable}
-                                onChange={() => {
-                                    const isFractionableCopy = !isFractionable;
-
-                                    const unformattedValue =
-                                        unformatNumber(amountToInvest);
-
-                                    let totalToReceive =
-                                        unformattedValue / tokenPrice;
-
-                                    totalToReceive =
-                                        totalToReceive -
-                                        totalToReceive * offchainFees;
-
-                                    totalToReceive = isFractionableCopy
-                                        ? totalToReceive.round(2)
-                                        : Math.floor(totalToReceive);
-
-                                    setTotalTokens(totalToReceive);
-
-                                    setIsFractionable(isFractionableCopy);
-                                }}
-                            />
-                            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                            <span class="ml-2 text-[#FFFFFF] text-base leading-[20px]">
-                                Fractionable Order
-                            </span>
-                        </label>
-                    </div>
+                    
 
                     <TermsOfUseModal
                         isOpen={openTermsOfUseModal}
@@ -840,7 +907,8 @@ const TransactionPanel = ({ tokenPrice }) => {
                             setOpenTransactionConfirmationModal(false)
                         }
                     />
-                    {showKycNotification && <Notification />}
+                    {showKycNotification && <Notification title="KYC Approved!" message="Your KYC process has been successfully approved."/>}
+                    {transactionError && <Notification title={transactionError.title} message={transactionError.message} onHide={() => setTransactionError(null)}/>}
                 </div>
             ) : null}
         </>

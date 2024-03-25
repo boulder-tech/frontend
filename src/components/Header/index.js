@@ -398,7 +398,7 @@ const Header = () => {
                         class="mt-4 inline-flex items-center rounded-md !bg-black px-4 py-2 text-base font-semibold text-white shadow-sm focus:outline-none focus:ring-0"
                         onClick={() => switchToEthereumNetwork()}
                     >
-                        Switch to Ethereum
+                        Switch to Arbitrum
                     </button>
                 </div>
             </Modal>
